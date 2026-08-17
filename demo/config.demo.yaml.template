@@ -1,0 +1,99 @@
+# Configuración para la demo OpenShift (3 rutas).
+# El script install.sh genera config.yaml a partir de esta plantilla.
+#
+# Rutas:
+#   general → llama-32-3b
+#   code    → qwen25-vl-7b-instruct-fp8
+#   vision  → granite-vision-32-2b
+
+version: v0.3
+
+listeners:
+  - name: http-chat
+    address: 0.0.0.0
+    port: 8080
+    timeout: 300s
+
+providers:
+  defaults:
+    default_model: llama-32-3b
+  models:
+    - name: llama-32-3b
+      backend_refs:
+        - name: primary
+          base_url: ${LLAMA_SERVICE_URL}
+          api_key_env: OPENSHIFT_AI_TOKEN
+          auth_header: Authorization
+          auth_prefix: Bearer
+          chat_path: /v1/chat/completions
+    - name: qwen25-vl-7b-instruct-fp8
+      backend_refs:
+        - name: primary
+          base_url: ${QWEN_SERVICE_URL}
+          api_key_env: OPENSHIFT_AI_TOKEN
+          auth_header: Authorization
+          auth_prefix: Bearer
+          chat_path: /v1/chat/completions
+    - name: granite-vision-32-2b
+      backend_refs:
+        - name: primary
+          base_url: ${GRANITE_VISION_SERVICE_URL}
+          api_key_env: OPENSHIFT_AI_TOKEN
+          auth_header: Authorization
+          auth_prefix: Bearer
+          chat_path: /v1/chat/completions
+
+routing:
+  modelCards:
+    - name: llama-32-3b
+      description: Consultas generales y conversación
+      modality: text
+    - name: qwen25-vl-7b-instruct-fp8
+      description: Código, debugging, SQL y scripts
+      modality: text
+    - name: granite-vision-32-2b
+      description: Imágenes, fotos y análisis visual
+      modality: multimodal
+
+  signals:
+    domains:
+      - name: code
+        description: Programación, software, debugging, SQL, scripts, algoritmos y DevOps
+      - name: vision
+        description: Imágenes, fotos, OCR, descripción visual, gráficos y análisis de escenas
+      - name: general
+        description: Conversación, conocimiento general, redacción y preguntas abiertas
+
+  decisions:
+    - name: code-route
+      description: Consultas de código van a Qwen VL
+      priority: 10
+      rules:
+        operator: AND
+        conditions:
+          - type: domain
+            name: code
+      modelRefs:
+        - model: qwen25-vl-7b-instruct-fp8
+
+    - name: vision-route
+      description: Consultas con imágenes van a Granite Vision
+      priority: 20
+      rules:
+        operator: AND
+        conditions:
+          - type: domain
+            name: vision
+      modelRefs:
+        - model: granite-vision-32-2b
+
+    - name: general-route
+      description: Todo lo demás va a Llama
+      priority: 100
+      rules:
+        operator: AND
+        conditions:
+          - type: domain
+            name: general
+      modelRefs:
+        - model: llama-32-3b

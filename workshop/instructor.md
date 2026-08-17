@@ -1,0 +1,89 @@
+# Guía del instructor
+
+Notas para facilitar el workshop de semantic routing.
+
+## Agenda sugerida (90 min)
+
+| Tiempo | Actividad | Material |
+|---|---|---|
+| 0–5 min | Introducción y objetivos | [00-introduccion](./00-introduccion.md) |
+| 5–25 min | Setup: Python, Podman, vllm-sr | [01](./01-python.md) – [03](./03-vllm-sr.md) |
+| 25–35 min | Arquitectura y demo del diagrama | [04-arquitectura](./04-arquitectura-y-flujo.md) |
+| 35–55 min | Configuración (dashboard o YAML) | [05-configuracion](./05-configuracion.md) |
+| 55–65 min | Levantar servicios, verificar | [06-levantar](./06-levantar-servicios.md) |
+| 65–90 min | Ejercicios prácticos | [07-ejercicios](./07-ejercicios.md) |
+
+## Antes del workshop
+
+- [ ] Tener credenciales de OpenShift AI listas para compartir (o un mecanismo seguro para distribuirlas)
+- [ ] Probar el flujo completo en tu máquina: `vllm-sr serve` + `podman-compose up`
+- [ ] Verificar que los 3 modelos remotos responden
+- [ ] Tener el dashboard abierto en una pantalla compartida para la demo en vivo
+
+## Puntos clave para explicar
+
+### ¿Por qué dos interfaces?
+
+- **Dashboard (8700):** transparencia — el participante *ve* el routing
+- **Open WebUI (3000):** experiencia real — el usuario *no ve* el routing
+
+### ¿Por qué tres modelos?
+
+Un solo modelo no es óptimo para todo. El router envía cada query al modelo más adecuado según su **significado**, no por palabras clave exactas.
+
+### Puertos (confusión frecuente)
+
+| Puerto | Qué es |
+|---|---|
+| 8899 | API de chat (Open WebUI, `vllm-sr chat`) |
+| 8080 | API interna (`vllm-sr eval`) |
+| 8700 | Dashboard |
+
+### Prioridades de decisions
+
+Menor número = mayor prioridad. `code-route` (10) gana sobre `general-route` (100).
+
+## Demo en vivo sugerida
+
+1. **Dashboard abierto** en pantalla compartida (sección de decisions)
+2. Pide a un participante que envíe una query de código en Open WebUI
+3. Muestra en el dashboard la decisión que se tomó en tiempo real
+4. Repite con una query general y una de visión (si hay imagen disponible)
+
+## Queries de demo
+
+| Query | Ruta esperada | Modelo |
+|---|---|---|
+| `Write a Python function to sort a list` | code | qwen35-9b |
+| `What is the capital of France?` | general | llama-32-3b |
+| `Generate a SQL query to select all users` | code | qwen35-9b |
+| `Tell me a story about a robot` | general | llama-32-3b |
+| `What is in this image?` (+ imagen) | vision | granite-vision-32-2b |
+
+## Problemas comunes en vivo
+
+| Problema | Solución rápida |
+|---|---|
+| Primera ejecución lenta | Avisar que descarga imágenes; mostrar arquitectura mientras espera |
+| Token expirado | Tener un token de respaldo |
+| Routing incorrecto | Usar `vllm-sr eval --json` para mostrar señales |
+| Open WebUI sin respuesta | Verificar puerto 8899 con `curl localhost:8899/v1/models` |
+
+## Preguntas frecuentes de participantes
+
+**¿Puedo usar Docker en vez de Podman?**
+Sí, `vllm-sr serve` detecta Docker automáticamente. El workshop está escrito para Podman.
+
+**¿El router corre en GPU?**
+No. La clasificación semántica corre en CPU local. Los modelos LLM están en OpenShift AI remoto.
+
+**¿Puedo agregar más modelos/rutas?**
+Sí, desde el dashboard o editando `config.yaml`.
+
+**¿Qué pasa si ninguna regla coincide?**
+Se usa el `default_model` configurado en providers (`llama-32-3b`).
+
+## Recursos adicionales
+
+- [vLLM Semantic Router](https://github.com/vllm-project/vllm-semantic-router)
+- [Open WebUI](https://github.com/open-webui/open-webui)

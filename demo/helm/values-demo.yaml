@@ -1,0 +1,46 @@
+# Overrides de Helm para la demo en OpenShift.
+# install.sh fusiona este archivo con la config generada.
+
+replicaCount: 1
+
+image:
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: "1"
+    memory: 4Gi
+  limits:
+    cpu: "2"
+    memory: 8Gi
+
+persistence:
+  enabled: true
+  size: 5Gi
+
+dashboard:
+  enabled: true
+  allowOpenBootstrap: true
+  readonly: false
+  persistence:
+    enabled: true
+    size: 1Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+autoscaling:
+  enabled: false
+
+dependencies:
+  observability:
+    jaeger:
+      enabled: false
+    prometheus:
+      enabled: false
+    grafana:
+      enabled: false
