@@ -19,6 +19,16 @@ require_cmd() {
   command -v "$1" >/dev/null 2>&1 || error "Falta '$1'. Instálalo antes de continuar."
 }
 
+resolve_python() {
+  if [[ -x "${REPO_ROOT}/.venv/bin/python3" ]]; then
+    echo "${REPO_ROOT}/.venv/bin/python3"
+  elif command -v python3 >/dev/null 2>&1; then
+    echo "python3"
+  else
+    error "No se encontró python3. Crea el venv del workshop o instala Python 3."
+  fi
+}
+
 load_env() {
   local env_file="${SCRIPT_DIR}/demo.env"
   if [[ ! -f "${env_file}" ]]; then
@@ -76,7 +86,14 @@ validate_config() {
 
 build_helm_values() {
   info "Construyendo values de Helm..."
-  python3 - <<'PY'
+  local python_bin
+  python_bin="$(resolve_python)"
+
+  if ! "${python_bin}" -c "import yaml" 2>/dev/null; then
+    error "PyYAML no está instalado. Ejecuta:\n  pip install pyyaml\n  # o activa el venv del repo: source ../.venv/bin/activate"
+  fi
+
+  "${python_bin}" - <<'PY'
 import os
 import sys
 
