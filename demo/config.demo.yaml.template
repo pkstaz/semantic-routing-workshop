@@ -59,15 +59,29 @@ routing:
     domains:
       - name: code
         description: Programación, software, debugging, SQL, scripts, algoritmos y DevOps
-      - name: vision
-        description: Imágenes, fotos, OCR, descripción visual, gráficos y análisis de escenas
+        mmlu_categories: ["computer science"]
       - name: general
         description: Conversación, conocimiento general, redacción y preguntas abiertas
+        mmlu_categories: [other]
+    keywords:
+      - name: vision
+        operator: OR
+        keywords:
+          - image
+          - photo
+          - picture
+          - screenshot
+          - visual
+          - foto
+          - imagen
+          - gráfico
+          - OCR
+        case_sensitive: false
 
   decisions:
     - name: code-route
       description: Consultas de código van a Qwen VL
-      priority: 10
+      priority: 150
       rules:
         operator: AND
         conditions:
@@ -78,11 +92,11 @@ routing:
 
     - name: vision-route
       description: Consultas con imágenes van a Granite Vision
-      priority: 20
+      priority: 200
       rules:
         operator: AND
         conditions:
-          - type: domain
+          - type: keyword
             name: vision
       modelRefs:
         - model: granite-vision-32-2b

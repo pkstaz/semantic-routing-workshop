@@ -6,6 +6,9 @@ replicaCount: 1
 image:
   pullPolicy: IfNotPresent
 
+# Dejar que OpenShift (restricted-v2) asigne UID/fsGroup — no forzar securityContext
+podSecurityContext: {}
+
 resources:
   requests:
     cpu: "1"
@@ -14,17 +17,41 @@ resources:
     cpu: "2"
     memory: 8Gi
 
+# PVC en OpenShift restricted suele quedar sin permisos de escritura en /app/models;
+# emptyDir evita el problema (los modelos se re-descargan al reiniciar el pod).
 persistence:
-  enabled: true
-  size: 5Gi
+  enabled: false
+
+extraVolumes:
+  - name: models-volume
+    emptyDir:
+      sizeLimit: 10Gi
+
+extraVolumeMounts:
+  - name: models-volume
+    mountPath: /app/models
+
+# Caché HF en volumen escribible; desactivar Xet (falla con permisos en OpenShift restricted)
+extraEnv:
+  - name: HF_HOME
+    value: /app/models
+  - name: HUGGINGFACE_HUB_CACHE
+    value: /app/models
+  - name: HF_HUB_DISABLE_XET
+    value: "1"
+  - name: HOME
+    value: /tmp
 
 dashboard:
   enabled: true
   allowOpenBootstrap: true
   readonly: false
+  image:
+    tag: v0.3.0
+  # El entrypoint del dashboard arranca como root y hace gosu a nonroot — requiere SCC anyuid
+  # (install.sh concede anyuid al ServiceAccount default del namespace).
   persistence:
-    enabled: true
-    size: 1Gi
+    enabled: false
   resources:
     requests:
       cpu: 100m

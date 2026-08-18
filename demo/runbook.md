@@ -62,6 +62,8 @@ vllm-sr eval --prompt "What is in this image?" \
   --endpoint http://localhost:8080
 ```
 
+> **Nota:** En OpenShift, el puerto 8080 expone la API de clasificación/eval (`/api/v1/eval`), no chat completions directo. Para chat en vivo usa el dashboard o un proxy Envoy local.
+
 **Esperado:**
 
 | Query | Decision | Modelo |
@@ -141,6 +143,10 @@ curl -s https://<ROUTE_API>/v1/chat/completions \
 | 503 del modelo | Probar endpoint MaaS directo con curl |
 | Routing incorrecto | `vllm-sr eval --prompt "..." --json` |
 | Visión no enruta | Confirmar que la query menciona imagen/foto |
+| SCC / pod forbidden | Re-ejecutar `./install.sh` — concede `anyuid` al dashboard |
+| Router CrashLoop (HF) | Verificar `HF_TOKEN` empieza por `hf_`; reinstalar con `./install.sh` |
+| Permission denied /app/models | Resuelto con `emptyDir` + `HF_HUB_DISABLE_XET=1` en values |
+| Routing sin decisión | Dominios custom requieren `mmlu_categories`; visión usa keywords |
 
 ---
 

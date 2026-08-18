@@ -26,6 +26,7 @@ https://maas.apps.ocp.cloud.rhai-tmm.dev/prelude-maas/granite-vision-32-2b
 cd demo
 cp env.demo.example demo.env
 # Pon tu token en demo.env → OPENSHIFT_AI_TOKEN=...
+# Y también HF_TOKEN=... (HuggingFace, para modelos de clasificación del router)
 ./install.sh
 ```
 

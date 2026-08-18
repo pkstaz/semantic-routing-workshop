@@ -58,10 +58,20 @@ routing:
     domains:
       - name: code
         description: Programación, software, debugging, SQL, scripts y algoritmos
-      - name: vision
-        description: Imágenes, fotos, OCR, descripción visual y análisis de gráficos
+        mmlu_categories: ["computer science"]
       - name: general
         description: Conversación, conocimiento general, redacción y preguntas abiertas
+        mmlu_categories: [other]
+    keywords:
+      - name: vision
+        operator: OR
+        keywords:
+          - image
+          - photo
+          - picture
+          - screenshot
+          - visual
+        case_sensitive: false
 
   decisions:
     - name: code-route
@@ -81,7 +91,7 @@ routing:
       rules:
         operator: AND
         conditions:
-          - type: domain
+          - type: keyword
             name: vision
       modelRefs:
         - model: granite-vision-32-2b

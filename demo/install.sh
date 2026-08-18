@@ -43,6 +43,7 @@ load_env() {
   : "${LLAMA_SERVICE_URL:?Define LLAMA_SERVICE_URL en demo.env}"
   : "${QWEN_SERVICE_URL:?Define QWEN_SERVICE_URL en demo.env}"
   : "${GRANITE_VISION_SERVICE_URL:?Define GRANITE_VISION_SERVICE_URL en demo.env}"
+  : "${STORAGE_CLASS:=gp3-csi}"
 }
 
 check_prerequisites() {
@@ -113,6 +114,25 @@ with open(os.path.join(script_dir, "helm", "values-demo.yaml")) as f:
 
 values["config"] = config
 
+# Modelos en emptyDir (ver values-demo.yaml) — evita Permission denied en PVC con restricted SCC
+values.setdefault("persistence", {})["enabled"] = False
+values.setdefault("extraVolumes", [{"name": "models-volume", "emptyDir": {"sizeLimit": "10Gi"}}])
+values.setdefault("extraVolumeMounts", [{"name": "models-volume", "mountPath": "/app/models"}])
+values.setdefault("extraEnv", [
+    {"name": "HF_HOME", "value": "/app/models"},
+    {"name": "HUGGINGFACE_HUB_CACHE", "value": "/app/models"},
+    {"name": "HF_HUB_DISABLE_XET", "value": "1"},
+    {"name": "HOME", "value": "/tmp"},
+])
+
+dashboard = values.setdefault("dashboard", {})
+dashboard.setdefault("persistence", {})["enabled"] = False
+if "image" not in dashboard:
+    dashboard["image"] = {}
+dashboard["image"]["tag"] = "v0.3.0"
+dashboard.pop("podSecurityContext", None)
+values.pop("securityContext", None)
+
 token = os.environ.get("OPENSHIFT_AI_TOKEN", "")
 if token and token != "your-token-here":
     values["envFromSecrets"] = ["vllm-sr-env-secrets"]
@@ -130,17 +150,36 @@ create_namespace() {
   oc apply -f "${GENERATED_DIR}/namespace.yaml"
 }
 
+apply_scc_bindings() {
+  info "Concediendo SCC anyuid al dashboard (entrypoint requiere arrancar como root)..."
+  # El deployment del dashboard no fija serviceAccountName — usa el SA default del namespace.
+  oc adm policy add-scc-to-user anyuid -z default -n "${DEMO_NAMESPACE}" 2>/dev/null \
+    || warn "No se pudo enlazar anyuid — el dashboard puede fallar en clusters sin permisos SCC"
+}
+
 create_secret() {
-  if [[ -z "${OPENSHIFT_AI_TOKEN:-}" || "${OPENSHIFT_AI_TOKEN}" == "your-token-here" ]]; then
-    warn "OPENSHIFT_AI_TOKEN no configurado — omitiendo secret (backends sin auth)"
-    return
+  if [[ -n "${OPENSHIFT_AI_TOKEN:-}" && "${OPENSHIFT_AI_TOKEN}" != "your-token-here" ]]; then
+    info "Creando secret para backends MaaS..."
+    oc create secret generic vllm-sr-env-secrets \
+      --namespace "${DEMO_NAMESPACE}" \
+      --from-literal=OPENSHIFT_AI_TOKEN="${OPENSHIFT_AI_TOKEN}" \
+      --dry-run=client -o yaml | oc apply -f -
+  else
+    warn "OPENSHIFT_AI_TOKEN no configurado — backends MaaS sin auth"
   fi
 
-  info "Creando secret para backends..."
-  oc create secret generic vllm-sr-env-secrets \
-    --namespace "${DEMO_NAMESPACE}" \
-    --from-literal=OPENSHIFT_AI_TOKEN="${OPENSHIFT_AI_TOKEN}" \
-    --dry-run=client -o yaml | oc apply -f -
+  if [[ -n "${HF_TOKEN:-}" && "${HF_TOKEN}" != "your-hf-token-here" ]]; then
+    if [[ "${HF_TOKEN}" == yhf_* ]]; then
+      warn "HF_TOKEN empieza por 'yhf_' — suele ser un typo; corrígelo a 'hf_' en demo.env"
+    fi
+    info "Creando secret hf-token-secret (modelos de clasificación)..."
+    oc create secret generic hf-token-secret \
+      --namespace "${DEMO_NAMESPACE}" \
+      --from-literal=token="${HF_TOKEN}" \
+      --dry-run=client -o yaml | oc apply -f -
+  else
+    error "HF_TOKEN requerido en demo.env — el router necesita descargar modelos mmBERT desde HuggingFace.\n  Obtén uno en: https://huggingface.co/settings/tokens"
+  fi
 }
 
 deploy_helm() {
@@ -150,7 +189,7 @@ deploy_helm() {
     --namespace "${DEMO_NAMESPACE}"
     -f "${GENERATED_DIR}/values-merged.yaml"
     --wait
-    --timeout 15m
+    --timeout 25m
   )
 
   if [[ -n "${HELM_CHART_VERSION:-}" ]]; then
@@ -253,10 +292,11 @@ main() {
   render_templates
   validate_config
 
-  export GENERATED_DIR SCRIPT_DIR OPENSHIFT_AI_TOKEN="${OPENSHIFT_AI_TOKEN:-}"
+  export GENERATED_DIR SCRIPT_DIR OPENSHIFT_AI_TOKEN="${OPENSHIFT_AI_TOKEN:-}" STORAGE_CLASS
   build_helm_values
 
   create_namespace
+  apply_scc_bindings
   create_secret
   deploy_helm
   apply_routes
