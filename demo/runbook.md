@@ -146,7 +146,7 @@ curl -s https://<ROUTE_API>/v1/chat/completions \
 | SCC / pod forbidden | Re-ejecutar `./install.sh` — concede `anyuid` al dashboard |
 | Router CrashLoop (HF) | Verificar `HF_TOKEN` empieza por `hf_`; reinstalar con `./install.sh` |
 | Permission denied /app/models | Resuelto con `emptyDir` + `HF_HUB_DISABLE_XET=1` en values |
-| Routing sin decisión | Dominios custom requieren `mmlu_categories`; visión usa keywords |
+| 502 Bad Gateway / connection refused :8080 | La Route apunta al Service del chart, que incluye el pod del dashboard (no escucha en 8080). Re-ejecuta `./install.sh` — crea `semantic-router-demo-api` solo para el router |
 
 ---
 

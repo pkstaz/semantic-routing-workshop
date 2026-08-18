@@ -1,0 +1,22 @@
+# Service dedicado para la API del router (puerto 8080).
+# El Service del chart (semantic-router-demo) también selecciona el pod del dashboard
+# porque comparten labels; el dashboard no escucha en 8080 → 502 intermitente.
+apiVersion: v1
+kind: Service
+metadata:
+  name: semantic-router-demo-api
+  namespace: ${DEMO_NAMESPACE}
+  labels:
+    app.kubernetes.io/instance: ${HELM_RELEASE}
+    app.kubernetes.io/component: router-api
+spec:
+  type: ClusterIP
+  ports:
+    - name: classify-api
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app.kubernetes.io/instance: ${HELM_RELEASE}
+    app.kubernetes.io/name: semantic-router
+    app.kubernetes.io/component: router

@@ -65,6 +65,7 @@ render_templates() {
 
   envsubst < "${SCRIPT_DIR}/config.demo.yaml.template" > "${GENERATED_DIR}/config.yaml"
   envsubst < "${SCRIPT_DIR}/openshift/namespace.yaml.template" > "${GENERATED_DIR}/namespace.yaml"
+  envsubst < "${SCRIPT_DIR}/openshift/api-service.yaml.template" > "${GENERATED_DIR}/api-service.yaml" 2>/dev/null || true
 
   info "Config generada en ${GENERATED_DIR}/config.yaml"
 }
@@ -199,23 +200,58 @@ deploy_helm() {
   helm "${helm_args[@]}"
 }
 
+apply_router_pod_label() {
+  info "Etiquetando pods del router (excluye dashboard)..."
+  # El chart no distingue router vs dashboard en el Service principal.
+  oc label deployment "${HELM_RELEASE}" -n "${DEMO_NAMESPACE}" \
+    app.kubernetes.io/component=router --overwrite 2>/dev/null || true
+  oc patch deployment "${HELM_RELEASE}" -n "${DEMO_NAMESPACE}" --type=strategic -p '
+{
+  "spec": {
+    "template": {
+      "metadata": {
+        "labels": {
+          "app.kubernetes.io/component": "router"
+        }
+      }
+    }
+  }
+}' 2>/dev/null || true
+  # Etiquetar pods ya en ejecución sin esperar rollout completo
+  local pod
+  while IFS= read -r pod; do
+    [[ -z "${pod}" ]] && continue
+    local component
+    component="$(oc get pod "${pod}" -n "${DEMO_NAMESPACE}" \
+      -o jsonpath='{.metadata.labels.app\.kubernetes\.io/component}' 2>/dev/null || true)"
+    if [[ "${component}" != "dashboard" ]]; then
+      oc label pod "${pod}" -n "${DEMO_NAMESPACE}" \
+        app.kubernetes.io/component=router --overwrite >/dev/null 2>&1 || true
+    fi
+  done < <(oc get pods -n "${DEMO_NAMESPACE}" \
+    -l "app.kubernetes.io/instance=${HELM_RELEASE},app.kubernetes.io/name=semantic-router" \
+    -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' 2>/dev/null)
+}
+
+apply_api_service() {
+  info "Creando Service dedicado para la API del router..."
+  envsubst < "${SCRIPT_DIR}/openshift/api-service.yaml.template" \
+    > "${GENERATED_DIR}/api-service.yaml"
+  oc apply -f "${GENERATED_DIR}/api-service.yaml"
+}
+
 apply_routes() {
   info "Creando OpenShift Routes..."
 
-  local dashboard_svc api_svc
+  local dashboard_svc
   dashboard_svc="$(oc get svc -n "${DEMO_NAMESPACE}" \
     -l "app.kubernetes.io/instance=${HELM_RELEASE},app.kubernetes.io/component=dashboard" \
     -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)"
-  api_svc="$(oc get svc -n "${DEMO_NAMESPACE}" \
-    -l "app.kubernetes.io/instance=${HELM_RELEASE}" \
-    -o jsonpath='{.items[?(@.spec.ports[0].port==8080)].metadata.name}' 2>/dev/null || true)"
 
-  # Fallback a nombres convencionales del chart
   : "${dashboard_svc:=${HELM_RELEASE}-dashboard}"
-  : "${api_svc:=${HELM_RELEASE}}"
 
   export DASHBOARD_SVC="${dashboard_svc}"
-  export API_SVC="${api_svc}"
+  export API_SVC="semantic-router-demo-api"
 
   cat > "${GENERATED_DIR}/routes.yaml" <<EOF
 apiVersion: route.openshift.io/v1
@@ -299,6 +335,8 @@ main() {
   apply_scc_bindings
   create_secret
   deploy_helm
+  apply_router_pod_label
+  apply_api_service
   apply_routes
   wait_for_pods
   print_summary
