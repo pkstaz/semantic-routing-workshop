@@ -16,8 +16,13 @@ echo "==> Desinstalando release ${HELM_RELEASE}..."
 helm uninstall "${HELM_RELEASE}" --namespace "${DEMO_NAMESPACE}" 2>/dev/null || true
 
 echo "==> Eliminando routes..."
-oc delete route semantic-router-dashboard semantic-router-api \
+oc delete route semantic-router-dashboard semantic-router-api semantic-router-chat \
   -n "${DEMO_NAMESPACE}" --ignore-not-found
+
+echo "==> Eliminando Envoy y API service..."
+oc delete deployment "${HELM_RELEASE}-envoy" -n "${DEMO_NAMESPACE}" --ignore-not-found
+oc delete svc "${HELM_RELEASE}-envoy" "${HELM_RELEASE}-api" -n "${DEMO_NAMESPACE}" --ignore-not-found
+oc delete configmap "${HELM_RELEASE}-envoy-config" -n "${DEMO_NAMESPACE}" --ignore-not-found
 
 echo "==> Eliminando secret..."
 oc delete secret vllm-sr-env-secrets -n "${DEMO_NAMESPACE}" --ignore-not-found

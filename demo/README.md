@@ -6,26 +6,26 @@ Demo para mostrar **3 rutas** de semantic routing con modelos en MaaS y dashboar
 
 | Ruta | Modelo | Uso |
 |---|---|---|
-| `general` | `llama-32-3b` | Conversación y conocimiento general |
-| `code` | `qwen25-vl-7b-instruct-fp8` | Código, debugging, SQL |
-| `vision` | `granite-vision-32-2b` | Imágenes y análisis visual |
+| `general` | `llama-scout-17b` | Conversación y conocimiento general |
+| `code` | `qwen3-14b` | Código, debugging, SQL |
+| `privacy` | `granite-3-2-8b-instruct` | Datos personales, PII e información sensible |
 
 El **dashboard** de vllm-sr muestra en tiempo real a qué modelo fue cada query.
 
-## Endpoints MaaS (preconfigurados)
+## Endpoint MaaS (preconfigurado)
 
 ```
-https://maas.apps.ocp.cloud.rhai-tmm.dev/prelude-maas/llama-32-3b
-https://maas.apps.ocp.cloud.rhai-tmm.dev/prelude-maas/qwen25-vl-7b-instruct-fp8
-https://maas.apps.ocp.cloud.rhai-tmm.dev/prelude-maas/granite-vision-32-2b
+https://maas-rhdp.apps.maas.redhatworkshops.io
 ```
+
+Los tres modelos comparten el mismo gateway; el router elige el `model` en cada petición.
 
 ## Instalación rápida
 
 ```bash
 cd demo
 cp env.demo.example demo.env
-# Pon tu token en demo.env → OPENSHIFT_AI_TOKEN=...
+# Pon tu token del workshop en demo.env → OPENSHIFT_AI_TOKEN=...
 # Y también HF_TOKEN=... (HuggingFace, para modelos de clasificación del router)
 ./install.sh
 ```
@@ -39,7 +39,7 @@ Requisitos: `oc`, `helm`, sesión activa en OpenShift.
 | `install.sh` | Instala router + dashboard + routes |
 | `uninstall.sh` | Elimina la demo |
 | `runbook.md` | Guión de presentación (15 min) |
-| `config.demo.yaml.template` | Routing llama + qwen + granite-vision |
+| `config.demo.yaml.template` | Routing llama-scout + qwen3 + granite (privacidad) |
 | `helm/values-demo.yaml` | Overrides (dashboard on, sin observability) |
 
 ## URLs después de instalar

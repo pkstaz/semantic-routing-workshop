@@ -7,6 +7,11 @@
 
 version: v0.3
 
+global:
+  integrations:
+    tools:
+      enabled: false
+
 listeners:
   - name: http-chat
     address: 0.0.0.0
@@ -15,28 +20,34 @@ listeners:
 
 providers:
   defaults:
-    default_model: llama-32-3b
+    default_model: llama-scout-17b
   models:
-    - name: llama-32-3b
+    - name: llama-scout-17b
       backend_refs:
         - name: primary
-          base_url: https://your-openshift-ai-host/llama-32-3b
+          base_url: https://maas-rhdp.apps.maas.redhatworkshops.io
+          type: chat
+          provider: openai
           api_key_env: OPENSHIFT_AI_TOKEN
           auth_header: Authorization
           auth_prefix: Bearer
           chat_path: /v1/chat/completions
-    - name: qwen35-9b
+    - name: qwen3-14b
       backend_refs:
         - name: primary
-          base_url: https://your-openshift-ai-host/qwen35-9b
+          base_url: https://maas-rhdp.apps.maas.redhatworkshops.io
+          type: chat
+          provider: openai
           api_key_env: OPENSHIFT_AI_TOKEN
           auth_header: Authorization
           auth_prefix: Bearer
           chat_path: /v1/chat/completions
-    - name: granite-vision-32-2b
+    - name: granite-3-2-8b-instruct
       backend_refs:
         - name: primary
-          base_url: https://your-openshift-ai-host/granite-vision-32-2b
+          base_url: https://maas-rhdp.apps.maas.redhatworkshops.io
+          type: chat
+          provider: openai
           api_key_env: OPENSHIFT_AI_TOKEN
           auth_header: Authorization
           auth_prefix: Bearer
@@ -44,15 +55,15 @@ providers:
 
 routing:
   modelCards:
-    - name: llama-32-3b
+    - name: llama-scout-17b
       description: Consultas generales y conversación
       modality: text
-    - name: qwen35-9b
+    - name: qwen3-14b
       description: Código, debugging y scripts
       modality: text
-    - name: granite-vision-32-2b
-      description: Imágenes y análisis visual
-      modality: multimodal
+    - name: granite-3-2-8b-instruct
+      description: Datos personales, PII e información privada
+      modality: text
 
   signals:
     domains:
@@ -63,41 +74,43 @@ routing:
         description: Conversación, conocimiento general, redacción y preguntas abiertas
         mmlu_categories: [other]
     keywords:
-      - name: vision
+      - name: sensitive_data
         operator: OR
         keywords:
-          - image
-          - photo
-          - picture
-          - screenshot
-          - visual
+          - ssn
+          - social security
+          - credit card
+          - personal information
+          - private information
+          - datos personales
+          - información privada
         case_sensitive: false
 
   decisions:
+    - name: privacy-route
+      description: Consultas con datos personales van a Granite
+      priority: 250
+      rules:
+        operator: AND
+        conditions:
+          - type: keyword
+            name: sensitive_data
+      modelRefs:
+        - model: granite-3-2-8b-instruct
+
     - name: code-route
-      description: Consultas de código van a Qwen
-      priority: 10
+      description: Consultas de código van a Qwen3
+      priority: 150
       rules:
         operator: AND
         conditions:
           - type: domain
             name: code
       modelRefs:
-        - model: qwen35-9b
-
-    - name: vision-route
-      description: Consultas con imágenes van a Granite Vision
-      priority: 20
-      rules:
-        operator: AND
-        conditions:
-          - type: keyword
-            name: vision
-      modelRefs:
-        - model: granite-vision-32-2b
+        - model: qwen3-14b
 
     - name: general-route
-      description: Todo lo demás va a Llama
+      description: Todo lo demás va a Llama Scout
       priority: 100
       rules:
         operator: AND
@@ -105,4 +118,4 @@ routing:
           - type: domain
             name: general
       modelRefs:
-        - model: llama-32-3b
+        - model: llama-scout-17b

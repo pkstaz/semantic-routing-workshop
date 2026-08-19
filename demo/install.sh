@@ -40,9 +40,9 @@ load_env() {
   : "${DEMO_NAMESPACE:=semantic-router-demo}"
   : "${HELM_RELEASE:=semantic-router-demo}"
   : "${HELM_CHART:=oci://ghcr.io/vllm-project/charts/semantic-router}"
-  : "${LLAMA_SERVICE_URL:?Define LLAMA_SERVICE_URL en demo.env}"
-  : "${QWEN_SERVICE_URL:?Define QWEN_SERVICE_URL en demo.env}"
-  : "${GRANITE_VISION_SERVICE_URL:?Define GRANITE_VISION_SERVICE_URL en demo.env}"
+  : "${GENERAL_SERVICE_URL:?Define GENERAL_SERVICE_URL en demo.env}"
+  : "${CODE_SERVICE_URL:?Define CODE_SERVICE_URL en demo.env}"
+  : "${PRIVACY_SERVICE_URL:?Define PRIVACY_SERVICE_URL en demo.env}"
   : "${STORAGE_CLASS:=gp3-csi}"
 }
 
@@ -61,7 +61,7 @@ render_templates() {
   mkdir -p "${GENERATED_DIR}"
 
   export DEMO_NAMESPACE HELM_RELEASE \
-    LLAMA_SERVICE_URL QWEN_SERVICE_URL GRANITE_VISION_SERVICE_URL
+    GENERAL_SERVICE_URL CODE_SERVICE_URL PRIVACY_SERVICE_URL
 
   envsubst < "${SCRIPT_DIR}/config.demo.yaml.template" > "${GENERATED_DIR}/config.yaml"
   envsubst < "${SCRIPT_DIR}/openshift/namespace.yaml.template" > "${GENERATED_DIR}/namespace.yaml"
@@ -183,6 +183,14 @@ create_secret() {
   fi
 }
 
+restart_router_for_secret() {
+  if oc get deployment "${HELM_RELEASE}" -n "${DEMO_NAMESPACE}" >/dev/null 2>&1; then
+    info "Reiniciando router para cargar OPENSHIFT_AI_TOKEN actualizado..."
+    oc rollout restart deployment/"${HELM_RELEASE}" -n "${DEMO_NAMESPACE}" >/dev/null
+    oc rollout status deployment/"${HELM_RELEASE}" -n "${DEMO_NAMESPACE}" --timeout=180s
+  fi
+}
+
 deploy_helm() {
   info "Desplegando ${HELM_RELEASE} con Helm..."
   local helm_args=(
@@ -240,6 +248,64 @@ apply_api_service() {
   oc apply -f "${GENERATED_DIR}/api-service.yaml"
 }
 
+deploy_envoy() {
+  info "Desplegando Envoy (chat API /v1/chat/completions en :8899)..."
+  local vllm_sr=""
+  if [[ -x "${REPO_ROOT}/.venv/bin/vllm-sr" ]]; then
+    vllm_sr="${REPO_ROOT}/.venv/bin/vllm-sr"
+  elif command -v vllm-sr >/dev/null 2>&1; then
+    vllm_sr="vllm-sr"
+  else
+    error "vllm-sr requerido para generar config de Envoy"
+  fi
+
+  local python_bin raw_envoy
+  python_bin="$(resolve_python)"
+  raw_envoy="${GENERATED_DIR}/envoy.raw.yaml"
+
+  "${vllm_sr}" config envoy --config "${GENERATED_DIR}/config.yaml" 2>/dev/null \
+    | sed -n '/^admin:/,$p' > "${raw_envoy}"
+
+  "${python_bin}" - "${HELM_RELEASE}" "${raw_envoy}" "${GENERATED_DIR}/envoy.yaml" <<'PY'
+import re, sys
+host, infile, outfile = sys.argv[1], sys.argv[2], sys.argv[3]
+with open(infile) as f:
+    text = f.read()
+text = text.replace("address: 127.0.0.1", f"address: {host}")
+text = re.sub(
+    r"(# ExtProc service \(semantic router\)\n  - name: extproc_service\n    connect_timeout: [^\n]+\n    )type: STATIC",
+    r"\1type: LOGICAL_DNS\n    dns_lookup_family: V4_ONLY",
+    text,
+    count=1,
+)
+text = re.sub(
+    r"(name: extproc_service.*?port_value: 50051\n)",
+    rf'\1            hostname: "{host}"\n',
+    text,
+    count=1,
+    flags=re.DOTALL,
+)
+with open(outfile, "w") as f:
+    f.write(text)
+PY
+
+  oc create configmap "${HELM_RELEASE}-envoy-config" \
+    --namespace "${DEMO_NAMESPACE}" \
+    --from-file=envoy.yaml="${GENERATED_DIR}/envoy.yaml" \
+    --dry-run=client -o yaml | oc apply -f -
+
+  envsubst < "${SCRIPT_DIR}/openshift/envoy-deployment.yaml.template" \
+    > "${GENERATED_DIR}/envoy-deployment.yaml"
+  oc apply -f "${GENERATED_DIR}/envoy-deployment.yaml"
+}
+
+patch_dashboard_envoy_url() {
+  info "Configurando dashboard para usar Envoy (chat API)..."
+  oc set env deployment/"${HELM_RELEASE}-dashboard" -n "${DEMO_NAMESPACE}" \
+    TARGET_ROUTER_API_URL="http://${HELM_RELEASE}-envoy:8899" --overwrite
+  oc rollout status deployment/"${HELM_RELEASE}-dashboard" -n "${DEMO_NAMESPACE}" --timeout=120s
+}
+
 apply_routes() {
   info "Creando OpenShift Routes..."
 
@@ -251,7 +317,8 @@ apply_routes() {
   : "${dashboard_svc:=${HELM_RELEASE}-dashboard}"
 
   export DASHBOARD_SVC="${dashboard_svc}"
-  export API_SVC="semantic-router-demo-api"
+  export API_SVC="${HELM_RELEASE}-api"
+  export CHAT_SVC="${HELM_RELEASE}-envoy"
 
   cat > "${GENERATED_DIR}/routes.yaml" <<EOF
 apiVersion: route.openshift.io/v1
@@ -285,10 +352,26 @@ spec:
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: semantic-router-chat
+  namespace: ${DEMO_NAMESPACE}
+spec:
+  to:
+    kind: Service
+    name: ${CHAT_SVC}
+    weight: 100
+  port:
+    targetPort: 8899
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
 EOF
 
   oc apply -f "${GENERATED_DIR}/routes.yaml"
-  info "Routes → dashboard:${DASHBOARD_SVC}  api:${API_SVC}"
+  info "Routes → dashboard:${DASHBOARD_SVC}  eval-api:${API_SVC}  chat:${CHAT_SVC}"
 }
 
 wait_for_pods() {
@@ -299,10 +382,47 @@ wait_for_pods() {
     --timeout=600s 2>/dev/null || true
 }
 
+wait_for_router_ready() {
+  info "Esperando que el router termine de cargar modelos de clasificación (~1-2 min)..."
+  local router_pod=""
+  local i
+  for i in $(seq 1 60); do
+    router_pod="$(oc get pods -n "${DEMO_NAMESPACE}" \
+      -l "app.kubernetes.io/instance=${HELM_RELEASE},app.kubernetes.io/component=router" \
+      -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)"
+    if [[ -n "${router_pod}" ]] && oc logs -n "${DEMO_NAMESPACE}" "${router_pod}" 2>/dev/null | grep -q "startup_complete"; then
+      info "Router listo (${router_pod})"
+      return 0
+    fi
+    sleep 5
+  done
+  warn "El router aún no reporta startup_complete — el playground puede devolver 500 unos minutos más"
+}
+
+warmup_router() {
+  info "Calentando backends MaaS (evita 500 en el primer request del playground)..."
+  local chat_host prompt
+  chat_host="$(oc get route semantic-router-chat -n "${DEMO_NAMESPACE}" -o jsonpath='{.spec.host}' 2>/dev/null || true)"
+  if [[ -z "${chat_host}" ]]; then
+    warn "Route semantic-router-chat no disponible — omite warmup"
+    return 0
+  fi
+  for prompt in "What is the capital of France?" "Write a Python function to sort a list"; do
+    if ! curl -sf -X POST "https://${chat_host}/v1/chat/completions" \
+      -H "Content-Type: application/json" \
+      -d "{\"model\":\"auto\",\"messages\":[{\"role\":\"user\",\"content\":\"${prompt}\"}],\"max_tokens\":5}" >/dev/null; then
+      warn "Warmup falló para: ${prompt}"
+    fi
+    sleep 2
+  done
+  info "Warmup completado"
+}
+
 print_summary() {
-  local dashboard_url api_url
+  local dashboard_url api_url chat_url
   dashboard_url="$(oc get route semantic-router-dashboard -n "${DEMO_NAMESPACE}" -o jsonpath='{.spec.host}' 2>/dev/null || true)"
   api_url="$(oc get route semantic-router-api -n "${DEMO_NAMESPACE}" -o jsonpath='{.spec.host}' 2>/dev/null || true)"
+  chat_url="$(oc get route semantic-router-chat -n "${DEMO_NAMESPACE}" -o jsonpath='{.spec.host}' 2>/dev/null || true)"
 
   echo ""
   info "Demo desplegada correctamente"
@@ -313,8 +433,11 @@ print_summary() {
   if [[ -n "${dashboard_url}" ]]; then
     echo "  Dashboard:  https://${dashboard_url}"
   fi
+  if [[ -n "${chat_url}" ]]; then
+    echo "  Chat API:   https://${chat_url}/v1/chat/completions"
+  fi
   if [[ -n "${api_url}" ]]; then
-    echo "  API chat:   https://${api_url}/v1/chat/completions"
+    echo "  Eval API:   https://${api_url}/api/v1/eval"
   fi
   echo ""
   echo "  Siguiente paso: demo/runbook.md"
@@ -335,10 +458,15 @@ main() {
   apply_scc_bindings
   create_secret
   deploy_helm
+  restart_router_for_secret
   apply_router_pod_label
   apply_api_service
+  deploy_envoy
+  patch_dashboard_envoy_url
   apply_routes
   wait_for_pods
+  wait_for_router_ready
+  warmup_router
   print_summary
 }
 
