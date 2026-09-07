@@ -9,7 +9,7 @@ Notas para facilitar el workshop de semantic routing.
 | 0–5 min | Introducción y objetivos | [00-introduccion](./00-introduccion.md) |
 | 5–25 min | Setup: Python, Docker, vllm-sr | [01](./01-python.md) – [03](./03-vllm-sr.md) |
 | 25–35 min | Arquitectura y demo del diagrama | [04-arquitectura](./04-arquitectura-y-flujo.md) |
-| 35–55 min | Setup dashboard: endpoints y rutas | [05-configuracion](./05-configuracion.md) |
+| 35–55 min | Setup dashboard: modelos y rutas | [05-configuracion](./05-configuracion.md) |
 | 55–65 min | Open WebUI y prueba rápida | [06-levantar](./06-levantar-servicios.md) |
 | 65–90 min | Ejercicios prácticos | [07-ejercicios](./07-ejercicios.md) |
 

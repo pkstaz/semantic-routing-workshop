@@ -33,43 +33,35 @@ La primera vez descarga imágenes — puede tardar varios minutos.
 
 Cuando esté listo, abre: [http://localhost:8700](http://localhost:8700)
 
-Crea una cuenta (email + contraseña) y guárdala: no hay usuario de fábrica. Después entra en **setup**: creas endpoints y rutas, y al final pulsas **Activate**.
+Crea una cuenta (email + contraseña) y guárdala: no hay usuario de fábrica.
 
 Si el dashboard pide login con *Bootstrap is complete* en vez de crear cuenta, ve a [Troubleshooting](./09-troubleshooting.md).
 
-## 2. Auth (igual en los 3 endpoints)
+Después del login ves **Build your first Mixture-of-Models**, paso **Connect model**. Ahí se crean y configuran los modelos. Sigue con la sección 2.
 
-En cada modelo, usa:
+## 2. Conecta los modelos
 
-Header:
+Routing mode: **From scratch**.
 
-```
-Authorization
-```
+Si el formulario trae un modelo de ejemplo (por ejemplo `qwen/qwen3.5-rocm` y `vllm:8000`), pulsa **Remove**. No es de este taller.
 
-Prefix:
+Crea **3 modelos** con **Add model**. En cada uno:
 
-```
-Bearer
-```
-
-**API key:** el token que te da el instructor (no lo copies de esta guía).
-
-> Las URLs van **sin** `/v1` al final.
-
-## 3. Endpoints
-
-En setup, crea **3 modelos**. Copia nombre y URL, pega, guarda, siguiente.
+| Campo | Valor |
+|---|---|
+| **Provider** | `OpenAI-compatible API` |
+| **Access key** | el token del instructor (igual en los 3) |
+| **Base URL or Host** | la URL que te dicten, **sin** `/v1` al final |
 
 ### Llama — conversación
 
-Nombre:
+Model name:
 
 ```
 llama-32-3b
 ```
 
-URL:
+Base URL or Host:
 
 ```
 https://<URL-LLAMA>
@@ -77,17 +69,17 @@ https://<URL-LLAMA>
 
 Uso: preguntas generales, redacción, conocimiento.
 
-Marca este modelo como **default**.
+Márcalo como **Default**.
 
 ### Qwen — código
 
-Nombre:
+Model name:
 
 ```
 qwen35-9b
 ```
 
-URL:
+Base URL or Host:
 
 ```
 https://<URL-CODE>
@@ -97,13 +89,13 @@ Uso: Python, SQL, debugging, scripts.
 
 ### Granite Vision — imágenes
 
-Nombre:
+Model name:
 
 ```
 granite-vision-32-2b
 ```
 
-URL:
+Base URL or Host:
 
 ```
 https://<URL-VISION>
@@ -111,11 +103,11 @@ https://<URL-VISION>
 
 Uso: fotos y análisis visual.
 
-Deberías ver 3 modelos en la lista.
+Deberías ver 3 modelos. Pulsa **Next** (Choose routing).
 
-## 4. Dominios
+## 3. Dominios
 
-En **Signals → Domains**, crea estos 3. Copia el nombre y la descripción.
+En el paso **Choose routing**, crea estos 3 dominios. Copia el nombre y la descripción.
 
 ### `code`
 
@@ -159,9 +151,9 @@ Descripción:
 Conversación, conocimiento general, redacción y preguntas abiertas
 ```
 
-## 5. Rutas
+## 4. Rutas
 
-En **Decisions / Routes**, crea 3 reglas. Prioridad: **número más bajo gana**.
+Sigue en **Choose routing**. Crea 3 reglas. Prioridad: **número más bajo gana**.
 
 ### Ruta código
 
@@ -211,9 +203,9 @@ Prioridad:
 
 Si el dominio es `general` → modelo `llama-32-3b`
 
-## 6. Activate
+## 5. Review & activate
 
-Pulsa **Activate**. El dashboard genera la config y sale del modo setup.
+Pulsa **Next** y luego **Activate**. El dashboard genera la config y sale del modo setup.
 
 Comprueba que ves los 3 modelos:
 

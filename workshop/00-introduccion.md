@@ -30,7 +30,7 @@ En este workshop vas a montar un **semantic router** que clasifica cada consulta
 
 ## Flujo del taller
 
-1. Arrancas `vllm-sr` y configuras endpoints y rutas en el setup del dashboard.
+1. Arrancas `vllm-sr` y configuras modelos y rutas en el setup del dashboard.
 2. Exploras las reglas de routing en el **dashboard**.
 3. Pruebas queries en el **playground** y ves qué modelo se eligió.
 4. Chateas en **Open WebUI** como usuario final.
