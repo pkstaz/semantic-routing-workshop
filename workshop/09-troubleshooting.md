@@ -31,7 +31,7 @@ vllm-sr serve           # Reiniciar si es necesario
 **Verificar:**
 
 1. ¿`vllm-sr serve` está corriendo?
-2. ¿El puerto en `.env` (`CHAT_API_PORT`) coincide con el listener de Envoy?
+2. ¿Open WebUI apunta a Envoy en el puerto **8899**?
 
 ```bash
 # Probar la API de chat directamente
@@ -51,9 +51,9 @@ podman inspect open-webui | grep OPENAI_API_BASE_URL
 
 **Síntoma:** el router conecta pero el modelo remoto rechaza la petición.
 
-- Verifica que `OPENSHIFT_AI_TOKEN` es válido y no expiró
-- Confirma que los endpoints en `.env` son correctos (sin `/v1` al final)
-- Revisa que el token esté exportado: `echo $OPENSHIFT_AI_TOKEN`
+- En el dashboard, revisa el **API key** (Bearer) de cada endpoint: el token puede haber expirado
+- Confirma que las URLs están **sin** `/v1` al final
+- Pide al instructor un token de respaldo si el actual falla
 
 ## El routing elige el modelo incorrecto
 

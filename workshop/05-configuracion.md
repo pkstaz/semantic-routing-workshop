@@ -1,90 +1,208 @@
 # 5. Configuración
 
-## 1. Variables de entorno
+Todo se hace en el **dashboard** (modo setup). No hace falta `.env` ni YAML.
 
-Copia el archivo de ejemplo y edítalo con tus credenciales de OpenShift AI:
+El instructor te pasa **un token** y **tres URLs**. Pégalo todo en la UI.
 
-```bash
-cp .env.example .env
-```
+## 1. Arranca vllm-sr
 
-Edita `.env`:
-
-```env
-LLAMA_ENDPOINT=https://tu-host-openshift-ai/llama-32-3b
-QWEN_CODE_ENDPOINT=https://tu-host-openshift-ai/qwen35-9b
-GRANITE_VISION_ENDPOINT=https://tu-host-openshift-ai/granite-vision-32-2b
-OPENSHIFT_AI_TOKEN=tu-token-aqui
-```
-
-> Los endpoints son la URL base del modelo **sin** `/v1` al final.
-
-Exporta el token para que `vllm-sr` lo use al conectar con los backends:
+Desde la raíz del repo, con el entorno virtual activo:
 
 ```bash
-export OPENSHIFT_AI_TOKEN=$(grep OPENSHIFT_AI_TOKEN .env | cut -d= -f2-)
+source .venv/bin/activate
+vllm-sr serve
 ```
 
-## 2. Configurar el routing
+La primera vez descarga imágenes — puede tardar varios minutos.
 
-Tienes dos opciones. Para el workshop recomendamos la **Opción A** (dashboard).
+Cuando esté listo, abre: [http://localhost:8700](http://localhost:8700)
 
-### Opción A — Dashboard (recomendado)
+El dashboard entra en **setup**. Ahí creas endpoints y rutas, y al final pulsas **Activate**.
 
-La primera vez que ejecutes `vllm-sr serve` sin `config.yaml`, el dashboard abre en **modo setup**. Desde ahí:
+## 2. Auth (igual en los 3 endpoints)
 
-1. **Providers** — agrega los 3 modelos con sus endpoints de OpenShift AI:
-   - `llama-32-3b` → `LLAMA_ENDPOINT`
-   - `qwen35-9b` → `QWEN_CODE_ENDPOINT`
-   - `granite-vision-32-2b` → `GRANITE_VISION_ENDPOINT`
-   - Auth: `Authorization: Bearer` con tu `OPENSHIFT_AI_TOKEN`
+En cada modelo, usa:
 
-2. **Signals → Domains** — crea tres dominios:
-   - `code` — programación, debugging, SQL, scripts
-   - `vision` — imágenes, fotos, análisis visual
-   - `general` — conversación y conocimiento general
+Header:
 
-3. **Decisions** — crea tres reglas (prioridad: code=10, vision=20, general=100):
-
-   | Decision | Condición | Modelo |
-   |---|---|---|
-   | `code-route` | domain = `code` | `qwen35-9b` |
-   | `vision-route` | domain = `vision` | `granite-vision-32-2b` |
-   | `general-route` | domain = `general` | `llama-32-3b` |
-
-4. **Activate** — activa la configuración desde el dashboard.
-
-### Opción B — Archivo YAML
-
-Si prefieres configurar por archivo:
-
-```bash
-cp config/config.example.yaml config.yaml
+```
+Authorization
 ```
 
-Edita `config.yaml` reemplazando los endpoints con los valores de tu `.env`.
+Prefix:
 
-Valida antes de usar:
-
-```bash
-vllm-sr validate --config config.yaml
+```
+Bearer
 ```
 
-Luego arranca con:
+**API key:** el token que te da el instructor (no lo copies de esta guía).
 
-```bash
-vllm-sr serve --config config.yaml
+> Las URLs van **sin** `/v1` al final.
+
+## 3. Endpoints
+
+En setup, crea **3 modelos**. Copia nombre y URL, pega, guarda, siguiente.
+
+### Llama — conversación
+
+Nombre:
+
+```
+llama-32-3b
 ```
 
-> Referencia completa del YAML: [`config/config.example.yaml`](../config/config.example.yaml)
+URL:
 
-## 3. Verificar la configuración
+```
+https://<URL-LLAMA>
+```
+
+Uso: preguntas generales, redacción, conocimiento.
+
+Marca este modelo como **default**.
+
+### Qwen — código
+
+Nombre:
+
+```
+qwen35-9b
+```
+
+URL:
+
+```
+https://<URL-CODE>
+```
+
+Uso: Python, SQL, debugging, scripts.
+
+### Granite Vision — imágenes
+
+Nombre:
+
+```
+granite-vision-32-2b
+```
+
+URL:
+
+```
+https://<URL-VISION>
+```
+
+Uso: fotos y análisis visual.
+
+Deberías ver 3 modelos en la lista.
+
+## 4. Dominios
+
+En **Signals → Domains**, crea estos 3. Copia el nombre y la descripción.
+
+### `code`
+
+Nombre:
+
+```
+code
+```
+
+Descripción:
+
+```
+Programación, debugging, SQL, scripts y algoritmos
+```
+
+### `vision`
+
+Nombre:
+
+```
+vision
+```
+
+Descripción:
+
+```
+Imágenes, fotos y análisis visual
+```
+
+### `general`
+
+Nombre:
+
+```
+general
+```
+
+Descripción:
+
+```
+Conversación, conocimiento general, redacción y preguntas abiertas
+```
+
+## 5. Rutas
+
+En **Decisions / Routes**, crea 3 reglas. Prioridad: **número más bajo gana**.
+
+### Ruta código
+
+Nombre:
+
+```
+code-route
+```
+
+Prioridad:
+
+```
+10
+```
+
+Si el dominio es `code` → modelo `qwen35-9b`
+
+### Ruta visión
+
+Nombre:
+
+```
+vision-route
+```
+
+Prioridad:
+
+```
+20
+```
+
+Si el dominio es `vision` → modelo `granite-vision-32-2b`
+
+### Ruta general
+
+Nombre:
+
+```
+general-route
+```
+
+Prioridad:
+
+```
+100
+```
+
+Si el dominio es `general` → modelo `llama-32-3b`
+
+## 6. Activate
+
+Pulsa **Activate**. El dashboard genera la config y sale del modo setup.
+
+Comprueba que ves los 3 modelos:
 
 ```bash
-vllm-sr validate --config config.yaml   # si usas YAML
-vllm-sr model                             # lista modelos configurados
+vllm-sr model
 ```
 
 ## Siguiente paso
 
-[Levantar los servicios →](./06-levantar-servicios.md)
+[Levantar Open WebUI →](./06-levantar-servicios.md)

@@ -52,9 +52,9 @@
         <h1>Guía del instructor</h1>
 <p>Notas para facilitar el workshop de semantic routing.</p>
 <h2>Agenda sugerida (90 min)</h2>
-<table><thead><tr><th>Tiempo</th><th>Actividad</th><th>Material</th></tr></thead><tbody><tr><td>0–5 min</td><td>Introducción y objetivos</td><td><a href="00-introduccion.html">00-introduccion</a></td></tr><tr><td>5–25 min</td><td>Setup: Python, Podman, vllm-sr</td><td><a href="01-python.html">01</a> – <a href="03-vllm-sr.html">03</a></td></tr><tr><td>25–35 min</td><td>Arquitectura y demo del diagrama</td><td><a href="04-arquitectura-y-flujo.html">04-arquitectura</a></td></tr><tr><td>35–55 min</td><td>Configuración (dashboard o YAML)</td><td><a href="05-configuracion.html">05-configuracion</a></td></tr><tr><td>55–65 min</td><td>Levantar servicios, verificar</td><td><a href="06-levantar-servicios.html">06-levantar</a></td></tr><tr><td>65–90 min</td><td>Ejercicios prácticos</td><td><a href="07-ejercicios.html">07-ejercicios</a></td></tr></tbody></table>
+<table><thead><tr><th>Tiempo</th><th>Actividad</th><th>Material</th></tr></thead><tbody><tr><td>0–5 min</td><td>Introducción y objetivos</td><td><a href="00-introduccion.html">00-introduccion</a></td></tr><tr><td>5–25 min</td><td>Setup: Python, Podman, vllm-sr</td><td><a href="01-python.html">01</a> – <a href="03-vllm-sr.html">03</a></td></tr><tr><td>25–35 min</td><td>Arquitectura y demo del diagrama</td><td><a href="04-arquitectura-y-flujo.html">04-arquitectura</a></td></tr><tr><td>35–55 min</td><td>Setup dashboard: endpoints y rutas</td><td><a href="05-configuracion.html">05-configuracion</a></td></tr><tr><td>55–65 min</td><td>Open WebUI y prueba rápida</td><td><a href="06-levantar-servicios.html">06-levantar</a></td></tr><tr><td>65–90 min</td><td>Ejercicios prácticos</td><td><a href="07-ejercicios.html">07-ejercicios</a></td></tr></tbody></table>
 <h2>Antes del workshop</h2>
-<ul><li>[ ] Tener credenciales de OpenShift AI listas para compartir (o un mecanismo seguro para distribuirlas)</li><li>[ ] Probar el flujo completo en tu máquina: <code>vllm-sr serve</code> + <code>podman-compose up</code></li><li>[ ] Verificar que los 3 modelos remotos responden</li><li>[ ] Tener el dashboard abierto en una pantalla compartida para la demo en vivo</li></ul>
+<ul><li>[ ] Tener token y las 3 URLs (llama / code / vision) listas para dictar — los participantes las pegan en el setup</li><li>[ ] Probar el flujo completo: <code>vllm-sr serve</code> → setup dashboard → <code>podman-compose up</code></li><li>[ ] Verificar que los 3 modelos remotos responden</li><li>[ ] Tener el dashboard abierto en una pantalla compartida para la demo en vivo</li></ul>
 <h2>Puntos clave para explicar</h2>
 <h3>¿Por qué dos interfaces?</h3>
 <ul><li><strong>Dashboard (8700):</strong> transparencia — el participante <em>ve</em> el routing</li><li><strong>Open WebUI (3000):</strong> experiencia real — el usuario <em>no ve</em> el routing</li></ul>
@@ -73,7 +73,7 @@
 <h2>Preguntas frecuentes de participantes</h2>
 <p><strong>¿Puedo usar Docker en vez de Podman?</strong> Sí, <code>vllm-sr serve</code> detecta Docker automáticamente. El workshop está escrito para Podman.</p>
 <p><strong>¿El router corre en GPU?</strong> No. La clasificación semántica corre en CPU local. Los modelos LLM están en OpenShift AI remoto.</p>
-<p><strong>¿Puedo agregar más modelos/rutas?</strong> Sí, desde el dashboard o editando <code>config.yaml</code>.</p>
+<p><strong>¿Puedo agregar más modelos/rutas?</strong> Sí, desde el dashboard.</p>
 <p><strong>¿Qué pasa si ninguna regla coincide?</strong> Se usa el <code>default_model</code> configurado en providers (<code>llama-32-3b</code>).</p>
 <h2>Recursos adicionales</h2>
 <ul><li><a href="https://github.com/vllm-project/vllm-semantic-router">vLLM Semantic Router</a></li><li><a href="https://github.com/open-webui/open-webui">Open WebUI</a></li></ul>

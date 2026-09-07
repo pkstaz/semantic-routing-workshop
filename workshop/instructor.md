@@ -9,14 +9,14 @@ Notas para facilitar el workshop de semantic routing.
 | 0–5 min | Introducción y objetivos | [00-introduccion](./00-introduccion.md) |
 | 5–25 min | Setup: Python, Podman, vllm-sr | [01](./01-python.md) – [03](./03-vllm-sr.md) |
 | 25–35 min | Arquitectura y demo del diagrama | [04-arquitectura](./04-arquitectura-y-flujo.md) |
-| 35–55 min | Configuración (dashboard o YAML) | [05-configuracion](./05-configuracion.md) |
-| 55–65 min | Levantar servicios, verificar | [06-levantar](./06-levantar-servicios.md) |
+| 35–55 min | Setup dashboard: endpoints y rutas | [05-configuracion](./05-configuracion.md) |
+| 55–65 min | Open WebUI y prueba rápida | [06-levantar](./06-levantar-servicios.md) |
 | 65–90 min | Ejercicios prácticos | [07-ejercicios](./07-ejercicios.md) |
 
 ## Antes del workshop
 
-- [ ] Tener credenciales de OpenShift AI listas para compartir (o un mecanismo seguro para distribuirlas)
-- [ ] Probar el flujo completo en tu máquina: `vllm-sr serve` + `podman-compose up`
+- [ ] Tener token y las 3 URLs (llama / code / vision) listas para dictar — los participantes las pegan en el setup
+- [ ] Probar el flujo completo: `vllm-sr serve` → setup dashboard → `podman-compose up`
 - [ ] Verificar que los 3 modelos remotos responden
 - [ ] Tener el dashboard abierto en una pantalla compartida para la demo en vivo
 
@@ -78,7 +78,7 @@ Sí, `vllm-sr serve` detecta Docker automáticamente. El workshop está escrito 
 No. La clasificación semántica corre en CPU local. Los modelos LLM están en OpenShift AI remoto.
 
 **¿Puedo agregar más modelos/rutas?**
-Sí, desde el dashboard o editando `config.yaml`.
+Sí, desde el dashboard.
 
 **¿Qué pasa si ninguna regla coincide?**
 Se usa el `default_model` configurado en providers (`llama-32-3b`).

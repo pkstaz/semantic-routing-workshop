@@ -24,7 +24,7 @@ Tres modelos remotos, una sola interfaz de chat:
 - macOS Apple Silicon (arm64) o Linux arm64/amd64
 - Python 3.12
 - Podman + podman-compose
-- Token y endpoints de OpenShift AI
+- Token y 3 URLs de OpenShift AI (se pegan en el setup del dashboard)
 
 ## Empezar
 

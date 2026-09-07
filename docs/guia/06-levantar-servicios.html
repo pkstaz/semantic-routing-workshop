@@ -49,36 +49,26 @@
       </aside>
       <article class="article prose">
         <div class="article-kicker">Misión 06 · 10 min</div>
-        <h1>6. Levantar los servicios</h1>
-<h2>1. Semantic router (API + dashboard)</h2>
-<p>Desde la raíz del repositorio, con el entorno virtual activo:</p>
+        <h1>6. Levantar Open WebUI</h1>
+<p><code>vllm-sr</code> ya debería estar corriendo del <a href="05-configuracion.html">paso 5</a>. Si lo cerraste, vuelve a arrancarlo:</p>
 <pre><code class="language-bash">source .venv/bin/activate
-export OPENSHIFT_AI_TOKEN=$(grep OPENSHIFT_AI_TOKEN .env | cut -d= -f2-)
 vllm-sr serve</code></pre>
-<p>Si usas un archivo de configuración:</p>
-<pre><code class="language-bash">vllm-sr serve --config config.yaml</code></pre>
-<p>La primera ejecución descarga imágenes de contenedor — puede tardar varios minutos.</p>
-<h3>Puertos disponibles</h3>
-<table><thead><tr><th>Puerto</th><th>Servicio</th></tr></thead><tbody><tr><td><strong>8899</strong></td><td>API de chat (Open WebUI apunta aquí)</td></tr><tr><td><strong>8080</strong></td><td>API interna del router (<code>vllm-sr eval</code>)</td></tr><tr><td><strong>8700</strong></td><td>Dashboard web</td></tr></tbody></table>
-<p>Verifica que esté corriendo:</p>
+<p>Verifica:</p>
 <pre><code class="language-bash">vllm-sr status</code></pre>
-<p>Abre el dashboard: <a href="http://localhost:8700">http://localhost:8700</a></p>
-<blockquote>Anota los puertos que muestra <code>vllm-sr serve</code> al arrancar. Si cambiaste el listener en <code>config.yaml</code>, actualiza <code>CHAT_API_PORT</code> en tu <code>.env</code>.</blockquote>
-<h2>2. Open WebUI</h2>
+<p>Dashboard: <a href="http://localhost:8700">http://localhost:8700</a></p>
+<table><thead><tr><th>Puerto</th><th>Servicio</th></tr></thead><tbody><tr><td><strong>8899</strong></td><td>API de chat (Open WebUI apunta aquí)</td></tr><tr><td><strong>8080</strong></td><td>API interna del router (<code>vllm-sr eval</code>)</td></tr><tr><td><strong>8700</strong></td><td>Dashboard web</td></tr></tbody></table>
+<h2>1. Open WebUI</h2>
 <p>En <strong>otra terminal</strong>, desde la raíz del repositorio:</p>
-<pre><code class="language-bash">cp .env.example .env   # si aún no lo tienes
-podman-compose up -d</code></pre>
-<p>Abre Open WebUI: <a href="http://localhost:3000">http://localhost:3000</a></p>
-<p>La primera vez te pedirá crear una cuenta local (solo para este entorno de demo).</p>
-<h3>Conectar Open WebUI al router</h3>
-<p><code>podman-compose.yml</code> ya configura:</p>
+<pre><code class="language-bash">podman-compose up -d</code></pre>
+<p>Abre: <a href="http://localhost:3000">http://localhost:3000</a></p>
+<p>La primera vez crea una cuenta local (solo para este entorno).</p>
+<p><code>podman-compose.yml</code> ya apunta al router:</p>
 <pre><code class="language-yaml">OPENAI_API_BASE_URL=http://host.containers.internal:8899/v1</code></pre>
-<p>No necesitas configurar modelos manualmente en Open WebUI — el router elige el modelo por ti.</p>
-<h2>3. Verificar end-to-end</h2>
-<pre><code class="language-bash"># Desde el CLI — prueba routing sin UI
-vllm-sr eval --prompt &quot;Write a Python function to sort a list&quot;
+<p>No eliges modelo en Open WebUI — el router lo hace por ti.</p>
+<h2>2. Probar rápido</h2>
+<pre><code class="language-bash">vllm-sr eval --prompt &quot;Write a Python function to sort a list&quot;
 vllm-sr chat &quot;What is the capital of France?&quot;</code></pre>
-<h2>4. Detener</h2>
+<h2>3. Detener (cuando termines el taller)</h2>
 <pre><code class="language-bash">podman-compose down
 vllm-sr stop</code></pre>
 <h2>Siguiente paso</h2>

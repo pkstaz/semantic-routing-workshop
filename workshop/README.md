@@ -8,7 +8,7 @@ Guías paso a paso para el workshop comunitario.
 
 - Mac Apple Silicon (arm64) o Linux
 - Conexión a internet
-- Credenciales de OpenShift AI (token + endpoints de los 3 modelos)
+- Token y 3 URLs de OpenShift AI (las da el instructor; se pegan en el dashboard)
 
 ## Guías (en orden)
 
