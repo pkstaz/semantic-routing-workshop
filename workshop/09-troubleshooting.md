@@ -27,7 +27,7 @@ ERROR - Use Docker for local `vllm-sr serve` workflows.
 
 `vllm-sr` no encontró `docker` en el PATH y cayó a Podman. En este taller hace falta Docker.
 
-También pasa si corres `vllm-sr serve` desde `~` en vez de la raíz del repo.
+También pasa si corres `vllm-sr serve` desde `~` en vez de la raíz del repo. Eso además crea `~/config.yaml` y `~/.vllm-sr/` (otra cuenta del dashboard, distinta a la del repo).
 
 ```bash
 # 1. Ir al repo
@@ -173,6 +173,49 @@ vllm-sr eval --prompt "tu query aquí" --json
 - Revisa las descripciones de los dominios en el dashboard
 - Ajusta prioridades (`priority`) si dos reglas compiten
 - El dominio con **menor** `priority` gana cuando hay empate
+
+## Dashboard pide login (“Bootstrap is complete”)
+
+**Síntoma:** [http://localhost:8700](http://localhost:8700) muestra *Sign in* con **Bootstrap is complete**. No hay usuario de fábrica; ese texto sale cuando el dashboard **cierra el registro**.
+
+Causa habitual en este taller: `config.yaml` sin bloque `setup:` (por ejemplo `version: "1.0"` solo con `listeners`). Entonces `vllm-sr serve` **no** activa modo setup, `/api/auth/bootstrap/can-register` devuelve `canRegister: false` y el login no sirve.
+
+1. Deja el YAML así (puerto **8899**, `setup.mode: true`):
+
+```yaml
+version: "v0.3"
+
+listeners:
+  - name: http-8899
+    address: "0.0.0.0"
+    port: 8899
+    timeout: "300s"
+
+setup:
+  mode: true
+  state: bootstrap
+  created_by: vllm-sr serve
+```
+
+2. Para y borra el estado de cuentas **con el stack detenido**, desde la **raíz del repo** (no desde `~`):
+
+```bash
+cd /ruta/al/semantic-router-workshop
+source .venv/bin/activate
+export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
+export CONTAINER_RUNTIME=docker
+
+vllm-sr stop
+rm -rf .vllm-sr/dashboard-data
+rm -rf "$HOME/.vllm-sr/dashboard-data"
+rm -f "$HOME/config.yaml"
+
+vllm-sr serve
+```
+
+3. Abre [http://localhost:8700](http://localhost:8700) con recarga forzada. Debe pedir **crear cuenta**, no *Bootstrap is complete*.
+
+Si corriste `serve` desde home, `~/config.yaml` y `~/.vllm-sr/` son otro workspace.
 
 ## Puerto ya en uso
 

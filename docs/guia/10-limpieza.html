@@ -57,8 +57,10 @@ vllm-sr stop</code></pre>
 <h2>Eliminar datos de Open WebUI (opcional)</h2>
 <pre><code class="language-bash">docker volume rm semantic-router-workshop_open-webui-data</code></pre>
 <h2>Eliminar estado de vllm-sr (opcional)</h2>
-<pre><code class="language-bash">rm -rf .vllm-sr/</code></pre>
-<blockquote>Esto borra la configuración del dashboard, historial de evaluaciones y datos persistidos. Solo hazlo si quieres empezar de cero.</blockquote>
+<pre><code class="language-bash">rm -rf .vllm-sr/
+rm -rf &quot;$HOME/.vllm-sr/&quot;
+rm -f &quot;$HOME/config.yaml&quot;</code></pre>
+<blockquote>Esto borra la configuración del dashboard, historial de evaluaciones y datos persistidos. Solo hazlo si quieres empezar de cero. <code>~/config.yaml</code> y <code>~/.vllm-sr/</code> aparecen si alguna vez corriste <code>vllm-sr serve</code> desde home.</blockquote>
 <h2>Eliminar entorno virtual (opcional)</h2>
 <pre><code class="language-bash">deactivate
 rm -rf .venv</code></pre>

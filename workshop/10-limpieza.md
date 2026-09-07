@@ -19,9 +19,11 @@ docker volume rm semantic-router-workshop_open-webui-data
 
 ```bash
 rm -rf .vllm-sr/
+rm -rf "$HOME/.vllm-sr/"
+rm -f "$HOME/config.yaml"
 ```
 
-> Esto borra la configuración del dashboard, historial de evaluaciones y datos persistidos. Solo hazlo si quieres empezar de cero.
+> Esto borra la configuración del dashboard, historial de evaluaciones y datos persistidos. Solo hazlo si quieres empezar de cero. `~/config.yaml` y `~/.vllm-sr/` aparecen si alguna vez corriste `vllm-sr serve` desde home.
 
 ## Eliminar entorno virtual (opcional)
 

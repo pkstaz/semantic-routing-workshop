@@ -60,18 +60,26 @@ export PATH=&quot;/Applications/Docker.app/Contents/Resources/bin:$PATH&quot;
 export CONTAINER_RUNTIME=docker
 docker --version   # debe decir &quot;Docker version ...&quot;, no podman</code></pre>
 <p>El <strong>dashboard</strong> siempre usa el puerto <strong>8700</strong>. El <code>listener</code> es la API de chat: ponlo en <strong>8899</strong>, no en 8700 (si coinciden, Docker falla con <code>port is already allocated</code>).</p>
+<p>Hace falta el bloque <code>setup:</code> y <code>version: &quot;v0.3&quot;</code>. Sin eso el dashboard no deja crear la primera cuenta y muestra <em>Bootstrap is complete</em>.</p>
 <pre><code class="language-bash">cat &gt; config.yaml &lt;&lt; &#x27;EOF&#x27;
-version: &quot;1.0&quot;
+version: &quot;v0.3&quot;
 
 listeners:
-  - name: main
+  - name: http-8899
     address: &quot;0.0.0.0&quot;
     port: 8899
+    timeout: &quot;300s&quot;
+
+setup:
+  mode: true
+  state: bootstrap
+  created_by: vllm-sr serve
 EOF
 vllm-sr serve</code></pre>
 <p>La primera vez descarga imágenes — puede tardar varios minutos.</p>
 <p>Cuando esté listo, abre: <a href="http://localhost:8700">http://localhost:8700</a></p>
-<p>El dashboard entra en <strong>setup</strong>. Ahí creas endpoints y rutas, y al final pulsas <strong>Activate</strong>.</p>
+<p>La primera vez el dashboard pide <strong>crear una cuenta</strong> (email + contraseña). Guárdala: no hay usuario de fábrica. Si ves <strong>“Bootstrap is complete”</strong> y un login, ya existe una cuenta de un arranque anterior; no intentes adivinar la clave, ve a <a href="09-troubleshooting.html">Troubleshooting</a>.</p>
+<p>Después entra en <strong>setup</strong>. Ahí creas endpoints y rutas, y al final pulsas <strong>Activate</strong>.</p>
 <h2>2. Auth (igual en los 3 endpoints)</h2>
 <p>En cada modelo, usa:</p>
 <p>Header:</p>

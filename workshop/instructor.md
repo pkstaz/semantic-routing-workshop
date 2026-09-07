@@ -69,6 +69,7 @@ Menor número = mayor prioridad. `code-route` (10) gana sobre `general-route` (1
 | Token expirado | Tener un token de respaldo |
 | Routing incorrecto | Usar `vllm-sr eval --json` para mostrar señales |
 | Open WebUI sin respuesta | Verificar puerto 8899 con `curl localhost:8899/v1/models` |
+| Dashboard: *Bootstrap is complete* | `config.yaml` sin `setup.mode: true` / `version: "v0.3"` ([troubleshooting](./09-troubleshooting.md)) |
 
 ## Preguntas frecuentes de participantes
 

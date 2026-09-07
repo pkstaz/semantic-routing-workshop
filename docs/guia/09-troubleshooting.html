@@ -66,7 +66,7 @@ vllm-sr logs router</code></pre>
 ERROR - Unsupported container runtime: podman
 ERROR - Use Docker for local `vllm-sr serve` workflows.</code></pre>
 <p><code>vllm-sr</code> no encontró <code>docker</code> en el PATH y cayó a Podman. En este taller hace falta Docker.</p>
-<p>También pasa si corres <code>vllm-sr serve</code> desde <code>~</code> en vez de la raíz del repo.</p>
+<p>También pasa si corres <code>vllm-sr serve</code> desde <code>~</code> en vez de la raíz del repo. Eso además crea <code>~/config.yaml</code> y <code>~/.vllm-sr/</code> (otra cuenta del dashboard, distinta a la del repo).</p>
 <pre><code class="language-bash"># 1. Ir al repo
 cd /ruta/al/semantic-router-workshop
 source .venv/bin/activate
@@ -134,6 +134,36 @@ vllm-sr chat &quot;hello&quot;</code></pre>
 <pre><code class="language-bash"># Diagnosticar qué señales se activaron
 vllm-sr eval --prompt &quot;tu query aquí&quot; --json</code></pre>
 <ul><li>Revisa las descripciones de los dominios en el dashboard</li><li>Ajusta prioridades (<code>priority</code>) si dos reglas compiten</li><li>El dominio con <strong>menor</strong> <code>priority</code> gana cuando hay empate</li></ul>
+<h2>Dashboard pide login (“Bootstrap is complete”)</h2>
+<p><strong>Síntoma:</strong> <a href="http://localhost:8700">http://localhost:8700</a> muestra <em>Sign in</em> con <strong>Bootstrap is complete</strong>. No hay usuario de fábrica; ese texto sale cuando el dashboard <strong>cierra el registro</strong>.</p>
+<p>Causa habitual en este taller: <code>config.yaml</code> sin bloque <code>setup:</code> (por ejemplo <code>version: &quot;1.0&quot;</code> solo con <code>listeners</code>). Entonces <code>vllm-sr serve</code> <strong>no</strong> activa modo setup, <code>/api/auth/bootstrap/can-register</code> devuelve <code>canRegister: false</code> y el login no sirve.</p>
+<ol><li>Deja el YAML así (puerto <strong>8899</strong>, <code>setup.mode: true</code>):</li></ol>
+<pre><code class="language-yaml">version: &quot;v0.3&quot;
+
+listeners:
+  - name: http-8899
+    address: &quot;0.0.0.0&quot;
+    port: 8899
+    timeout: &quot;300s&quot;
+
+setup:
+  mode: true
+  state: bootstrap
+  created_by: vllm-sr serve</code></pre>
+<ol><li>Para y borra el estado de cuentas <strong>con el stack detenido</strong>, desde la <strong>raíz del repo</strong> (no desde <code>~</code>):</li></ol>
+<pre><code class="language-bash">cd /ruta/al/semantic-router-workshop
+source .venv/bin/activate
+export PATH=&quot;/Applications/Docker.app/Contents/Resources/bin:$PATH&quot;
+export CONTAINER_RUNTIME=docker
+
+vllm-sr stop
+rm -rf .vllm-sr/dashboard-data
+rm -rf &quot;$HOME/.vllm-sr/dashboard-data&quot;
+rm -f &quot;$HOME/config.yaml&quot;
+
+vllm-sr serve</code></pre>
+<ol><li>Abre <a href="http://localhost:8700">http://localhost:8700</a> con recarga forzada. Debe pedir <strong>crear cuenta</strong>, no <em>Bootstrap is complete</em>.</li></ol>
+<p>Si corriste <code>serve</code> desde home, <code>~/config.yaml</code> y <code>~/.vllm-sr/</code> son otro workspace.</p>
 <h2>Puerto ya en uso</h2>
 <pre><code class="language-bash"># Ver qué proceso usa el puerto
 lsof -i :8899
