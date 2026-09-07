@@ -637,6 +637,46 @@ section {
   font-size: 0.84rem;
 }
 
+.code-block {
+  position: relative;
+  margin: 1rem 0 1.3rem;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 1rem 5.2rem 1rem 1rem;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  z-index: 1;
+  border: 1px solid hsl(var(--accent) / 0.55);
+  background: hsl(var(--secondary) / 0.92);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.28rem 0.72rem;
+  font-family: Poppins, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.copy-btn:hover {
+  border-color: hsl(var(--accent));
+  box-shadow: 0 0 18px #50bce733;
+}
+
+.copy-btn.is-copied {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  border-color: hsl(var(--accent));
+}
+
 .pager {
   display: flex;
   justify-content: space-between;
