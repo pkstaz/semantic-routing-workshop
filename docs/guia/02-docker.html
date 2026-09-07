@@ -68,7 +68,7 @@ sudo usermod -aG docker &quot;$USER&quot;</code></pre>
 <h2>Verificar que Docker funciona</h2>
 <pre><code class="language-bash">docker run --rm hello-world</code></pre>
 <h2>Notas</h2>
-<ul><li><code>vllm-sr serve</code> necesita Docker; con Podman no funciona en este taller.</li><li>Las imágenes <code>linux/arm64</code> (Apple Silicon) y <code>linux/amd64</code> (Linux típico) se resuelven solas.</li></ul>
+<ul><li><code>vllm-sr serve</code> necesita Docker; con Podman no funciona en este taller.</li><li>Las imágenes <code>linux/arm64</code> (Apple Silicon) y <code>linux/amd64</code> (Linux típico) se resuelven solas.</li><li>En <strong>macOS</strong>, si <code>vllm-sr serve</code> falla con <code>mounts denied</code>, hay que compartir rutas en Docker Desktop: <a href="09-troubleshooting.html">Troubleshooting</a>.</li></ul>
 <h2>Más ayuda</h2>
 <ul><li><a href="https://docs.docker.com/desktop/">Docker Desktop</a></li><li><a href="https://docs.docker.com/compose/">Docker Compose</a></li></ul>
 <h2>Siguiente paso</h2>

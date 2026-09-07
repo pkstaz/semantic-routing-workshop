@@ -15,6 +15,41 @@ vllm-sr serve --log-level debug
 vllm-sr logs router
 ```
 
+## macOS: `mounts denied` / File Sharing (Docker Desktop)
+
+**Síntoma:** `vllm-sr serve` falla con algo así:
+
+```
+Failed to start container: docker: Error response from daemon: mounts denied:
+The path /Applications/Docker.app/Contents/Resources/bin/docker is not shared from the host and is not known to Docker.
+You can configure shared paths from Docker -> Preferences... -> Resources -> File Sharing.
+```
+
+Esto es de **Docker Desktop en macOS**. En Linux (Docker Engine) no suele pasar. En Windows, si usas Docker Desktop, la pantalla de File Sharing es parecida.
+
+Hay que hacerlo por la GUI:
+
+1. Abre **Docker Desktop**
+2. **Settings → Resources → File Sharing**
+3. Pulsa **"+"** y agrega estas rutas:
+
+```
+/Applications/Docker.app/Contents/Resources/bin
+```
+
+```
+$HOME/.vllm-sr
+```
+
+En File Sharing pega la ruta absoluta de tu home, no la variable. Ejemplo de forma: `/Users/<tu-usuario>/.vllm-sr`.
+
+4. **Apply & Restart**
+5. Vuelve a correr:
+
+```bash
+vllm-sr serve
+```
+
 ## `vllm-sr eval` devuelve error de conexión
 
 **Síntoma:** `Router is not running at http://localhost:8080`

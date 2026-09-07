@@ -65,6 +65,7 @@ Menor número = mayor prioridad. `code-route` (10) gana sobre `general-route` (1
 | Problema | Solución rápida |
 |---|---|
 | Primera ejecución lenta | Avisar que descarga imágenes; mostrar arquitectura mientras espera |
+| `mounts denied` en macOS | File Sharing en Docker Desktop: bin de Docker + `$HOME/.vllm-sr` ([troubleshooting](./09-troubleshooting.md)) |
 | Token expirado | Tener un token de respaldo |
 | Routing incorrecto | Usar `vllm-sr eval --json` para mostrar señales |
 | Open WebUI sin respuesta | Verificar puerto 8899 con `curl localhost:8899/v1/models` |

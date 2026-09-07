@@ -43,6 +43,7 @@ docker run --rm hello-world
 
 - `vllm-sr serve` necesita Docker; con Podman no funciona en este taller.
 - Las imágenes `linux/arm64` (Apple Silicon) y `linux/amd64` (Linux típico) se resuelven solas.
+- En **macOS**, si `vllm-sr serve` falla con `mounts denied`, hay que compartir rutas en Docker Desktop: [Troubleshooting](./09-troubleshooting.md).
 
 ## Más ayuda
 
