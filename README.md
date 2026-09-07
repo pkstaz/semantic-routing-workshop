@@ -30,7 +30,11 @@ Tres modelos remotos, una sola interfaz de chat:
 
 ### Guía publicada (GitHub Pages)
 
-Versión web del taller, con layout tipo DevOpsDays Santiago: **[pkstaz.github.io/semantic-routing-workshop](https://pkstaz.github.io/semantic-routing-workshop/)** (rama `devopsdays`).
+Versión web del taller, con layout tipo DevOpsDays Santiago: **[pkstaz.github.io/semantic-routing-workshop](https://pkstaz.github.io/semantic-routing-workshop/)**
+
+En el repo: **Settings → Pages → Deploy from a branch** → rama `devopsdays`, carpeta `/docs` → Save.
+
+Si el repo es privado, hazlo público (GitHub Free no publica Pages en repos privados). No uses *GitHub Actions* como source: el entorno `github-pages` suele bloquear ramas que no son `master`.
 
 ### Workshop local (Podman)
 
