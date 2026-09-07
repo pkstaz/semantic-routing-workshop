@@ -36,7 +36,7 @@
         <h2>Itinerario</h2>
         <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
 <a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
-<a class="" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/02-docker.html"><span>02. Docker y Docker Compose</span><div class="toc-time">10 min</div></a>
 <a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
 <a class="is-active" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
 <a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
@@ -63,7 +63,7 @@
 <h2>Flujo del workshop</h2>
 <ol><li>El participante abre el <strong>dashboard</strong> (<code>http://localhost:8700</code>) y revisa las reglas definidas.</li><li>Escribe una query en el <strong>playground</strong> del dashboard y ve en tiempo real qué modelo fue elegido y por qué.</li><li>Abre <strong>Open WebUI</strong> (<code>http://localhost:3000</code>) y chatea con normalidad, sin ver el router.</li><li>El instructor muestra en el dashboard las decisiones de routing que se tomaron en segundo plano.</li></ol>
 <h2>Cómo se levanta cada pieza</h2>
-<table><thead><tr><th>Componente</th><th>Comando</th></tr></thead><tbody><tr><td>vllm-sr (router + envoy + dashboard)</td><td><code>vllm-sr serve</code></td></tr><tr><td>Open WebUI</td><td><code>podman-compose up -d</code></td></tr></tbody></table>
+<table><thead><tr><th>Componente</th><th>Comando</th></tr></thead><tbody><tr><td>vllm-sr (router + envoy + dashboard)</td><td><code>vllm-sr serve</code></td></tr><tr><td>Open WebUI</td><td><code>docker compose up -d</code></td></tr></tbody></table>
 <h2>Diagrama</h2>
 <pre><code>Participante                    Instructor
      │                               │

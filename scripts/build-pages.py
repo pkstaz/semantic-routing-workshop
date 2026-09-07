@@ -29,9 +29,9 @@ PAGES = [
         "num": "01",
     },
     {
-        "src": "02-podman.md",
-        "slug": "02-podman",
-        "title": "Podman y podman-compose",
+        "src": "02-docker.md",
+        "slug": "02-docker",
+        "title": "Docker y Docker Compose",
         "time": "10 min",
         "num": "02",
     },

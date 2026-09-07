@@ -26,17 +26,17 @@ Dashboard: [http://localhost:8700](http://localhost:8700)
 En **otra terminal**, desde la raíz del repositorio:
 
 ```bash
-podman-compose up -d
+docker compose up -d
 ```
 
 Abre: [http://localhost:3000](http://localhost:3000)
 
 La primera vez crea una cuenta local (solo para este entorno).
 
-`podman-compose.yml` ya apunta al router:
+`docker-compose.yml` ya apunta al router:
 
 ```yaml
-OPENAI_API_BASE_URL=http://host.containers.internal:8899/v1
+OPENAI_API_BASE_URL=http://host.docker.internal:8899/v1
 ```
 
 No eliges modelo en Open WebUI — el router lo hace por ti.
@@ -51,7 +51,7 @@ vllm-sr chat "What is the capital of France?"
 ## 3. Detener (cuando termines el taller)
 
 ```bash
-podman-compose down
+docker compose down
 vllm-sr stop
 ```
 

@@ -36,7 +36,7 @@
         <h2>Itinerario</h2>
         <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
 <a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
-<a class="" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/02-docker.html"><span>02. Docker y Docker Compose</span><div class="toc-time">10 min</div></a>
 <a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
 <a class="" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
 <a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
@@ -59,17 +59,17 @@ vllm-sr serve</code></pre>
 <table><thead><tr><th>Puerto</th><th>Servicio</th></tr></thead><tbody><tr><td><strong>8899</strong></td><td>API de chat (Open WebUI apunta aquí)</td></tr><tr><td><strong>8080</strong></td><td>API interna del router (<code>vllm-sr eval</code>)</td></tr><tr><td><strong>8700</strong></td><td>Dashboard web</td></tr></tbody></table>
 <h2>1. Open WebUI</h2>
 <p>En <strong>otra terminal</strong>, desde la raíz del repositorio:</p>
-<pre><code class="language-bash">podman-compose up -d</code></pre>
+<pre><code class="language-bash">docker compose up -d</code></pre>
 <p>Abre: <a href="http://localhost:3000">http://localhost:3000</a></p>
 <p>La primera vez crea una cuenta local (solo para este entorno).</p>
-<p><code>podman-compose.yml</code> ya apunta al router:</p>
-<pre><code class="language-yaml">OPENAI_API_BASE_URL=http://host.containers.internal:8899/v1</code></pre>
+<p><code>docker-compose.yml</code> ya apunta al router:</p>
+<pre><code class="language-yaml">OPENAI_API_BASE_URL=http://host.docker.internal:8899/v1</code></pre>
 <p>No eliges modelo en Open WebUI — el router lo hace por ti.</p>
 <h2>2. Probar rápido</h2>
 <pre><code class="language-bash">vllm-sr eval --prompt &quot;Write a Python function to sort a list&quot;
 vllm-sr chat &quot;What is the capital of France?&quot;</code></pre>
 <h2>3. Detener (cuando termines el taller)</h2>
-<pre><code class="language-bash">podman-compose down
+<pre><code class="language-bash">docker compose down
 vllm-sr stop</code></pre>
 <h2>Siguiente paso</h2>
 <p><a href="07-ejercicios.html">Ejercicios prácticos →</a></p>

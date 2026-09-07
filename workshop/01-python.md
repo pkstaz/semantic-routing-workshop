@@ -42,7 +42,7 @@ deactivate
 
 ## Siguiente paso
 
-[Podman y podman-compose →](./02-podman.md)
+[Docker y Docker Compose →](./02-docker.md)
 
 ## Más ayuda
 

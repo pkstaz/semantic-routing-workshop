@@ -16,7 +16,7 @@ Guías paso a paso para el workshop comunitario.
 |---|---|---|
 | 0 | [Introducción](./00-introduccion.md) | 5 min |
 | 1 | [Requisitos de Python](./01-python.md) | 10 min |
-| 2 | [Podman y podman-compose](./02-podman.md) | 10 min |
+| 2 | [Docker y Docker Compose](./02-docker.md) | 10 min |
 | 3 | [Instalar vllm-sr CLI](./03-vllm-sr.md) | 5 min |
 | 4 | [Arquitectura y flujo](./04-arquitectura-y-flujo.md) | 10 min |
 | 5 | [Configuración](./05-configuracion.md) | 20 min |

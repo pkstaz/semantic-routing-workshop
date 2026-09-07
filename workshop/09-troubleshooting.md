@@ -5,8 +5,8 @@
 **Síntoma:** error al descargar imágenes o iniciar contenedores.
 
 ```bash
-# Verificar que Podman está corriendo (macOS)
-podman machine start
+# Verificar que Docker está corriendo
+docker info
 
 # Ver logs detallados
 vllm-sr serve --log-level debug
@@ -44,7 +44,7 @@ vllm-sr chat "hello"
 3. ¿Open WebUI apunta al puerto correcto?
 
 ```bash
-podman inspect open-webui | grep OPENAI_API_BASE_URL
+docker inspect open-webui | grep OPENAI_API_BASE_URL
 ```
 
 ## Error 401 / 403 desde OpenShift AI

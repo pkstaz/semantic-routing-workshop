@@ -36,7 +36,7 @@
         <h2>Itinerario</h2>
         <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
 <a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
-<a class="" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/02-docker.html"><span>02. Docker y Docker Compose</span><div class="toc-time">10 min</div></a>
 <a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
 <a class="" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
 <a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
@@ -52,9 +52,9 @@
         <h1>Guía del instructor</h1>
 <p>Notas para facilitar el workshop de semantic routing.</p>
 <h2>Agenda sugerida (90 min)</h2>
-<table><thead><tr><th>Tiempo</th><th>Actividad</th><th>Material</th></tr></thead><tbody><tr><td>0–5 min</td><td>Introducción y objetivos</td><td><a href="00-introduccion.html">00-introduccion</a></td></tr><tr><td>5–25 min</td><td>Setup: Python, Podman, vllm-sr</td><td><a href="01-python.html">01</a> – <a href="03-vllm-sr.html">03</a></td></tr><tr><td>25–35 min</td><td>Arquitectura y demo del diagrama</td><td><a href="04-arquitectura-y-flujo.html">04-arquitectura</a></td></tr><tr><td>35–55 min</td><td>Setup dashboard: endpoints y rutas</td><td><a href="05-configuracion.html">05-configuracion</a></td></tr><tr><td>55–65 min</td><td>Open WebUI y prueba rápida</td><td><a href="06-levantar-servicios.html">06-levantar</a></td></tr><tr><td>65–90 min</td><td>Ejercicios prácticos</td><td><a href="07-ejercicios.html">07-ejercicios</a></td></tr></tbody></table>
+<table><thead><tr><th>Tiempo</th><th>Actividad</th><th>Material</th></tr></thead><tbody><tr><td>0–5 min</td><td>Introducción y objetivos</td><td><a href="00-introduccion.html">00-introduccion</a></td></tr><tr><td>5–25 min</td><td>Setup: Python, Docker, vllm-sr</td><td><a href="01-python.html">01</a> – <a href="03-vllm-sr.html">03</a></td></tr><tr><td>25–35 min</td><td>Arquitectura y demo del diagrama</td><td><a href="04-arquitectura-y-flujo.html">04-arquitectura</a></td></tr><tr><td>35–55 min</td><td>Setup dashboard: endpoints y rutas</td><td><a href="05-configuracion.html">05-configuracion</a></td></tr><tr><td>55–65 min</td><td>Open WebUI y prueba rápida</td><td><a href="06-levantar-servicios.html">06-levantar</a></td></tr><tr><td>65–90 min</td><td>Ejercicios prácticos</td><td><a href="07-ejercicios.html">07-ejercicios</a></td></tr></tbody></table>
 <h2>Antes del workshop</h2>
-<ul><li>[ ] Tener token y las 3 URLs (llama / code / vision) listas para dictar — los participantes las pegan en el setup</li><li>[ ] Probar el flujo completo: <code>vllm-sr serve</code> → setup dashboard → <code>podman-compose up</code></li><li>[ ] Verificar que los 3 modelos remotos responden</li><li>[ ] Tener el dashboard abierto en una pantalla compartida para la demo en vivo</li></ul>
+<ul><li>[ ] Tener token y las 3 URLs (llama / code / vision) listas para dictar — los participantes las pegan en el setup</li><li>[ ] Probar el flujo completo: <code>vllm-sr serve</code> → setup dashboard → <code>docker compose up</code></li><li>[ ] Verificar que los 3 modelos remotos responden</li><li>[ ] Tener el dashboard abierto en una pantalla compartida para la demo en vivo</li></ul>
 <h2>Puntos clave para explicar</h2>
 <h3>¿Por qué dos interfaces?</h3>
 <ul><li><strong>Dashboard (8700):</strong> transparencia — el participante <em>ve</em> el routing</li><li><strong>Open WebUI (3000):</strong> experiencia real — el usuario <em>no ve</em> el routing</li></ul>
@@ -71,7 +71,7 @@
 <h2>Problemas comunes en vivo</h2>
 <table><thead><tr><th>Problema</th><th>Solución rápida</th></tr></thead><tbody><tr><td>Primera ejecución lenta</td><td>Avisar que descarga imágenes; mostrar arquitectura mientras espera</td></tr><tr><td>Token expirado</td><td>Tener un token de respaldo</td></tr><tr><td>Routing incorrecto</td><td>Usar <code>vllm-sr eval --json</code> para mostrar señales</td></tr><tr><td>Open WebUI sin respuesta</td><td>Verificar puerto 8899 con <code>curl localhost:8899/v1/models</code></td></tr></tbody></table>
 <h2>Preguntas frecuentes de participantes</h2>
-<p><strong>¿Puedo usar Docker en vez de Podman?</strong> Sí, <code>vllm-sr serve</code> detecta Docker automáticamente. El workshop está escrito para Podman.</p>
+<p><strong>¿Puedo usar Podman en vez de Docker?</strong> No en este taller. <code>vllm-sr serve</code> necesita Docker.</p>
 <p><strong>¿El router corre en GPU?</strong> No. La clasificación semántica corre en CPU local. Los modelos LLM están en OpenShift AI remoto.</p>
 <p><strong>¿Puedo agregar más modelos/rutas?</strong> Sí, desde el dashboard.</p>
 <p><strong>¿Qué pasa si ninguna regla coincide?</strong> Se usa el <code>default_model</code> configurado en providers (<code>llama-32-3b</code>).</p>

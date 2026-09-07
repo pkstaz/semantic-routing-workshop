@@ -2,89 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Podman y podman-compose · Semantic Router Workshop</title>
-  <meta name="description" content="Guía del workshop Semantic Router: Podman y podman-compose." />
-  <link rel="stylesheet" href="../assets/css/style.css" />
+  <meta http-equiv="refresh" content="0; url=02-docker.html" />
+  <link rel="canonical" href="02-docker.html" />
+  <title>Redirigiendo a Docker</title>
 </head>
-<body class="bg-space">
-  <div class="star-field" aria-hidden="true"></div>
-  <div class="wrap">
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href="../index.html">
-          <span class="brand-mark">🚀</span>
-          <span class="brand-text">
-            <span class="brand-kicker">DevOpsDays Santiago</span>
-            <span class="brand-name">Semantic Router Workshop</span>
-          </span>
-        </a>
-        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">Menú</button>
-        <nav class="nav" data-nav>
-          <a href="../index.html" class="">Inicio</a>
-          <a href="00-introduccion.html" class="is-active">Guía</a>
-          <a href="../index.html#arquitectura">Arquitectura</a>
-          <a href="instructor.html" class="">Instructor</a>
-          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">Repo</a>
-          <a class="btn btn-primary btn-sm" href="00-introduccion.html">Empezar</a>
-        </nav>
-      </div>
-    </header>
-
-    <main class="container guide-shell">
-      <aside class="toc">
-        <h2>Itinerario</h2>
-        <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
-<a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
-<a class="is-active" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
-<a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
-<a class="" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
-<a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
-<a class="" href="../guia/06-levantar-servicios.html"><span>06. Levantar los servicios</span><div class="toc-time">10 min</div></a>
-<a class="" href="../guia/07-ejercicios.html"><span>07. Ejercicios prácticos</span><div class="toc-time">30 min</div></a>
-<a class="" href="../guia/08-comandos-cli.html"><span>08. Comandos CLI útiles</span><div class="toc-time">10 min</div></a>
-<a class="" href="../guia/09-troubleshooting.html"><span>09. Troubleshooting</span><div class="toc-time">referencia</div></a>
-<a class="" href="../guia/10-limpieza.html"><span>10. Limpieza</span><div class="toc-time">5 min</div></a>
-<a class="" href="../guia/instructor.html"><span>I. Guía del instructor</span><div class="toc-time">staff</div></a>
-      </aside>
-      <article class="article prose">
-        <div class="article-kicker">Misión 02 · 10 min</div>
-        <h1>2. Podman y podman-compose</h1>
-<p>Este workshop usa <strong>Podman</strong> (no Docker) para correr Open WebUI. <code>vllm-sr serve</code> también usa Podman internamente para levantar sus contenedores.</p>
-<h2>Verificar instalación</h2>
-<pre><code class="language-bash">podman --version
-podman-compose --version</code></pre>
-<h2>Instalar (macOS)</h2>
-<pre><code class="language-bash">brew install podman podman-compose</code></pre>
-<p>Inicializa y arranca la máquina virtual de Podman (solo macOS):</p>
-<pre><code class="language-bash">podman machine init    # solo la primera vez
-podman machine start</code></pre>
-<h2>Instalar (Linux)</h2>
-<p>Usa el gestor de paquetes de tu distro. En Fedora/RHEL:</p>
-<pre><code class="language-bash">sudo dnf install podman podman-compose</code></pre>
-<h2>Verificar que Podman funciona</h2>
-<pre><code class="language-bash">podman run --rm hello-world</code></pre>
-<h2>Notas importantes</h2>
-<ul><li><strong>No montamos</strong> <code>/var/run/docker.sock</code> — Podman es rootless y no lo necesita.</li><li>Las imágenes deben ser <code>linux/arm64</code> (Apple Silicon) o multi-arch.</li><li><code>vllm-sr serve</code> detecta Podman automáticamente si Docker no está disponible.</li></ul>
-<h2>Más ayuda</h2>
-<ul><li><a href="https://docs.podman.io/">Podman docs</a></li><li><a href="https://github.com/containers/podman-compose">podman-compose</a></li></ul>
-<h2>Siguiente paso</h2>
-<p><a href="03-vllm-sr.html">Instalar vllm-sr CLI →</a></p>
-        <nav class="pager"><a href="01-python.html"><span class="dir">Anterior</span>Requisitos de Python</a><a href="03-vllm-sr.html"><span class="dir">Siguiente</span>Instalar vllm-sr CLI</a></nav>
-      </article>
-    </main>
-    <footer class="site-footer">
-      <div class="container footer-inner">
-        <p>Semantic Router Workshop · DevOpsDays Santiago 2026 — Misión Espacial DevOps</p>
-        <p>
-          <a href="https://santiago.devopsdayschile.cl/" target="_blank" rel="noopener">DevOpsDays Chile</a>
-          ·
-          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">GitHub</a>
-        </p>
-      </div>
-    </footer>
-  </div>
-  <script src="../assets/js/main.js"></script>
+<body>
+  <p>Esta guía ahora usa Docker: <a href="02-docker.html">02-docker.html</a></p>
 </body>
 </html>
-

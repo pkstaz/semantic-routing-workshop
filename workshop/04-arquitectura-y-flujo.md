@@ -42,7 +42,7 @@ Chat orientado al usuario final. Apunta al semantic router en el puerto **8899**
 | Componente | Comando |
 |---|---|
 | vllm-sr (router + envoy + dashboard) | `vllm-sr serve` |
-| Open WebUI | `podman-compose up -d` |
+| Open WebUI | `docker compose up -d` |
 
 ## Diagrama
 

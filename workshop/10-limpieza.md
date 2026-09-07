@@ -5,14 +5,14 @@ Al terminar el workshop, detén y limpia los recursos locales.
 ## Detener servicios
 
 ```bash
-podman-compose down
+docker compose down
 vllm-sr stop
 ```
 
 ## Eliminar datos de Open WebUI (opcional)
 
 ```bash
-podman volume rm semantic-router-workshop_open-webui-data
+docker volume rm semantic-router-workshop_open-webui-data
 ```
 
 ## Eliminar estado de vllm-sr (opcional)
@@ -34,7 +34,7 @@ rm -rf .venv
 
 ```bash
 vllm-sr status
-podman ps
+docker ps
 ```
 
 No debería quedar ningún contenedor del workshop corriendo.

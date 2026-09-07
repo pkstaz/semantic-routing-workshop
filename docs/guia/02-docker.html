@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introducción · Semantic Router Workshop</title>
-  <meta name="description" content="Guía del workshop Semantic Router: Introducción." />
+  <title>Docker y Docker Compose · Semantic Router Workshop</title>
+  <meta name="description" content="Guía del workshop Semantic Router: Docker y Docker Compose." />
   <link rel="stylesheet" href="../assets/css/style.css" />
 </head>
 <body class="bg-space">
@@ -34,9 +34,9 @@
     <main class="container guide-shell">
       <aside class="toc">
         <h2>Itinerario</h2>
-        <a class="is-active" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
+        <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
 <a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
-<a class="" href="../guia/02-docker.html"><span>02. Docker y Docker Compose</span><div class="toc-time">10 min</div></a>
+<a class="is-active" href="../guia/02-docker.html"><span>02. Docker y Docker Compose</span><div class="toc-time">10 min</div></a>
 <a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
 <a class="" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
 <a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
@@ -48,21 +48,32 @@
 <a class="" href="../guia/instructor.html"><span>I. Guía del instructor</span><div class="toc-time">staff</div></a>
       </aside>
       <article class="article prose">
-        <div class="article-kicker">Misión 00 · 5 min</div>
-        <h1>0. Introducción</h1>
-<h2>Objetivo</h2>
-<p>En este workshop vas a montar un <strong>semantic router</strong> que clasifica cada consulta del usuario y la envía al modelo más adecuado en OpenShift AI — sin que el usuario tenga que elegir modelo manualmente.</p>
-<h2>Qué aprenderás</h2>
-<ul><li>Cómo funciona el routing semántico con <code>vllm-sr</code></li><li>Cómo configurar reglas que dirigen consultas a distintos modelos</li><li>Cómo visualizar las decisiones de routing en tiempo real</li><li>Cómo integrar el router con Open WebUI para una experiencia de chat transparente</li></ul>
-<h2>Stack del workshop</h2>
-<table><thead><tr><th>Componente</th><th>Puerto</th><th>Rol</th></tr></thead><tbody><tr><td><strong>vllm-sr</strong> (Envoy)</td><td>8899</td><td>API de chat OpenAI-compatible</td></tr><tr><td><strong>vllm-sr</strong> (router)</td><td>8080</td><td>API interna (eval, debugging)</td></tr><tr><td><strong>vllm-sr</strong> (dashboard)</td><td>8700</td><td>Visualización y playground</td></tr><tr><td><strong>Open WebUI</strong></td><td>3000</td><td>Chat para el usuario final</td></tr></tbody></table>
-<h2>Modelos remotos (OpenShift AI)</h2>
-<table><thead><tr><th>Modelo</th><th>Ruta</th><th>Uso</th></tr></thead><tbody><tr><td><code>llama-32-3b</code></td><td>general</td><td>Conversación, conocimiento general</td></tr><tr><td><code>qwen35-9b</code></td><td>code</td><td>Código, debugging, SQL</td></tr><tr><td><code>granite-vision-32-2b</code></td><td>vision</td><td>Imágenes y análisis visual</td></tr></tbody></table>
-<h2>Flujo del taller</h2>
-<ol><li>Arrancas <code>vllm-sr</code> y configuras endpoints y rutas en el setup del dashboard.</li><li>Exploras las reglas de routing en el <strong>dashboard</strong>.</li><li>Pruebas queries en el <strong>playground</strong> y ves qué modelo se eligió.</li><li>Chateas en <strong>Open WebUI</strong> como usuario final.</li><li>El instructor muestra en el dashboard las decisiones tomadas en segundo plano.</li></ol>
+        <div class="article-kicker">Misión 02 · 10 min</div>
+        <h1>2. Docker y Docker Compose</h1>
+<p>Este workshop usa <strong>Docker</strong>. <code>vllm-sr serve</code> levanta sus contenedores con Docker; Open WebUI también.</p>
+<h2>Verificar instalación</h2>
+<pre><code class="language-bash">docker --version
+docker compose version</code></pre>
+<p>Docker Desktop (o el daemon) debe estar <strong>en ejecución</strong>.</p>
+<h2>Instalar (macOS)</h2>
+<pre><code class="language-bash">brew install --cask docker</code></pre>
+<p>Abre <strong>Docker Desktop</strong> y espera a que el icono de la ballena deje de animarse.</p>
+<h2>Instalar (Linux)</h2>
+<p>Sigue la guía de tu distro: <a href="https://docs.docker.com/engine/install/">Install Docker Engine</a>. Incluye el plugin <strong>Compose</strong>.</p>
+<p>En Ubuntu/Debian, algo así:</p>
+<pre><code class="language-bash">sudo apt-get update
+sudo apt-get install docker.io docker-compose-v2
+sudo usermod -aG docker &quot;$USER&quot;</code></pre>
+<p>Cierra sesión y vuelve a entrar para que el grupo <code>docker</code> aplique.</p>
+<h2>Verificar que Docker funciona</h2>
+<pre><code class="language-bash">docker run --rm hello-world</code></pre>
+<h2>Notas</h2>
+<ul><li><code>vllm-sr serve</code> necesita Docker; con Podman no funciona en este taller.</li><li>Las imágenes <code>linux/arm64</code> (Apple Silicon) y <code>linux/amd64</code> (Linux típico) se resuelven solas.</li></ul>
+<h2>Más ayuda</h2>
+<ul><li><a href="https://docs.docker.com/desktop/">Docker Desktop</a></li><li><a href="https://docs.docker.com/compose/">Docker Compose</a></li></ul>
 <h2>Siguiente paso</h2>
-<p><a href="01-python.html">Requisitos de Python →</a></p>
-        <nav class="pager"><span></span><a href="01-python.html"><span class="dir">Siguiente</span>Requisitos de Python</a></nav>
+<p><a href="03-vllm-sr.html">Instalar vllm-sr CLI →</a></p>
+        <nav class="pager"><a href="01-python.html"><span class="dir">Anterior</span>Requisitos de Python</a><a href="03-vllm-sr.html"><span class="dir">Siguiente</span>Instalar vllm-sr CLI</a></nav>
       </article>
     </main>
     <footer class="site-footer">

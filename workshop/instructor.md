@@ -7,7 +7,7 @@ Notas para facilitar el workshop de semantic routing.
 | Tiempo | Actividad | Material |
 |---|---|---|
 | 0–5 min | Introducción y objetivos | [00-introduccion](./00-introduccion.md) |
-| 5–25 min | Setup: Python, Podman, vllm-sr | [01](./01-python.md) – [03](./03-vllm-sr.md) |
+| 5–25 min | Setup: Python, Docker, vllm-sr | [01](./01-python.md) – [03](./03-vllm-sr.md) |
 | 25–35 min | Arquitectura y demo del diagrama | [04-arquitectura](./04-arquitectura-y-flujo.md) |
 | 35–55 min | Setup dashboard: endpoints y rutas | [05-configuracion](./05-configuracion.md) |
 | 55–65 min | Open WebUI y prueba rápida | [06-levantar](./06-levantar-servicios.md) |
@@ -16,7 +16,7 @@ Notas para facilitar el workshop de semantic routing.
 ## Antes del workshop
 
 - [ ] Tener token y las 3 URLs (llama / code / vision) listas para dictar — los participantes las pegan en el setup
-- [ ] Probar el flujo completo: `vllm-sr serve` → setup dashboard → `podman-compose up`
+- [ ] Probar el flujo completo: `vllm-sr serve` → setup dashboard → `docker compose up`
 - [ ] Verificar que los 3 modelos remotos responden
 - [ ] Tener el dashboard abierto en una pantalla compartida para la demo en vivo
 
@@ -71,8 +71,8 @@ Menor número = mayor prioridad. `code-route` (10) gana sobre `general-route` (1
 
 ## Preguntas frecuentes de participantes
 
-**¿Puedo usar Docker en vez de Podman?**
-Sí, `vllm-sr serve` detecta Docker automáticamente. El workshop está escrito para Podman.
+**¿Puedo usar Podman en vez de Docker?**
+No en este taller. `vllm-sr serve` necesita Docker.
 
 **¿El router corre en GPU?**
 No. La clasificación semántica corre en CPU local. Los modelos LLM están en OpenShift AI remoto.

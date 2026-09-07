@@ -36,7 +36,7 @@
         <h2>Itinerario</h2>
         <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
 <a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
-<a class="" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/02-docker.html"><span>02. Docker y Docker Compose</span><div class="toc-time">10 min</div></a>
 <a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
 <a class="" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
 <a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
@@ -52,8 +52,8 @@
         <h1>9. Troubleshooting</h1>
 <h2><code>vllm-sr serve</code> falla al arrancar</h2>
 <p><strong>Síntoma:</strong> error al descargar imágenes o iniciar contenedores.</p>
-<pre><code class="language-bash"># Verificar que Podman está corriendo (macOS)
-podman machine start
+<pre><code class="language-bash"># Verificar que Docker está corriendo
+docker info
 
 # Ver logs detallados
 vllm-sr serve --log-level debug
@@ -74,7 +74,7 @@ curl http://localhost:8899/v1/models
 # Probar un chat
 vllm-sr chat &quot;hello&quot;</code></pre>
 <ol><li>¿Open WebUI apunta al puerto correcto?</li></ol>
-<pre><code class="language-bash">podman inspect open-webui | grep OPENAI_API_BASE_URL</code></pre>
+<pre><code class="language-bash">docker inspect open-webui | grep OPENAI_API_BASE_URL</code></pre>
 <h2>Error 401 / 403 desde OpenShift AI</h2>
 <p><strong>Síntoma:</strong> el router conecta pero el modelo remoto rechaza la petición.</p>
 <ul><li>En el dashboard, revisa el <strong>API key</strong> (Bearer) de cada endpoint: el token puede haber expirado</li><li>Confirma que las URLs están <strong>sin</strong> <code>/v1</code> al final</li><li>Pide al instructor un token de respaldo si el actual falla</li></ul>

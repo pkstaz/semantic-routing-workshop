@@ -36,7 +36,7 @@
         <h2>Itinerario</h2>
         <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
 <a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
-<a class="" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/02-docker.html"><span>02. Docker y Docker Compose</span><div class="toc-time">10 min</div></a>
 <a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
 <a class="" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
 <a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
@@ -52,10 +52,10 @@
         <h1>10. Limpieza</h1>
 <p>Al terminar el workshop, detén y limpia los recursos locales.</p>
 <h2>Detener servicios</h2>
-<pre><code class="language-bash">podman-compose down
+<pre><code class="language-bash">docker compose down
 vllm-sr stop</code></pre>
 <h2>Eliminar datos de Open WebUI (opcional)</h2>
-<pre><code class="language-bash">podman volume rm semantic-router-workshop_open-webui-data</code></pre>
+<pre><code class="language-bash">docker volume rm semantic-router-workshop_open-webui-data</code></pre>
 <h2>Eliminar estado de vllm-sr (opcional)</h2>
 <pre><code class="language-bash">rm -rf .vllm-sr/</code></pre>
 <blockquote>Esto borra la configuración del dashboard, historial de evaluaciones y datos persistidos. Solo hazlo si quieres empezar de cero.</blockquote>
@@ -64,7 +64,7 @@ vllm-sr stop</code></pre>
 rm -rf .venv</code></pre>
 <h2>Verificar que todo está detenido</h2>
 <pre><code class="language-bash">vllm-sr status
-podman ps</code></pre>
+docker ps</code></pre>
 <p>No debería quedar ningún contenedor del workshop corriendo.</p>
         <nav class="pager"><a href="09-troubleshooting.html"><span class="dir">Anterior</span>Troubleshooting</a><a href="instructor.html"><span class="dir">Siguiente</span>Guía del instructor</a></nav>
       </article>

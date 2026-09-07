@@ -23,7 +23,7 @@ Tres modelos remotos, una sola interfaz de chat:
 
 - macOS Apple Silicon (arm64) o Linux arm64/amd64
 - Python 3.12
-- Podman + podman-compose
+- Docker + Docker Compose
 - Token y 3 URLs de OpenShift AI (se pegan en el setup del dashboard)
 
 ## Empezar
@@ -36,7 +36,7 @@ En el repo: **Settings → Pages → Deploy from a branch** → rama `devopsdays
 
 Si el repo es privado, hazlo público (GitHub Free no publica Pages en repos privados). No uses *GitHub Actions* como source: el entorno `github-pages` suele bloquear ramas que no son `master`.
 
-### Workshop local (Podman)
+### Workshop local (Docker)
 
 Sigue las guías en orden: **[workshop/README.md](./workshop/README.md)**
 
@@ -52,7 +52,7 @@ semantic-router-workshop/
 ├── demo/               # Demo OpenShift (install.sh + runbook)
 ├── config/
 │   └── config.example.yaml
-├── podman-compose.yml
+├── docker-compose.yml
 ├── .env.example
 └── README.md
 ```
