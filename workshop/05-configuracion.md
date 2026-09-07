@@ -41,8 +41,6 @@ Después del login ves **Build your first Mixture-of-Models**, paso **Connect mo
 
 ## 2. Conecta los modelos
 
-Routing mode: **From scratch**.
-
 Si el formulario trae un modelo de ejemplo (por ejemplo `qwen/qwen3.5-rocm` y `vllm:8000`), pulsa **Remove**. No es de este taller.
 
 Crea **3 modelos** con **Add model**. En cada uno:
@@ -103,11 +101,36 @@ https://<URL-VISION>
 
 Uso: fotos y análisis visual.
 
-Deberías ver 3 modelos. Pulsa **Next** (Choose routing).
+Deberías ver 3 modelos. Pulsa **Next**.
 
-## 3. Dominios
+En **Choose routing** deja **From scratch** (Default catch-all). No elijas Balance, Security ni From remote.
 
-En el paso **Choose routing**, crea estos 3 dominios. Copia el nombre y la descripción.
+Pulsa **Next** otra vez.
+
+## 3. Review & activate
+
+Estás en **Review & activate**. Aquí se valida y se activa.
+
+Comprueba:
+
+- Badge **READY**
+- Listener **:8899**
+- Models **3**
+- Routing mode **From scratch**
+
+**Decisions: 1** y **Signals: 0** es normal: From scratch deja un catch-all. Dominios y rutas de código/visión/general se agregan **después** de activar.
+
+Si algo no cuadra, pulsa **Revalidate**. Si está READY, pulsa **Activate**.
+
+Comprueba que ves los 3 modelos:
+
+```bash
+vllm-sr model
+```
+
+## 4. Dominios
+
+En el dashboard (ya fuera del wizard), crea estos 3 dominios. Copia el nombre y la descripción.
 
 ### `code`
 
@@ -151,9 +174,9 @@ Descripción:
 Conversación, conocimiento general, redacción y preguntas abiertas
 ```
 
-## 4. Rutas
+## 5. Rutas
 
-Sigue en **Choose routing**. Crea 3 reglas. Prioridad: **número más bajo gana**.
+Crea 3 reglas. Prioridad: **número más bajo gana**.
 
 ### Ruta código
 
@@ -202,16 +225,6 @@ Prioridad:
 ```
 
 Si el dominio es `general` → modelo `llama-32-3b`
-
-## 5. Review & activate
-
-Pulsa **Next** y luego **Activate**. El dashboard genera la config y sale del modo setup.
-
-Comprueba que ves los 3 modelos:
-
-```bash
-vllm-sr model
-```
 
 ## Siguiente paso
 

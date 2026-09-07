@@ -75,7 +75,6 @@ EOF</code></pre>
 <p>Si el dashboard pide login con <em>Bootstrap is complete</em> en vez de crear cuenta, ve a <a href="09-troubleshooting.html">Troubleshooting</a>.</p>
 <p>Después del login ves <strong>Build your first Mixture-of-Models</strong>, paso <strong>Connect model</strong>. Ahí se crean y configuran los modelos. Sigue con la sección 2.</p>
 <h2>2. Conecta los modelos</h2>
-<p>Routing mode: <strong>From scratch</strong>.</p>
 <p>Si el formulario trae un modelo de ejemplo (por ejemplo <code>qwen/qwen3.5-rocm</code> y <code>vllm:8000</code>), pulsa <strong>Remove</strong>. No es de este taller.</p>
 <p>Crea <strong>3 modelos</strong> con <strong>Add model</strong>. En cada uno:</p>
 <table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Provider</strong></td><td><code>OpenAI-compatible API</code></td></tr><tr><td><strong>Access key</strong></td><td>el token del instructor (igual en los 3)</td></tr><tr><td><strong>Base URL or Host</strong></td><td>la URL que te dicten, <strong>sin</strong> <code>/v1</code> al final</td></tr></tbody></table>
@@ -98,9 +97,19 @@ EOF</code></pre>
 <p>Base URL or Host:</p>
 <pre><code>https://&lt;URL-VISION&gt;</code></pre>
 <p>Uso: fotos y análisis visual.</p>
-<p>Deberías ver 3 modelos. Pulsa <strong>Next</strong> (Choose routing).</p>
-<h2>3. Dominios</h2>
-<p>En el paso <strong>Choose routing</strong>, crea estos 3 dominios. Copia el nombre y la descripción.</p>
+<p>Deberías ver 3 modelos. Pulsa <strong>Next</strong>.</p>
+<p>En <strong>Choose routing</strong> deja <strong>From scratch</strong> (Default catch-all). No elijas Balance, Security ni From remote.</p>
+<p>Pulsa <strong>Next</strong> otra vez.</p>
+<h2>3. Review & activate</h2>
+<p>Estás en <strong>Review & activate</strong>. Aquí se valida y se activa.</p>
+<p>Comprueba:</p>
+<ul><li>Badge <strong>READY</strong></li><li>Listener <strong>:8899</strong></li><li>Models <strong>3</strong></li><li>Routing mode <strong>From scratch</strong></li></ul>
+<p><strong>Decisions: 1</strong> y <strong>Signals: 0</strong> es normal: From scratch deja un catch-all. Dominios y rutas de código/visión/general se agregan <strong>después</strong> de activar.</p>
+<p>Si algo no cuadra, pulsa <strong>Revalidate</strong>. Si está READY, pulsa <strong>Activate</strong>.</p>
+<p>Comprueba que ves los 3 modelos:</p>
+<pre><code class="language-bash">vllm-sr model</code></pre>
+<h2>4. Dominios</h2>
+<p>En el dashboard (ya fuera del wizard), crea estos 3 dominios. Copia el nombre y la descripción.</p>
 <h3><code>code</code></h3>
 <p>Nombre:</p>
 <pre><code>code</code></pre>
@@ -116,8 +125,8 @@ EOF</code></pre>
 <pre><code>general</code></pre>
 <p>Descripción:</p>
 <pre><code>Conversación, conocimiento general, redacción y preguntas abiertas</code></pre>
-<h2>4. Rutas</h2>
-<p>Sigue en <strong>Choose routing</strong>. Crea 3 reglas. Prioridad: <strong>número más bajo gana</strong>.</p>
+<h2>5. Rutas</h2>
+<p>Crea 3 reglas. Prioridad: <strong>número más bajo gana</strong>.</p>
 <h3>Ruta código</h3>
 <p>Nombre:</p>
 <pre><code>code-route</code></pre>
@@ -136,10 +145,6 @@ EOF</code></pre>
 <p>Prioridad:</p>
 <pre><code>100</code></pre>
 <p>Si el dominio es <code>general</code> → modelo <code>llama-32-3b</code></p>
-<h2>5. Review & activate</h2>
-<p>Pulsa <strong>Next</strong> y luego <strong>Activate</strong>. El dashboard genera la config y sale del modo setup.</p>
-<p>Comprueba que ves los 3 modelos:</p>
-<pre><code class="language-bash">vllm-sr model</code></pre>
 <h2>Siguiente paso</h2>
 <p><a href="06-levantar-servicios.html">Levantar Open WebUI →</a></p>
         <nav class="pager"><a href="04-arquitectura-y-flujo.html"><span class="dir">Anterior</span>Arquitectura y flujo</a><a href="06-levantar-servicios.html"><span class="dir">Siguiente</span>Levantar los servicios</a></nav>
