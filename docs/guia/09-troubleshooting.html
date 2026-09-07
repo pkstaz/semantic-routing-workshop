@@ -60,6 +60,28 @@ vllm-sr serve --log-level debug
 
 # Ver logs de un servicio específico
 vllm-sr logs router</code></pre>
+<h2><code>Unsupported container runtime: podman</code></h2>
+<p><strong>Síntoma:</strong></p>
+<pre><code>ERROR - Podman is not supported for local vLLM Semantic Router deployment.
+ERROR - Unsupported container runtime: podman
+ERROR - Use Docker for local `vllm-sr serve` workflows.</code></pre>
+<p><code>vllm-sr</code> no encontró <code>docker</code> en el PATH y cayó a Podman. En este taller hace falta Docker.</p>
+<p>También pasa si corres <code>vllm-sr serve</code> desde <code>~</code> en vez de la raíz del repo.</p>
+<pre><code class="language-bash"># 1. Ir al repo
+cd /ruta/al/semantic-router-workshop
+source .venv/bin/activate
+
+# 2. macOS: CLI de Docker Desktop + forzar runtime
+export PATH=&quot;/Applications/Docker.app/Contents/Resources/bin:$PATH&quot;
+export CONTAINER_RUNTIME=docker
+
+# 3. Comprobar que es Docker de verdad
+docker --version
+which docker
+
+# 4. Arrancar
+vllm-sr serve</code></pre>
+<p>Si <code>docker --version</code> sigue fallando, abre <strong>Docker Desktop</strong> y espera a que esté en ejecución.</p>
 <h2>Puerto 8700 ocupado (<code>port is already allocated</code>)</h2>
 <p><strong>Síntoma:</strong></p>
 <pre><code>Bind for 0.0.0.0:8700 failed: port is already allocated</code></pre>

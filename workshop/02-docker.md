@@ -7,6 +7,16 @@ Este workshop usa **Docker**. `vllm-sr serve` levanta sus contenedores con Docke
 ```bash
 docker --version
 docker compose version
+which docker
+```
+
+`docker --version` debe decir **Docker version ...**. Si dice `podman`, el CLI no es Docker.
+
+En macOS, si `which docker` no encuentra nada, Docker Desktop no está en el PATH. En esta terminal:
+
+```bash
+export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
+export CONTAINER_RUNTIME=docker
 ```
 
 Docker Desktop (o el daemon) debe estar **en ejecución**.
