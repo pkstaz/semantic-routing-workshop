@@ -52,7 +52,8 @@
         <h1>5. Configuración</h1>
 <p>Todo se hace en el <strong>dashboard</strong> (modo setup). El instructor te pasa <strong>un token</strong> y <strong>tres URLs</strong>. Pégalo todo en la UI.</p>
 <h2>1. Arranca vllm-sr</h2>
-<p>Desde la raíz del repo, con el entorno virtual activo, crea un <code>config.yaml</code> mínimo y luego arranca:</p>
+<p>Desde la raíz del repo, con el entorno virtual activo, crea un <code>config.yaml</code> mínimo y luego arranca.</p>
+<p>El <strong>dashboard</strong> siempre usa el puerto <strong>8700</strong>. El <code>listener</code> es la API de chat: ponlo en <strong>8899</strong>, no en 8700 (si coinciden, Docker falla con <code>port is already allocated</code>).</p>
 <pre><code class="language-bash">source .venv/bin/activate
 cat &gt; config.yaml &lt;&lt; &#x27;EOF&#x27;
 version: &quot;1.0&quot;
@@ -60,7 +61,7 @@ version: &quot;1.0&quot;
 listeners:
   - name: main
     address: &quot;0.0.0.0&quot;
-    port: 8700
+    port: 8899
 EOF
 vllm-sr serve</code></pre>
 <p>La primera vez descarga imágenes — puede tardar varios minutos.</p>

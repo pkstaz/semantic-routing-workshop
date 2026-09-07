@@ -4,7 +4,9 @@ Todo se hace en el **dashboard** (modo setup). El instructor te pasa **un token*
 
 ## 1. Arranca vllm-sr
 
-Desde la raíz del repo, con el entorno virtual activo, crea un `config.yaml` mínimo y luego arranca:
+Desde la raíz del repo, con el entorno virtual activo, crea un `config.yaml` mínimo y luego arranca.
+
+El **dashboard** siempre usa el puerto **8700**. El `listener` es la API de chat: ponlo en **8899**, no en 8700 (si coinciden, Docker falla con `port is already allocated`).
 
 ```bash
 source .venv/bin/activate
@@ -14,7 +16,7 @@ version: "1.0"
 listeners:
   - name: main
     address: "0.0.0.0"
-    port: 8700
+    port: 8899
 EOF
 vllm-sr serve
 ```

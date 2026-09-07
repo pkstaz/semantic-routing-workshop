@@ -15,6 +15,46 @@ vllm-sr serve --log-level debug
 vllm-sr logs router
 ```
 
+## Puerto 8700 ocupado (`port is already allocated`)
+
+**Síntoma:**
+
+```
+Bind for 0.0.0.0:8700 failed: port is already allocated
+```
+
+en el contenedor `vllm-sr-dashboard-container`.
+
+El dashboard **siempre** usa **8700**. Si en `config.yaml` el `listener` también está en 8700, Docker intenta montar dos cosas en el mismo puerto.
+
+1. Para el stack a medias:
+
+```bash
+vllm-sr stop
+```
+
+2. El listener de chat debe ser **8899**:
+
+```yaml
+listeners:
+  - name: main
+    address: "0.0.0.0"
+    port: 8899
+```
+
+3. Arranca de nuevo:
+
+```bash
+vllm-sr serve
+```
+
+Si sigue ocupado:
+
+```bash
+lsof -nP -iTCP:8700 -sTCP:LISTEN
+docker ps -a | grep vllm-sr
+```
+
 ## macOS: `mounts denied` / File Sharing (Docker Desktop)
 
 **Síntoma:** `vllm-sr serve` falla con algo así:
