@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guía del instructor · Semantic Router Workshop</title>
+  <meta name="description" content="Guía del workshop Semantic Router: Guía del instructor." />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body class="bg-space">
+  <div class="star-field" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">🚀</span>
+          <span class="brand-text">
+            <span class="brand-kicker">DevOpsDays Santiago</span>
+            <span class="brand-name">Semantic Router Workshop</span>
+          </span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">Menú</button>
+        <nav class="nav" data-nav>
+          <a href="../index.html" class="">Inicio</a>
+          <a href="00-introduccion.html" class="">Guía</a>
+          <a href="../index.html#arquitectura">Arquitectura</a>
+          <a href="instructor.html" class="is-active">Instructor</a>
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">Repo</a>
+          <a class="btn btn-primary btn-sm" href="00-introduccion.html">Empezar</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container guide-shell">
+      <aside class="toc">
+        <h2>Itinerario</h2>
+        <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
+<a class="" href="../guia/06-levantar-servicios.html"><span>06. Levantar los servicios</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/07-ejercicios.html"><span>07. Ejercicios prácticos</span><div class="toc-time">30 min</div></a>
+<a class="" href="../guia/08-comandos-cli.html"><span>08. Comandos CLI útiles</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/09-troubleshooting.html"><span>09. Troubleshooting</span><div class="toc-time">referencia</div></a>
+<a class="" href="../guia/10-limpieza.html"><span>10. Limpieza</span><div class="toc-time">5 min</div></a>
+<a class="is-active" href="../guia/instructor.html"><span>I. Guía del instructor</span><div class="toc-time">staff</div></a>
+      </aside>
+      <article class="article prose">
+        <div class="article-kicker">Misión I · staff</div>
+        <h1>Guía del instructor</h1>
+<p>Notas para facilitar el workshop de semantic routing.</p>
+<h2>Agenda sugerida (90 min)</h2>
+<table><thead><tr><th>Tiempo</th><th>Actividad</th><th>Material</th></tr></thead><tbody><tr><td>0–5 min</td><td>Introducción y objetivos</td><td><a href="00-introduccion.html">00-introduccion</a></td></tr><tr><td>5–25 min</td><td>Setup: Python, Podman, vllm-sr</td><td><a href="01-python.html">01</a> – <a href="03-vllm-sr.html">03</a></td></tr><tr><td>25–35 min</td><td>Arquitectura y demo del diagrama</td><td><a href="04-arquitectura-y-flujo.html">04-arquitectura</a></td></tr><tr><td>35–55 min</td><td>Configuración (dashboard o YAML)</td><td><a href="05-configuracion.html">05-configuracion</a></td></tr><tr><td>55–65 min</td><td>Levantar servicios, verificar</td><td><a href="06-levantar-servicios.html">06-levantar</a></td></tr><tr><td>65–90 min</td><td>Ejercicios prácticos</td><td><a href="07-ejercicios.html">07-ejercicios</a></td></tr></tbody></table>
+<h2>Antes del workshop</h2>
+<ul><li>[ ] Tener credenciales de OpenShift AI listas para compartir (o un mecanismo seguro para distribuirlas)</li><li>[ ] Probar el flujo completo en tu máquina: <code>vllm-sr serve</code> + <code>podman-compose up</code></li><li>[ ] Verificar que los 3 modelos remotos responden</li><li>[ ] Tener el dashboard abierto en una pantalla compartida para la demo en vivo</li></ul>
+<h2>Puntos clave para explicar</h2>
+<h3>¿Por qué dos interfaces?</h3>
+<ul><li><strong>Dashboard (8700):</strong> transparencia — el participante <em>ve</em> el routing</li><li><strong>Open WebUI (3000):</strong> experiencia real — el usuario <em>no ve</em> el routing</li></ul>
+<h3>¿Por qué tres modelos?</h3>
+<p>Un solo modelo no es óptimo para todo. El router envía cada query al modelo más adecuado según su <strong>significado</strong>, no por palabras clave exactas.</p>
+<h3>Puertos (confusión frecuente)</h3>
+<table><thead><tr><th>Puerto</th><th>Qué es</th></tr></thead><tbody><tr><td>8899</td><td>API de chat (Open WebUI, <code>vllm-sr chat</code>)</td></tr><tr><td>8080</td><td>API interna (<code>vllm-sr eval</code>)</td></tr><tr><td>8700</td><td>Dashboard</td></tr></tbody></table>
+<h3>Prioridades de decisions</h3>
+<p>Menor número = mayor prioridad. <code>code-route</code> (10) gana sobre <code>general-route</code> (100).</p>
+<h2>Demo en vivo sugerida</h2>
+<ol><li><strong>Dashboard abierto</strong> en pantalla compartida (sección de decisions)</li><li>Pide a un participante que envíe una query de código en Open WebUI</li><li>Muestra en el dashboard la decisión que se tomó en tiempo real</li><li>Repite con una query general y una de visión (si hay imagen disponible)</li></ol>
+<h2>Queries de demo</h2>
+<table><thead><tr><th>Query</th><th>Ruta esperada</th><th>Modelo</th></tr></thead><tbody><tr><td><code>Write a Python function to sort a list</code></td><td>code</td><td>qwen35-9b</td></tr><tr><td><code>What is the capital of France?</code></td><td>general</td><td>llama-32-3b</td></tr><tr><td><code>Generate a SQL query to select all users</code></td><td>code</td><td>qwen35-9b</td></tr><tr><td><code>Tell me a story about a robot</code></td><td>general</td><td>llama-32-3b</td></tr><tr><td><code>What is in this image?</code> (+ imagen)</td><td>vision</td><td>granite-vision-32-2b</td></tr></tbody></table>
+<h2>Problemas comunes en vivo</h2>
+<table><thead><tr><th>Problema</th><th>Solución rápida</th></tr></thead><tbody><tr><td>Primera ejecución lenta</td><td>Avisar que descarga imágenes; mostrar arquitectura mientras espera</td></tr><tr><td>Token expirado</td><td>Tener un token de respaldo</td></tr><tr><td>Routing incorrecto</td><td>Usar <code>vllm-sr eval --json</code> para mostrar señales</td></tr><tr><td>Open WebUI sin respuesta</td><td>Verificar puerto 8899 con <code>curl localhost:8899/v1/models</code></td></tr></tbody></table>
+<h2>Preguntas frecuentes de participantes</h2>
+<p><strong>¿Puedo usar Docker en vez de Podman?</strong> Sí, <code>vllm-sr serve</code> detecta Docker automáticamente. El workshop está escrito para Podman.</p>
+<p><strong>¿El router corre en GPU?</strong> No. La clasificación semántica corre en CPU local. Los modelos LLM están en OpenShift AI remoto.</p>
+<p><strong>¿Puedo agregar más modelos/rutas?</strong> Sí, desde el dashboard o editando <code>config.yaml</code>.</p>
+<p><strong>¿Qué pasa si ninguna regla coincide?</strong> Se usa el <code>default_model</code> configurado en providers (<code>llama-32-3b</code>).</p>
+<h2>Recursos adicionales</h2>
+<ul><li><a href="https://github.com/vllm-project/vllm-semantic-router">vLLM Semantic Router</a></li><li><a href="https://github.com/open-webui/open-webui">Open WebUI</a></li></ul>
+        <nav class="pager"><a href="10-limpieza.html"><span class="dir">Anterior</span>Limpieza</a><span></span></nav>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Semantic Router Workshop · DevOpsDays Santiago 2026 — Misión Espacial DevOps</p>
+        <p>
+          <a href="https://santiago.devopsdayschile.cl/" target="_blank" rel="noopener">DevOpsDays Chile</a>
+          ·
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">GitHub</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
+

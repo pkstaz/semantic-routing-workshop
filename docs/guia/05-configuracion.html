@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuración · Semantic Router Workshop</title>
+  <meta name="description" content="Guía del workshop Semantic Router: Configuración." />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body class="bg-space">
+  <div class="star-field" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">🚀</span>
+          <span class="brand-text">
+            <span class="brand-kicker">DevOpsDays Santiago</span>
+            <span class="brand-name">Semantic Router Workshop</span>
+          </span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">Menú</button>
+        <nav class="nav" data-nav>
+          <a href="../index.html" class="">Inicio</a>
+          <a href="00-introduccion.html" class="is-active">Guía</a>
+          <a href="../index.html#arquitectura">Arquitectura</a>
+          <a href="instructor.html" class="">Instructor</a>
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">Repo</a>
+          <a class="btn btn-primary btn-sm" href="00-introduccion.html">Empezar</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container guide-shell">
+      <aside class="toc">
+        <h2>Itinerario</h2>
+        <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
+<a class="is-active" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
+<a class="" href="../guia/06-levantar-servicios.html"><span>06. Levantar los servicios</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/07-ejercicios.html"><span>07. Ejercicios prácticos</span><div class="toc-time">30 min</div></a>
+<a class="" href="../guia/08-comandos-cli.html"><span>08. Comandos CLI útiles</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/09-troubleshooting.html"><span>09. Troubleshooting</span><div class="toc-time">referencia</div></a>
+<a class="" href="../guia/10-limpieza.html"><span>10. Limpieza</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/instructor.html"><span>I. Guía del instructor</span><div class="toc-time">staff</div></a>
+      </aside>
+      <article class="article prose">
+        <div class="article-kicker">Misión 05 · 20 min</div>
+        <h1>5. Configuración</h1>
+<h2>1. Variables de entorno</h2>
+<p>Copia el archivo de ejemplo y edítalo con tus credenciales de OpenShift AI:</p>
+<pre><code class="language-bash">cp .env.example .env</code></pre>
+<p>Edita <code>.env</code>:</p>
+<pre><code class="language-env">LLAMA_ENDPOINT=https://tu-host-openshift-ai/llama-32-3b
+QWEN_CODE_ENDPOINT=https://tu-host-openshift-ai/qwen35-9b
+GRANITE_VISION_ENDPOINT=https://tu-host-openshift-ai/granite-vision-32-2b
+OPENSHIFT_AI_TOKEN=tu-token-aqui</code></pre>
+<blockquote>Los endpoints son la URL base del modelo <strong>sin</strong> <code>/v1</code> al final.</blockquote>
+<p>Exporta el token para que <code>vllm-sr</code> lo use al conectar con los backends:</p>
+<pre><code class="language-bash">export OPENSHIFT_AI_TOKEN=$(grep OPENSHIFT_AI_TOKEN .env | cut -d= -f2-)</code></pre>
+<h2>2. Configurar el routing</h2>
+<p>Tienes dos opciones. Para el workshop recomendamos la <strong>Opción A</strong> (dashboard).</p>
+<h3>Opción A — Dashboard (recomendado)</h3>
+<p>La primera vez que ejecutes <code>vllm-sr serve</code> sin <code>config.yaml</code>, el dashboard abre en <strong>modo setup</strong>. Desde ahí:</p>
+<ol><li><strong>Providers</strong> — agrega los 3 modelos con sus endpoints de OpenShift AI: - <code>llama-32-3b</code> → <code>LLAMA_ENDPOINT</code> - <code>qwen35-9b</code> → <code>QWEN_CODE_ENDPOINT</code> - <code>granite-vision-32-2b</code> → <code>GRANITE_VISION_ENDPOINT</code> - Auth: <code>Authorization: Bearer</code> con tu <code>OPENSHIFT_AI_TOKEN</code></li></ol>
+<ol><li><strong>Signals → Domains</strong> — crea tres dominios: - <code>code</code> — programación, debugging, SQL, scripts - <code>vision</code> — imágenes, fotos, análisis visual - <code>general</code> — conversación y conocimiento general</li></ol>
+<ol><li><strong>Decisions</strong> — crea tres reglas (prioridad: code=10, vision=20, general=100):</li></ol>
+<table><thead><tr><th>Decision</th><th>Condición</th><th>Modelo</th></tr></thead><tbody><tr><td><code>code-route</code></td><td>domain = <code>code</code></td><td><code>qwen35-9b</code></td></tr><tr><td><code>vision-route</code></td><td>domain = <code>vision</code></td><td><code>granite-vision-32-2b</code></td></tr><tr><td><code>general-route</code></td><td>domain = <code>general</code></td><td><code>llama-32-3b</code></td></tr></tbody></table>
+<ol><li><strong>Activate</strong> — activa la configuración desde el dashboard.</li></ol>
+<h3>Opción B — Archivo YAML</h3>
+<p>Si prefieres configurar por archivo:</p>
+<pre><code class="language-bash">cp config/config.example.yaml config.yaml</code></pre>
+<p>Edita <code>config.yaml</code> reemplazando los endpoints con los valores de tu <code>.env</code>.</p>
+<p>Valida antes de usar:</p>
+<pre><code class="language-bash">vllm-sr validate --config config.yaml</code></pre>
+<p>Luego arranca con:</p>
+<pre><code class="language-bash">vllm-sr serve --config config.yaml</code></pre>
+<blockquote>Referencia completa del YAML: <a href="https://github.com/pkstaz/semantic-routing-workshop/blob/devopsdays/config/config.example.yaml"><code>config/config.example.yaml</code></a></blockquote>
+<h2>3. Verificar la configuración</h2>
+<pre><code class="language-bash">vllm-sr validate --config config.yaml   # si usas YAML
+vllm-sr model                             # lista modelos configurados</code></pre>
+<h2>Siguiente paso</h2>
+<p><a href="06-levantar-servicios.html">Levantar los servicios →</a></p>
+        <nav class="pager"><a href="04-arquitectura-y-flujo.html"><span class="dir">Anterior</span>Arquitectura y flujo</a><a href="06-levantar-servicios.html"><span class="dir">Siguiente</span>Levantar los servicios</a></nav>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Semantic Router Workshop · DevOpsDays Santiago 2026 — Misión Espacial DevOps</p>
+        <p>
+          <a href="https://santiago.devopsdayschile.cl/" target="_blank" rel="noopener">DevOpsDays Chile</a>
+          ·
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">GitHub</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arquitectura y flujo · Semantic Router Workshop</title>
+  <meta name="description" content="Guía del workshop Semantic Router: Arquitectura y flujo." />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body class="bg-space">
+  <div class="star-field" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">🚀</span>
+          <span class="brand-text">
+            <span class="brand-kicker">DevOpsDays Santiago</span>
+            <span class="brand-name">Semantic Router Workshop</span>
+          </span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">Menú</button>
+        <nav class="nav" data-nav>
+          <a href="../index.html" class="">Inicio</a>
+          <a href="00-introduccion.html" class="is-active">Guía</a>
+          <a href="../index.html#arquitectura">Arquitectura</a>
+          <a href="instructor.html" class="">Instructor</a>
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">Repo</a>
+          <a class="btn btn-primary btn-sm" href="00-introduccion.html">Empezar</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container guide-shell">
+      <aside class="toc">
+        <h2>Itinerario</h2>
+        <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
+<a class="is-active" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
+<a class="" href="../guia/06-levantar-servicios.html"><span>06. Levantar los servicios</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/07-ejercicios.html"><span>07. Ejercicios prácticos</span><div class="toc-time">30 min</div></a>
+<a class="" href="../guia/08-comandos-cli.html"><span>08. Comandos CLI útiles</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/09-troubleshooting.html"><span>09. Troubleshooting</span><div class="toc-time">referencia</div></a>
+<a class="" href="../guia/10-limpieza.html"><span>10. Limpieza</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/instructor.html"><span>I. Guía del instructor</span><div class="toc-time">staff</div></a>
+      </aside>
+      <article class="article prose">
+        <div class="article-kicker">Misión 04 · 10 min</div>
+        <h1>4. Arquitectura y flujo del workshop</h1>
+<h2>Interfaces</h2>
+<p>Usaremos <strong>dos interfaces</strong> complementarias:</p>
+<table><thead><tr><th>Interfaz</th><th>Puerto</th><th>Para qué</th></tr></thead><tbody><tr><td><strong>Dashboard vllm-sr</strong></td><td>8700</td><td>Explicar y visualizar el routing</td></tr><tr><td><strong>Open WebUI</strong></td><td>3000</td><td>Experiencia final de chat para el usuario</td></tr></tbody></table>
+<h3>Puertos de vllm-sr</h3>
+<table><thead><tr><th>Puerto</th><th>Componente</th><th>Uso</th></tr></thead><tbody><tr><td><strong>8899</strong></td><td>Envoy</td><td>API de chat — Open WebUI apunta aquí</td></tr><tr><td><strong>8080</strong></td><td>Router</td><td>API interna — <code>vllm-sr eval</code>, debugging</td></tr><tr><td><strong>8700</strong></td><td>Dashboard</td><td>UI web con playground y métricas</td></tr></tbody></table>
+<h3>Dashboard vllm-sr (puerto 8700)</h3>
+<p><code>vllm-sr</code> incluye un dashboard web con:</p>
+<ul><li><strong>Playground de chat</strong> — probar el routing sin Open WebUI</li><li><strong>Reglas de routing</strong> — visualización en tiempo real</li><li><strong>Métricas</strong> — qué modelo se eligió para cada query</li><li><strong>Editor visual</strong> del <code>config.yaml</code></li></ul>
+<h3>Open WebUI (puerto 3000)</h3>
+<p>Chat orientado al usuario final. Apunta al semantic router en el puerto <strong>8899</strong> (API OpenAI-compatible vía Envoy). El usuario no ve el router; solo conversa.</p>
+<h2>Flujo del workshop</h2>
+<ol><li>El participante abre el <strong>dashboard</strong> (<code>http://localhost:8700</code>) y revisa las reglas definidas.</li><li>Escribe una query en el <strong>playground</strong> del dashboard y ve en tiempo real qué modelo fue elegido y por qué.</li><li>Abre <strong>Open WebUI</strong> (<code>http://localhost:3000</code>) y chatea con normalidad, sin ver el router.</li><li>El instructor muestra en el dashboard las decisiones de routing que se tomaron en segundo plano.</li></ol>
+<h2>Cómo se levanta cada pieza</h2>
+<table><thead><tr><th>Componente</th><th>Comando</th></tr></thead><tbody><tr><td>vllm-sr (router + envoy + dashboard)</td><td><code>vllm-sr serve</code></td></tr><tr><td>Open WebUI</td><td><code>podman-compose up -d</code></td></tr></tbody></table>
+<h2>Diagrama</h2>
+<pre><code>Participante                    Instructor
+     │                               │
+     ▼                               ▼
+Open WebUI :3000              Dashboard :8700
+     │                               │
+     └──────────► Envoy :8899 ◄──────┘
+                      │
+                      ▼
+              vLLM Semantic Router
+                      │
+                      ▼
+            Modelos en OpenShift AI
+         (llama / qwen / granite-vision)</code></pre>
+<h2>Siguiente paso</h2>
+<p><a href="05-configuracion.html">Configuración →</a></p>
+        <nav class="pager"><a href="03-vllm-sr.html"><span class="dir">Anterior</span>Instalar vllm-sr CLI</a><a href="05-configuracion.html"><span class="dir">Siguiente</span>Configuración</a></nav>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Semantic Router Workshop · DevOpsDays Santiago 2026 — Misión Espacial DevOps</p>
+        <p>
+          <a href="https://santiago.devopsdayschile.cl/" target="_blank" rel="noopener">DevOpsDays Chile</a>
+          ·
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">GitHub</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
+

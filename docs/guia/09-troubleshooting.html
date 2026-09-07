@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Troubleshooting · Semantic Router Workshop</title>
+  <meta name="description" content="Guía del workshop Semantic Router: Troubleshooting." />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body class="bg-space">
+  <div class="star-field" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">🚀</span>
+          <span class="brand-text">
+            <span class="brand-kicker">DevOpsDays Santiago</span>
+            <span class="brand-name">Semantic Router Workshop</span>
+          </span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">Menú</button>
+        <nav class="nav" data-nav>
+          <a href="../index.html" class="">Inicio</a>
+          <a href="00-introduccion.html" class="is-active">Guía</a>
+          <a href="../index.html#arquitectura">Arquitectura</a>
+          <a href="instructor.html" class="">Instructor</a>
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">Repo</a>
+          <a class="btn btn-primary btn-sm" href="00-introduccion.html">Empezar</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container guide-shell">
+      <aside class="toc">
+        <h2>Itinerario</h2>
+        <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
+<a class="" href="../guia/06-levantar-servicios.html"><span>06. Levantar los servicios</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/07-ejercicios.html"><span>07. Ejercicios prácticos</span><div class="toc-time">30 min</div></a>
+<a class="" href="../guia/08-comandos-cli.html"><span>08. Comandos CLI útiles</span><div class="toc-time">10 min</div></a>
+<a class="is-active" href="../guia/09-troubleshooting.html"><span>09. Troubleshooting</span><div class="toc-time">referencia</div></a>
+<a class="" href="../guia/10-limpieza.html"><span>10. Limpieza</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/instructor.html"><span>I. Guía del instructor</span><div class="toc-time">staff</div></a>
+      </aside>
+      <article class="article prose">
+        <div class="article-kicker">Misión 09 · referencia</div>
+        <h1>9. Troubleshooting</h1>
+<h2><code>vllm-sr serve</code> falla al arrancar</h2>
+<p><strong>Síntoma:</strong> error al descargar imágenes o iniciar contenedores.</p>
+<pre><code class="language-bash"># Verificar que Podman está corriendo (macOS)
+podman machine start
+
+# Ver logs detallados
+vllm-sr serve --log-level debug
+
+# Ver logs de un servicio específico
+vllm-sr logs router</code></pre>
+<h2><code>vllm-sr eval</code> devuelve error de conexión</h2>
+<p><strong>Síntoma:</strong> <code>Router is not running at http://localhost:8080</code></p>
+<pre><code class="language-bash">vllm-sr status          # ¿Está corriendo?
+vllm-sr serve           # Reiniciar si es necesario</code></pre>
+<blockquote><code>eval</code> usa el puerto <strong>8080</strong> (API interna del router), no el 8899 de Envoy.</blockquote>
+<h2>Open WebUI no recibe respuestas</h2>
+<p><strong>Verificar:</strong></p>
+<ol><li>¿<code>vllm-sr serve</code> está corriendo?</li><li>¿El puerto en <code>.env</code> (<code>CHAT_API_PORT</code>) coincide con el listener de Envoy?</li></ol>
+<pre><code class="language-bash"># Probar la API de chat directamente
+curl http://localhost:8899/v1/models
+
+# Probar un chat
+vllm-sr chat &quot;hello&quot;</code></pre>
+<ol><li>¿Open WebUI apunta al puerto correcto?</li></ol>
+<pre><code class="language-bash">podman inspect open-webui | grep OPENAI_API_BASE_URL</code></pre>
+<h2>Error 401 / 403 desde OpenShift AI</h2>
+<p><strong>Síntoma:</strong> el router conecta pero el modelo remoto rechaza la petición.</p>
+<ul><li>Verifica que <code>OPENSHIFT_AI_TOKEN</code> es válido y no expiró</li><li>Confirma que los endpoints en <code>.env</code> son correctos (sin <code>/v1</code> al final)</li><li>Revisa que el token esté exportado: <code>echo $OPENSHIFT_AI_TOKEN</code></li></ul>
+<h2>El routing elige el modelo incorrecto</h2>
+<pre><code class="language-bash"># Diagnosticar qué señales se activaron
+vllm-sr eval --prompt &quot;tu query aquí&quot; --json</code></pre>
+<ul><li>Revisa las descripciones de los dominios en el dashboard</li><li>Ajusta prioridades (<code>priority</code>) si dos reglas compiten</li><li>El dominio con <strong>menor</strong> <code>priority</code> gana cuando hay empate</li></ul>
+<h2>Puerto ya en uso</h2>
+<pre><code class="language-bash"># Ver qué proceso usa el puerto
+lsof -i :8899
+lsof -i :8700
+
+# Detener el stack anterior
+vllm-sr stop</code></pre>
+<h2>Imágenes lentas en la primera ejecución</h2>
+<p>La primera vez, <code>vllm-sr serve</code> descarga imágenes de contenedor (~varios GB). Es normal. Las siguientes ejecuciones son más rápidas.</p>
+<h2>Más ayuda</h2>
+<ul><li><a href="https://github.com/vllm-project/vllm-semantic-router/issues">vLLM Semantic Router — Issues</a></li><li><a href="https://github.com/vllm-project/vllm-semantic-router/blob/main/README.md">vllm-sr docs</a></li></ul>
+        <nav class="pager"><a href="08-comandos-cli.html"><span class="dir">Anterior</span>Comandos CLI útiles</a><a href="10-limpieza.html"><span class="dir">Siguiente</span>Limpieza</a></nav>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Semantic Router Workshop · DevOpsDays Santiago 2026 — Misión Espacial DevOps</p>
+        <p>
+          <a href="https://santiago.devopsdayschile.cl/" target="_blank" rel="noopener">DevOpsDays Chile</a>
+          ·
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">GitHub</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
+

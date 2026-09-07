@@ -28,6 +28,10 @@ Tres modelos remotos, una sola interfaz de chat:
 
 ## Empezar
 
+### Guía publicada (GitHub Pages)
+
+Versión web del taller, con layout tipo DevOpsDays Santiago: **[pkstaz.github.io/semantic-routing-workshop](https://pkstaz.github.io/semantic-routing-workshop/)** (rama `devopsdays`).
+
 ### Workshop local (Podman)
 
 Sigue las guías en orden: **[workshop/README.md](./workshop/README.md)**

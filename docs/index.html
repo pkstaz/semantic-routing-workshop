@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Semantic Router Workshop · DevOpsDays Santiago</title>
+  <meta name="description" content="Taller de semantic routing con vLLM Semantic Router, Open WebUI y modelos remotos en OpenShift AI. DevOpsDays Santiago 2026." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="bg-space">
+  <div class="star-field" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">
+          <span class="brand-mark">🚀</span>
+          <span class="brand-text">
+            <span class="brand-kicker">DevOpsDays Santiago</span>
+            <span class="brand-name">Semantic Router Workshop</span>
+          </span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">Menú</button>
+        <nav class="nav" data-nav>
+          <a href="index.html" class="is-active">Inicio</a>
+          <a href="guia/00-introduccion.html">Guía</a>
+          <a href="#arquitectura">Arquitectura</a>
+          <a href="guia/instructor.html">Instructor</a>
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">Repo</a>
+          <a class="btn btn-primary btn-sm" href="guia/00-introduccion.html">Empezar</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge">Misión 2026 · Taller</span>
+        <h1>Semantic<span class="text-gradient">Router</span></h1>
+        <p class="hero-lead">
+          Únete a la misión de routing semántico: clasifica cada consulta y envíala al modelo más adecuado
+          en OpenShift AI, sin que el usuario tenga que elegir modelo a mano.
+        </p>
+        <div class="hero-meta">
+          <span>⏱ 90–120 minutos</span>
+          <span>🛰 OpenShift AI · vllm-sr · Open WebUI</span>
+          <span>📍 DevOpsDays Santiago</span>
+        </div>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="guia/00-introduccion.html">Empezar la guía</a>
+          <a class="btn btn-outline" href="#itinerario">Ver itinerario</a>
+          <a class="btn btn-outline" href="https://santiago.devopsdayschile.cl/" target="_blank" rel="noopener">DevOpsDays Chile</a>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-value">11</div>
+            <div class="stat-label">Secciones de la guía</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Modelos remotos</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">90+</div>
+            <div class="stat-label">Minutos de taller</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">1</div>
+            <div class="stat-label">Interfaz de chat</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="itinerario">
+      <div class="container">
+        <div class="section-kicker">Itinerario</div>
+        <h2 class="section-title">Tu misión, paso a paso</h2>
+        <p class="section-lead">Sigue las guías en orden. Cada estación suma una pieza hasta el chat con routing invisible.</p>
+        <div class="cards">
+          <a class="card" href="guia/00-introduccion.html">
+            <div class="card-num">00</div>
+            <h3>Introducción</h3>
+            <p>Objetivo del taller, stack y modelos remotos.</p>
+            <div class="card-time">5 min</div>
+          </a>
+          <a class="card" href="guia/01-python.html">
+            <div class="card-num">01</div>
+            <h3>Python 3.12</h3>
+            <p>Entorno virtual listo para vllm-sr.</p>
+            <div class="card-time">10 min</div>
+          </a>
+          <a class="card" href="guia/02-podman.html">
+            <div class="card-num">02</div>
+            <h3>Podman</h3>
+            <p>Contenedores rootless para Open WebUI.</p>
+            <div class="card-time">10 min</div>
+          </a>
+          <a class="card" href="guia/03-vllm-sr.html">
+            <div class="card-num">03</div>
+            <h3>Instalar vllm-sr</h3>
+            <p>CLI que orquesta router, Envoy y dashboard.</p>
+            <div class="card-time">5 min</div>
+          </a>
+          <a class="card" href="guia/04-arquitectura-y-flujo.html">
+            <div class="card-num">04</div>
+            <h3>Arquitectura</h3>
+            <p>Dashboard vs Open WebUI y el flujo del taller.</p>
+            <div class="card-time">10 min</div>
+          </a>
+          <a class="card" href="guia/05-configuracion.html">
+            <div class="card-num">05</div>
+            <h3>Configuración</h3>
+            <p>Endpoints, token y reglas de routing.</p>
+            <div class="card-time">20 min</div>
+          </a>
+          <a class="card" href="guia/06-levantar-servicios.html">
+            <div class="card-num">06</div>
+            <h3>Levantar servicios</h3>
+            <p>Router + dashboard + Open WebUI en marcha.</p>
+            <div class="card-time">10 min</div>
+          </a>
+          <a class="card" href="guia/07-ejercicios.html">
+            <div class="card-num">07</div>
+            <h3>Ejercicios</h3>
+            <p>Playground, CLI y chat como usuario final.</p>
+            <div class="card-time">30 min</div>
+          </a>
+          <a class="card" href="guia/08-comandos-cli.html">
+            <div class="card-num">08</div>
+            <h3>CLI útil</h3>
+            <p>serve, eval, chat, logs y stacks paralelos.</p>
+            <div class="card-time">10 min</div>
+          </a>
+          <a class="card" href="guia/09-troubleshooting.html">
+            <div class="card-num">09</div>
+            <h3>Troubleshooting</h3>
+            <p>Puertos, tokens y routing incorrecto.</p>
+            <div class="card-time">referencia</div>
+          </a>
+          <a class="card" href="guia/10-limpieza.html">
+            <div class="card-num">10</div>
+            <h3>Limpieza</h3>
+            <p>Detén contenedores y deja tu máquina en órbita limpia.</p>
+            <div class="card-time">5 min</div>
+          </a>
+          <a class="card" href="guia/instructor.html">
+            <div class="card-num">I</div>
+            <h3>Instructor</h3>
+            <p>Agenda, demo en vivo y preguntas frecuentes.</p>
+            <div class="card-time">staff</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="arquitectura">
+      <div class="container">
+        <div class="section-kicker">Arquitectura</div>
+        <h2 class="section-title">Tres modelos, una sola interfaz</h2>
+        <p class="section-lead">Open WebUI habla con Envoy. El router clasifica el significado de cada query y elige el backend en OpenShift AI.</p>
+        <div class="flow">
+          <pre>Open WebUI :3000  ──►  vllm-sr (Envoy :8899)  ──►  OpenShift AI
+                              │
+Dashboard :8700  ◄────────────┘
+         (visualizar routing)</pre>
+        </div>
+        <div class="model-grid">
+          <div class="card">
+            <div class="card-num">general</div>
+            <h3>llama-32-3b</h3>
+            <p>Conversación y conocimiento general.</p>
+          </div>
+          <div class="card">
+            <div class="card-num">code</div>
+            <h3>qwen35-9b</h3>
+            <p>Código, debugging y SQL.</p>
+          </div>
+          <div class="card">
+            <div class="card-num">vision</div>
+            <h3>granite-vision-32-2b</h3>
+            <p>Imágenes y análisis visual.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="requisitos">
+      <div class="container">
+        <div class="section-kicker">Antes de despegar</div>
+        <h2 class="section-title">Requisitos de la tripulación</h2>
+        <div class="req-grid">
+          <div class="card">
+            <h3>Máquina</h3>
+            <p>macOS Apple Silicon o Linux. Python 3.12, Podman y podman-compose.</p>
+          </div>
+          <div class="card">
+            <h3>Credenciales</h3>
+            <p>Token y endpoints de OpenShift AI para los tres modelos remotos.</p>
+          </div>
+          <div class="card">
+            <h3>Red</h3>
+            <p>Conexión a internet para descargar imágenes la primera vez.</p>
+          </div>
+        </div>
+        <div class="pill-list">
+          <span class="pill">Python 3.12</span>
+          <span class="pill">Podman</span>
+          <span class="pill">vllm-sr</span>
+          <span class="pill">Open WebUI :3000</span>
+          <span class="pill">Dashboard :8700</span>
+          <span class="pill">Envoy :8899</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <div class="section-kicker">Control tower</div>
+            <h2 class="section-title">¿Facilitas el taller?</h2>
+            <p class="section-lead">Agenda de 90 minutos, queries de demo y problemas comunes en vivo.</p>
+          </div>
+          <a class="btn btn-primary" href="guia/instructor.html">Guía del instructor</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Semantic Router Workshop · DevOpsDays Santiago 2026 — Misión Espacial DevOps</p>
+        <p>
+          <a href="https://santiago.devopsdayschile.cl/" target="_blank" rel="noopener">DevOpsDays Chile</a>
+          ·
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">GitHub</a>
+          ·
+          <a href="https://github.com/vllm-project/vllm-semantic-router" target="_blank" rel="noopener">vLLM Semantic Router</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

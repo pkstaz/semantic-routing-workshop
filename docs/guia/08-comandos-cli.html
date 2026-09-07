@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comandos CLI útiles · Semantic Router Workshop</title>
+  <meta name="description" content="Guía del workshop Semantic Router: Comandos CLI útiles." />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body class="bg-space">
+  <div class="star-field" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">🚀</span>
+          <span class="brand-text">
+            <span class="brand-kicker">DevOpsDays Santiago</span>
+            <span class="brand-name">Semantic Router Workshop</span>
+          </span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">Menú</button>
+        <nav class="nav" data-nav>
+          <a href="../index.html" class="">Inicio</a>
+          <a href="00-introduccion.html" class="is-active">Guía</a>
+          <a href="../index.html#arquitectura">Arquitectura</a>
+          <a href="instructor.html" class="">Instructor</a>
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">Repo</a>
+          <a class="btn btn-primary btn-sm" href="00-introduccion.html">Empezar</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container guide-shell">
+      <aside class="toc">
+        <h2>Itinerario</h2>
+        <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
+<a class="" href="../guia/06-levantar-servicios.html"><span>06. Levantar los servicios</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/07-ejercicios.html"><span>07. Ejercicios prácticos</span><div class="toc-time">30 min</div></a>
+<a class="is-active" href="../guia/08-comandos-cli.html"><span>08. Comandos CLI útiles</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/09-troubleshooting.html"><span>09. Troubleshooting</span><div class="toc-time">referencia</div></a>
+<a class="" href="../guia/10-limpieza.html"><span>10. Limpieza</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/instructor.html"><span>I. Guía del instructor</span><div class="toc-time">staff</div></a>
+      </aside>
+      <article class="article prose">
+        <div class="article-kicker">Misión 08 · 10 min</div>
+        <h1>8. Comandos CLI útiles</h1>
+<p>Referencia rápida de comandos <code>vllm-sr</code> para el workshop.</p>
+<h2>Estado y ciclo de vida</h2>
+<pre><code class="language-bash">vllm-sr serve                    # Iniciar el stack completo
+vllm-sr serve --config config.yaml
+vllm-sr status                   # Ver estado de contenedores
+vllm-sr stop                     # Detener todo
+vllm-sr dashboard                # Abrir dashboard en el navegador</code></pre>
+<h2>Evaluar routing (sin enviar al modelo)</h2>
+<pre><code class="language-bash"># Resumen legible
+vllm-sr eval --prompt &quot;Write a shell script to backup files&quot;
+
+# JSON completo
+vllm-sr eval --prompt &quot;What is 2+2?&quot; --json
+
+# Multi-turn
+vllm-sr eval --messages &#x27;[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Hello&quot;}]&#x27;</code></pre>
+<h2>Chat (envía al modelo vía Envoy)</h2>
+<pre><code class="language-bash">vllm-sr chat &quot;Hello, how are you?&quot;
+vllm-sr chat --json &quot;Explain recursion in Python&quot;</code></pre>
+<h2>Modelos y configuración</h2>
+<pre><code class="language-bash">vllm-sr model                              # Listar modelos configurados
+vllm-sr validate --config config.yaml      # Validar YAML
+vllm-sr config router                      # Ver config efectiva del router</code></pre>
+<h2>Logs</h2>
+<pre><code class="language-bash">vllm-sr logs router
+vllm-sr logs envoy
+vllm-sr logs dashboard
+vllm-sr logs router -f                       # Follow (streaming)</code></pre>
+<h2>Puertos alternativos (stacks paralelos)</h2>
+<pre><code class="language-bash">VLLM_SR_STACK_NAME=lane-b VLLM_SR_PORT_OFFSET=200 vllm-sr serve
+# Dashboard en :8900, listener en :9099, etc.</code></pre>
+<h2>Siguiente paso</h2>
+<p>Si algo falla: <a href="09-troubleshooting.html">Troubleshooting →</a></p>
+        <nav class="pager"><a href="07-ejercicios.html"><span class="dir">Anterior</span>Ejercicios prácticos</a><a href="09-troubleshooting.html"><span class="dir">Siguiente</span>Troubleshooting</a></nav>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Semantic Router Workshop · DevOpsDays Santiago 2026 — Misión Espacial DevOps</p>
+        <p>
+          <a href="https://santiago.devopsdayschile.cl/" target="_blank" rel="noopener">DevOpsDays Chile</a>
+          ·
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">GitHub</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Levantar los servicios · Semantic Router Workshop</title>
+  <meta name="description" content="Guía del workshop Semantic Router: Levantar los servicios." />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body class="bg-space">
+  <div class="star-field" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">🚀</span>
+          <span class="brand-text">
+            <span class="brand-kicker">DevOpsDays Santiago</span>
+            <span class="brand-name">Semantic Router Workshop</span>
+          </span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">Menú</button>
+        <nav class="nav" data-nav>
+          <a href="../index.html" class="">Inicio</a>
+          <a href="00-introduccion.html" class="is-active">Guía</a>
+          <a href="../index.html#arquitectura">Arquitectura</a>
+          <a href="instructor.html" class="">Instructor</a>
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">Repo</a>
+          <a class="btn btn-primary btn-sm" href="00-introduccion.html">Empezar</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container guide-shell">
+      <aside class="toc">
+        <h2>Itinerario</h2>
+        <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
+<a class="is-active" href="../guia/06-levantar-servicios.html"><span>06. Levantar los servicios</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/07-ejercicios.html"><span>07. Ejercicios prácticos</span><div class="toc-time">30 min</div></a>
+<a class="" href="../guia/08-comandos-cli.html"><span>08. Comandos CLI útiles</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/09-troubleshooting.html"><span>09. Troubleshooting</span><div class="toc-time">referencia</div></a>
+<a class="" href="../guia/10-limpieza.html"><span>10. Limpieza</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/instructor.html"><span>I. Guía del instructor</span><div class="toc-time">staff</div></a>
+      </aside>
+      <article class="article prose">
+        <div class="article-kicker">Misión 06 · 10 min</div>
+        <h1>6. Levantar los servicios</h1>
+<h2>1. Semantic router (API + dashboard)</h2>
+<p>Desde la raíz del repositorio, con el entorno virtual activo:</p>
+<pre><code class="language-bash">source .venv/bin/activate
+export OPENSHIFT_AI_TOKEN=$(grep OPENSHIFT_AI_TOKEN .env | cut -d= -f2-)
+vllm-sr serve</code></pre>
+<p>Si usas un archivo de configuración:</p>
+<pre><code class="language-bash">vllm-sr serve --config config.yaml</code></pre>
+<p>La primera ejecución descarga imágenes de contenedor — puede tardar varios minutos.</p>
+<h3>Puertos disponibles</h3>
+<table><thead><tr><th>Puerto</th><th>Servicio</th></tr></thead><tbody><tr><td><strong>8899</strong></td><td>API de chat (Open WebUI apunta aquí)</td></tr><tr><td><strong>8080</strong></td><td>API interna del router (<code>vllm-sr eval</code>)</td></tr><tr><td><strong>8700</strong></td><td>Dashboard web</td></tr></tbody></table>
+<p>Verifica que esté corriendo:</p>
+<pre><code class="language-bash">vllm-sr status</code></pre>
+<p>Abre el dashboard: <a href="http://localhost:8700">http://localhost:8700</a></p>
+<blockquote>Anota los puertos que muestra <code>vllm-sr serve</code> al arrancar. Si cambiaste el listener en <code>config.yaml</code>, actualiza <code>CHAT_API_PORT</code> en tu <code>.env</code>.</blockquote>
+<h2>2. Open WebUI</h2>
+<p>En <strong>otra terminal</strong>, desde la raíz del repositorio:</p>
+<pre><code class="language-bash">cp .env.example .env   # si aún no lo tienes
+podman-compose up -d</code></pre>
+<p>Abre Open WebUI: <a href="http://localhost:3000">http://localhost:3000</a></p>
+<p>La primera vez te pedirá crear una cuenta local (solo para este entorno de demo).</p>
+<h3>Conectar Open WebUI al router</h3>
+<p><code>podman-compose.yml</code> ya configura:</p>
+<pre><code class="language-yaml">OPENAI_API_BASE_URL=http://host.containers.internal:8899/v1</code></pre>
+<p>No necesitas configurar modelos manualmente en Open WebUI — el router elige el modelo por ti.</p>
+<h2>3. Verificar end-to-end</h2>
+<pre><code class="language-bash"># Desde el CLI — prueba routing sin UI
+vllm-sr eval --prompt &quot;Write a Python function to sort a list&quot;
+vllm-sr chat &quot;What is the capital of France?&quot;</code></pre>
+<h2>4. Detener</h2>
+<pre><code class="language-bash">podman-compose down
+vllm-sr stop</code></pre>
+<h2>Siguiente paso</h2>
+<p><a href="07-ejercicios.html">Ejercicios prácticos →</a></p>
+        <nav class="pager"><a href="05-configuracion.html"><span class="dir">Anterior</span>Configuración</a><a href="07-ejercicios.html"><span class="dir">Siguiente</span>Ejercicios prácticos</a></nav>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Semantic Router Workshop · DevOpsDays Santiago 2026 — Misión Espacial DevOps</p>
+        <p>
+          <a href="https://santiago.devopsdayschile.cl/" target="_blank" rel="noopener">DevOpsDays Chile</a>
+          ·
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">GitHub</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
+

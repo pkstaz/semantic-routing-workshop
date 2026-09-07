@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ejercicios prácticos · Semantic Router Workshop</title>
+  <meta name="description" content="Guía del workshop Semantic Router: Ejercicios prácticos." />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body class="bg-space">
+  <div class="star-field" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">🚀</span>
+          <span class="brand-text">
+            <span class="brand-kicker">DevOpsDays Santiago</span>
+            <span class="brand-name">Semantic Router Workshop</span>
+          </span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">Menú</button>
+        <nav class="nav" data-nav>
+          <a href="../index.html" class="">Inicio</a>
+          <a href="00-introduccion.html" class="is-active">Guía</a>
+          <a href="../index.html#arquitectura">Arquitectura</a>
+          <a href="instructor.html" class="">Instructor</a>
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">Repo</a>
+          <a class="btn btn-primary btn-sm" href="00-introduccion.html">Empezar</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container guide-shell">
+      <aside class="toc">
+        <h2>Itinerario</h2>
+        <a class="" href="../guia/00-introduccion.html"><span>00. Introducción</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/01-python.html"><span>01. Requisitos de Python</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/02-podman.html"><span>02. Podman y podman-compose</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/03-vllm-sr.html"><span>03. Instalar vllm-sr CLI</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/04-arquitectura-y-flujo.html"><span>04. Arquitectura y flujo</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/05-configuracion.html"><span>05. Configuración</span><div class="toc-time">20 min</div></a>
+<a class="" href="../guia/06-levantar-servicios.html"><span>06. Levantar los servicios</span><div class="toc-time">10 min</div></a>
+<a class="is-active" href="../guia/07-ejercicios.html"><span>07. Ejercicios prácticos</span><div class="toc-time">30 min</div></a>
+<a class="" href="../guia/08-comandos-cli.html"><span>08. Comandos CLI útiles</span><div class="toc-time">10 min</div></a>
+<a class="" href="../guia/09-troubleshooting.html"><span>09. Troubleshooting</span><div class="toc-time">referencia</div></a>
+<a class="" href="../guia/10-limpieza.html"><span>10. Limpieza</span><div class="toc-time">5 min</div></a>
+<a class="" href="../guia/instructor.html"><span>I. Guía del instructor</span><div class="toc-time">staff</div></a>
+      </aside>
+      <article class="article prose">
+        <div class="article-kicker">Misión 07 · 30 min</div>
+        <h1>7. Ejercicios prácticos</h1>
+<p>Con los servicios corriendo, sigue estos ejercicios en orden.</p>
+<h2>Ejercicio 1 — Explorar el dashboard</h2>
+<ol><li>Abre <a href="http://localhost:8700">http://localhost:8700</a></li><li>Navega a la sección de <strong>routing rules</strong> / <strong>decisions</strong></li><li>Identifica las tres rutas: <code>code</code>, <code>vision</code>, <code>general</code></li><li>Revisa qué modelo está asignado a cada una</li></ol>
+<p><strong>Pregunta:</strong> ¿Qué pasa si dos reglas coinciden? (Pista: mira el campo <code>priority</code>)</p>
+<h2>Ejercicio 2 — Playground: routing de código</h2>
+<p>En el <strong>playground</strong> del dashboard, envía:</p>
+<pre><code>Write a Python function to calculate the Fibonacci sequence.</code></pre>
+<p><strong>Observa:</strong> - Qué decisión (<code>decision</code>) se activó - Qué modelo se eligió - Qué señales (<code>signals</code>) contribuyeron</p>
+<p><strong>Resultado esperado:</strong> decisión <code>code-route</code> → modelo <code>qwen35-9b</code></p>
+<h2>Ejercicio 3 — Playground: consulta general</h2>
+<pre><code>What is the capital of France?</code></pre>
+<p><strong>Resultado esperado:</strong> decisión <code>general-route</code> → modelo <code>llama-32-3b</code></p>
+<h2>Ejercicio 4 — Playground: consulta de visión</h2>
+<p>Si tu setup soporta imágenes en el playground, adjunta una imagen y pregunta:</p>
+<pre><code>What is in this image?</code></pre>
+<p><strong>Resultado esperado:</strong> decisión <code>vision-route</code> → modelo <code>granite-vision-32-2b</code></p>
+<h2>Ejercicio 5 — CLI: eval sin UI</h2>
+<p>Desde la terminal:</p>
+<pre><code class="language-bash">vllm-sr eval --prompt &quot;Generate a SQL query to select all users from a table&quot;</code></pre>
+<p>Compara el output con lo que viste en el playground.</p>
+<p>Prueba con JSON completo:</p>
+<pre><code class="language-bash">vllm-sr eval --prompt &quot;Hello, how are you?&quot; --json</code></pre>
+<h2>Ejercicio 6 — Open WebUI: experiencia de usuario</h2>
+<ol><li>Abre <a href="http://localhost:3000">http://localhost:3000</a></li><li>Inicia sesión (cuenta local)</li><li>Envía estas tres consultas <strong>sin elegir modelo</strong>:</li></ol>
+<table><thead><tr><th>Query</th><th>Modelo esperado</th></tr></thead><tbody><tr><td><code>How do I sort a list in Python?</code></td><td>qwen35-9b</td></tr><tr><td><code>Tell me a short story about a robot</code></td><td>llama-32-3b</td></tr><tr><td><code>Explain photosynthesis in simple terms</code></td><td>llama-32-3b</td></tr></tbody></table>
+<ol><li>Mientras chateas, el instructor muestra en el dashboard las decisiones tomadas.</li></ol>
+<h2>Ejercicio 7 — Comparar las dos interfaces</h2>
+<p>Envía la misma query en el <strong>playground</strong> y en <strong>Open WebUI</strong>:</p>
+<pre><code>Can you help me debug my JavaScript code?</code></pre>
+<table><thead><tr><th>Interfaz</th><th>¿Ves el routing?</th><th>¿Ves la respuesta del modelo?</th></tr></thead><tbody><tr><td>Dashboard playground</td><td>Sí</td><td>Sí</td></tr><tr><td>Open WebUI</td><td>No</td><td>Sí</td></tr></tbody></table>
+<p><strong>Conclusión:</strong> el routing es transparente para el usuario final.</p>
+<h2>Ejercicio 8 (opcional) — Modificar una regla</h2>
+<ol><li>En el dashboard, edita la descripción del dominio <code>code</code> para incluir "kubernetes"</li><li>Activa la configuración</li><li>Prueba: <code>How do I deploy a pod in Kubernetes?</code></li><li>Verifica que sigue yendo a <code>qwen35-9b</code></li></ol>
+<h2>Siguiente paso</h2>
+<p><a href="08-comandos-cli.html">Comandos CLI útiles →</a></p>
+        <nav class="pager"><a href="06-levantar-servicios.html"><span class="dir">Anterior</span>Levantar los servicios</a><a href="08-comandos-cli.html"><span class="dir">Siguiente</span>Comandos CLI útiles</a></nav>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Semantic Router Workshop · DevOpsDays Santiago 2026 — Misión Espacial DevOps</p>
+        <p>
+          <a href="https://santiago.devopsdayschile.cl/" target="_blank" rel="noopener">DevOpsDays Chile</a>
+          ·
+          <a href="https://github.com/pkstaz/semantic-routing-workshop" target="_blank" rel="noopener">GitHub</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
+
