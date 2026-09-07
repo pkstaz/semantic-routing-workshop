@@ -9,8 +9,11 @@ Desde la raÃ­z del repo, con el entorno virtual activo, crea un `config.yaml` mÃ
 ```bash
 source .venv/bin/activate
 cat > config.yaml << 'EOF'
+version: "1.0"
+
 listeners:
-  - host: 0.0.0.0
+  - name: main
+    address: "0.0.0.0"
     port: 8700
 EOF
 vllm-sr serve
