@@ -50,11 +50,15 @@
       <article class="article prose">
         <div class="article-kicker">Misión 05 · 20 min</div>
         <h1>5. Configuración</h1>
-<p>Todo se hace en el <strong>dashboard</strong> (modo setup). No hace falta <code>.env</code> ni YAML.</p>
-<p>El instructor te pasa <strong>un token</strong> y <strong>tres URLs</strong>. Pégalo todo en la UI.</p>
+<p>Todo se hace en el <strong>dashboard</strong> (modo setup). El instructor te pasa <strong>un token</strong> y <strong>tres URLs</strong>. Pégalo todo en la UI.</p>
 <h2>1. Arranca vllm-sr</h2>
-<p>Desde la raíz del repo, con el entorno virtual activo:</p>
+<p>Desde la raíz del repo, con el entorno virtual activo, crea un <code>config.yaml</code> mínimo y luego arranca:</p>
 <pre><code class="language-bash">source .venv/bin/activate
+cat &gt; config.yaml &lt;&lt; &#x27;EOF&#x27;
+listeners:
+  - host: 0.0.0.0
+    port: 8700
+EOF
 vllm-sr serve</code></pre>
 <p>La primera vez descarga imágenes — puede tardar varios minutos.</p>
 <p>Cuando esté listo, abre: <a href="http://localhost:8700">http://localhost:8700</a></p>

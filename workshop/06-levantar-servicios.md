@@ -1,6 +1,6 @@
 # 6. Levantar Open WebUI
 
-`vllm-sr` ya debería estar corriendo del [paso 5](./05-configuracion.md). Si lo cerraste, vuelve a arrancarlo:
+`vllm-sr` ya debería estar corriendo del [paso 5](./05-configuracion.md). Si lo cerraste, vuelve a arrancarlo (con el `config.yaml` que ya creaste):
 
 ```bash
 source .venv/bin/activate

@@ -1,15 +1,18 @@
 # 5. Configuración
 
-Todo se hace en el **dashboard** (modo setup). No hace falta `.env` ni YAML.
-
-El instructor te pasa **un token** y **tres URLs**. Pégalo todo en la UI.
+Todo se hace en el **dashboard** (modo setup). El instructor te pasa **un token** y **tres URLs**. Pégalo todo en la UI.
 
 ## 1. Arranca vllm-sr
 
-Desde la raíz del repo, con el entorno virtual activo:
+Desde la raíz del repo, con el entorno virtual activo, crea un `config.yaml` mínimo y luego arranca:
 
 ```bash
 source .venv/bin/activate
+cat > config.yaml << 'EOF'
+listeners:
+  - host: 0.0.0.0
+    port: 8700
+EOF
 vllm-sr serve
 ```
 
