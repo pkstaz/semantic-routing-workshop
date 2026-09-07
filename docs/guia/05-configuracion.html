@@ -52,16 +52,21 @@
         <h1>5. Configuración</h1>
 <p>Todo se hace en el <strong>dashboard</strong> (modo setup). El instructor te pasa <strong>un token</strong> y <strong>tres URLs</strong>. Pégalo todo en la UI.</p>
 <h2>1. Arranca vllm-sr</h2>
-<p>Desde la <strong>raíz del repositorio</strong> (no desde <code>~</code>), con el entorno virtual activo.</p>
-<p>En macOS, si también tienes Podman, hay que poner Docker en el PATH y forzar el runtime:</p>
-<pre><code class="language-bash">cd /ruta/al/semantic-router-workshop
-source .venv/bin/activate
-export PATH=&quot;/Applications/Docker.app/Contents/Resources/bin:$PATH&quot;
-export CONTAINER_RUNTIME=docker
-docker --version   # debe decir &quot;Docker version ...&quot;, no podman</code></pre>
-<p>El <strong>dashboard</strong> siempre usa el puerto <strong>8700</strong>. El listener de chat queda en <strong>8899</strong> (si coinciden, Docker falla con <code>port is already allocated</code>).</p>
-<p>Vamos a crear un <code>config.yaml</code> inicial en modo setup y arrancar el stack. Si ya tienes uno de un intento anterior, bórralo para que se genere de nuevo:</p>
-<pre><code class="language-bash">rm -f config.yaml
+<p>Creamos un <code>config.yaml</code> inicial en modo setup y arrancamos el stack:</p>
+<pre><code class="language-bash">cat &gt; config.yaml &lt;&lt; &#x27;EOF&#x27;
+version: &quot;v0.3&quot;
+
+listeners:
+  - name: http-8899
+    address: &quot;0.0.0.0&quot;
+    port: 8899
+    timeout: &quot;300s&quot;
+
+setup:
+  mode: true
+  state: bootstrap
+  created_by: vllm-sr serve
+EOF
 vllm-sr serve</code></pre>
 <p>La primera vez descarga imágenes — puede tardar varios minutos.</p>
 <p>Cuando esté listo, abre: <a href="http://localhost:8700">http://localhost:8700</a></p>

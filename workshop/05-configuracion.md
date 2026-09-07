@@ -4,24 +4,23 @@ Todo se hace en el **dashboard** (modo setup). El instructor te pasa **un token*
 
 ## 1. Arranca vllm-sr
 
-Desde la **raíz del repositorio** (no desde `~`), con el entorno virtual activo.
-
-En macOS, si también tienes Podman, hay que poner Docker en el PATH y forzar el runtime:
+Creamos un `config.yaml` inicial en modo setup y arrancamos el stack:
 
 ```bash
-cd /ruta/al/semantic-router-workshop
-source .venv/bin/activate
-export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
-export CONTAINER_RUNTIME=docker
-docker --version   # debe decir "Docker version ...", no podman
-```
+cat > config.yaml << 'EOF'
+version: "v0.3"
 
-El **dashboard** siempre usa el puerto **8700**. El listener de chat queda en **8899** (si coinciden, Docker falla con `port is already allocated`).
+listeners:
+  - name: http-8899
+    address: "0.0.0.0"
+    port: 8899
+    timeout: "300s"
 
-Vamos a crear un `config.yaml` inicial en modo setup y arrancar el stack. Si ya tienes uno de un intento anterior, bórralo para que se genere de nuevo:
-
-```bash
-rm -f config.yaml
+setup:
+  mode: true
+  state: bootstrap
+  created_by: vllm-sr serve
+EOF
 vllm-sr serve
 ```
 
