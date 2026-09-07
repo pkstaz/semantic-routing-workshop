@@ -52,7 +52,7 @@
         <h1>5. Configuración</h1>
 <p>Todo se hace en el <strong>dashboard</strong> (modo setup). El instructor te pasa <strong>un token</strong> y <strong>tres URLs</strong>. Pégalo todo en la UI.</p>
 <h2>1. Arranca vllm-sr</h2>
-<p>Creamos un <code>config.yaml</code> inicial en modo setup y arrancamos el stack:</p>
+<p>Creamos un <code>config.yaml</code> inicial en modo setup:</p>
 <pre><code class="language-bash">cat &gt; config.yaml &lt;&lt; &#x27;EOF&#x27;
 version: &quot;v0.3&quot;
 
@@ -66,8 +66,9 @@ setup:
   mode: true
   state: bootstrap
   created_by: vllm-sr serve
-EOF
-vllm-sr serve</code></pre>
+EOF</code></pre>
+<p>Arranca el stack:</p>
+<pre><code class="language-bash">vllm-sr serve</code></pre>
 <p>La primera vez descarga imágenes — puede tardar varios minutos.</p>
 <p>Cuando esté listo, abre: <a href="http://localhost:8700">http://localhost:8700</a></p>
 <p>Crea una cuenta (email + contraseña) y guárdala: no hay usuario de fábrica. Después entra en <strong>setup</strong>: creas endpoints y rutas, y al final pulsas <strong>Activate</strong>.</p>

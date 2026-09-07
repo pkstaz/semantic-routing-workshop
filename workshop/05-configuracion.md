@@ -4,7 +4,7 @@ Todo se hace en el **dashboard** (modo setup). El instructor te pasa **un token*
 
 ## 1. Arranca vllm-sr
 
-Creamos un `config.yaml` inicial en modo setup y arrancamos el stack:
+Creamos un `config.yaml` inicial en modo setup:
 
 ```bash
 cat > config.yaml << 'EOF'
@@ -21,6 +21,11 @@ setup:
   state: bootstrap
   created_by: vllm-sr serve
 EOF
+```
+
+Arranca el stack:
+
+```bash
 vllm-sr serve
 ```
 
