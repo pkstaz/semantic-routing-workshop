@@ -140,7 +140,7 @@ vllm-sr model list
 
 En el dashboard, **Quick Actions → Manage Signals** (o pestaña **Signals** del Manager).
 
-La lista empieza vacía (**0 ITEMS**). Pulsa **Add Signal** y crea **3** de tipo **Domain**.
+La lista empieza vacía (**0 ITEMS**). Crea **2** Domain (`code`, `general`) y **1** Modality (`BOTH`).
 
 En un Domain hay que elegir categorías **MMLU**. Sin eso el clasificador no sabe qué textos pertenecen a tu signal.
 
@@ -155,18 +155,17 @@ En un Domain hay que elegir categorías **MMLU**. Sin eso el clasificador no sab
 | **Description** | `Programación, debugging, SQL, scripts y algoritmos` |
 | **MMLU categories** | `computer science` |
 
-### `vision`
+### `BOTH` (visión)
 
-MMLU es **texto académico**: no hay categoría de fotos o imágenes. Crea el Domain para la decision, pero no esperes que un prompt con imagen se clasifique por MMLU.
+**Name** tiene que ser exactamente `AR`, `DIFFUSION` o `BOTH`. `vision` no valida.
 
-Si **Add Signal** ofrece tipo **Modality**, úsalo para visión (imagen) y apunta `vision-route` a ese signal. Si solo hay Domain, crea `vision` igual y **no** marques `computer science` (chocaría con `code`).
+Para este taller usa **BOTH** (texto + imagen: *qué hay en esta foto*). **DIFFUSION** es generar imagen; **AR** es solo texto.
 
 | Campo | Valor |
 |---|---|
-| **Type** | Domain |
-| **Name** | `vision` |
+| **Type** | Modality |
+| **Name** | `BOTH` |
 | **Description** | `Imágenes, fotos y análisis visual` |
-| **MMLU categories** | no uses `computer science` |
 
 ### `general`
 
@@ -189,7 +188,7 @@ Pulsa **Add Decision** y crea **3** reglas. Prioridad: **número más bajo gana*
 
 En cada una:
 
-- **Conditions:** type `domain`, name = el signal (`code`, `vision` o `general`)
+- **Conditions:** type `domain` + name `code`/`general`, o type `modality` + name `BOTH`
 - **Models:** el modelo de esa ruta
 
 ### `code-route`
@@ -207,7 +206,7 @@ En cada una:
 |---|---|
 | **Name** | `vision-route` |
 | **Priority** | `20` |
-| **Condition** | domain `vision` |
+| **Condition** | modality `BOTH` |
 | **Model** | `granite-vision-32-2b` |
 
 ### `general-route`

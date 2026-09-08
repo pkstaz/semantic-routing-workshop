@@ -45,7 +45,7 @@ Menor número = mayor prioridad. `code-route` (10) gana sobre `general-route` (5
 
 ### ¿Qué es MMLU? (en Signals tipo Domain)
 
-Hay que elegir **MMLU categories**. MMLU es un examen de cultura académica; el clasificador del router etiqueta el prompt con esas materias. `code` → `computer science`, `general` → `other`. Visión no es una materia MMLU (es imagen): si hay signal **Modality**, usarlo para `vision-route`.
+Hay que elegir **MMLU categories**. MMLU es un examen de cultura académica; el clasificador del router etiqueta el prompt con esas materias. `code` → `computer science`, `general` → `other`. Visión usa signal tipo **Modality** (`BOTH` = texto+imagen; `DIFFUSION` = generar imagen), no MMLU.
 
 ## Demo en vivo sugerida
 
