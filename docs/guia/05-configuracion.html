@@ -66,6 +66,25 @@ setup:
   mode: true
   state: bootstrap
   created_by: vllm-sr serve
+
+global:
+  model_catalog:
+    modules:
+      modality_detector:
+        enabled: true
+        method: keyword
+        keywords:
+          - what is in this
+          - what&#x27;s in this
+          - que hay en esta
+          - describe this image
+          - describe this photo
+        both_keywords:
+          - what is in this
+          - what&#x27;s in this
+          - que hay en esta
+          - describe this image
+          - describe this photo
 EOF</code></pre>
 <p>Arranca el stack:</p>
 <pre><code class="language-bash">vllm-sr serve</code></pre>
@@ -120,7 +139,7 @@ EOF</code></pre>
 <h3><code>code</code></h3>
 <table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>code</code></td></tr><tr><td><strong>Description</strong></td><td><code>Programación, debugging, SQL, scripts y algoritmos</code></td></tr><tr><td><strong>MMLU categories</strong></td><td><code>computer science</code></td></tr></tbody></table>
 <h3><code>vision</code> (Keywords)</h3>
-<p><code>Modality</code> / <code>BOTH</code> no sirve para <em>qué hay en esta foto</em>. <code>BOTH</code> es “el prompt pide generar texto <strong>y</strong> imagen”; el detector además viene <strong>apagado</strong>. Para análisis visual usa Keywords.</p>
+<p><code>Modality</code> / <code>BOTH</code> no rutea “qué hay en esta foto” a Granite por sí solo: el detector mira el <strong>texto</strong> (¿generar imagen?) no el adjunto. En este taller el detector arranca <strong>encendido</strong> en modo <code>keyword</code> con frases de <em>análisis</em> (<code>what is in this</code>, <code>describe this photo</code>), no de <em>generación</em> (<code>draw</code>, <code>generate an image</code>). Aun así, <code>vision-route</code> usa <strong>Keywords</strong> <code>vision</code> para mandar esas queries a Granite Vision.</p>
 <table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Keywords</td></tr><tr><td><strong>Name</strong></td><td><code>vision</code></td></tr><tr><td><strong>Operator</strong></td><td><code>OR</code></td></tr><tr><td><strong>Keywords</strong></td><td><code>image</code>, <code>photo</code>, <code>picture</code>, <code>imagen</code>, <code>foto</code>, <code>diagram</code>, <code>what is in this</code></td></tr></tbody></table>
 <h3><code>general</code></h3>
 <table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>general</code></td></tr><tr><td><strong>Description</strong></td><td><code>Conversación, conocimiento general, redacción y preguntas abiertas</code></td></tr><tr><td><strong>MMLU categories</strong></td><td><code>other</code></td></tr></tbody></table>
@@ -134,7 +153,8 @@ EOF</code></pre>
 <table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Name</strong></td><td><code>code-route</code></td></tr><tr><td><strong>Description</strong></td><td><code>Código, SQL, debugging y scripts van a Qwen</code></td></tr><tr><td><strong>Priority</strong></td><td><code>250</code></td></tr><tr><td><strong>Signal type</strong></td><td><code>domain</code></td></tr><tr><td><strong>Signal name</strong></td><td><code>code</code></td></tr><tr><td><strong>Model</strong></td><td><code>qwen35-9b</code></td></tr></tbody></table>
 <h3><code>vision-route</code></h3>
 <p>No uses Signal type <strong>Modality</strong> / <code>BOTH</code> para este taller. Granite Vision analiza fotos; <code>BOTH</code> es otra cosa (generar imagen + texto).</p>
-<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Name</strong></td><td><code>vision-route</code></td></tr><tr><td><strong>Description</strong></td><td><code>Texto e imagen van a Granite Vision</code></td></tr><tr><td><strong>Priority</strong></td><td><code>200</code></td></tr><tr><td><strong>Rules Operator</strong></td><td><code>AND</code></td></tr><tr><td><strong>Signal type</strong></td><td><code>keyword</code></td></tr><tr><td><strong>Signal name</strong></td><td><code>vision</code></td></tr><tr><td><strong>Model</strong></td><td><code>granite-vision-32-2b</code> (modality <strong>omni</strong>)</td></tr></tbody></table>
+<p><strong>Priority 300</strong> (mayor que <code>code-route</code> 250): si adjuntas un JPEG, el clasificador de dominio suele ver el base64 como “código” y, si visión tiene menos prioridad, gana Qwen.</p>
+<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Name</strong></td><td><code>vision-route</code></td></tr><tr><td><strong>Description</strong></td><td><code>Texto e imagen van a Granite Vision</code></td></tr><tr><td><strong>Priority</strong></td><td><code>300</code></td></tr><tr><td><strong>Rules Operator</strong></td><td><code>AND</code></td></tr><tr><td><strong>Signal type</strong></td><td><code>keyword</code></td></tr><tr><td><strong>Signal name</strong></td><td><code>vision</code></td></tr><tr><td><strong>Model</strong></td><td><code>granite-vision-32-2b</code> (modality <strong>omni</strong>)</td></tr></tbody></table>
 <h3><code>general-route</code></h3>
 <table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Name</strong></td><td><code>general-route</code></td></tr><tr><td><strong>Description</strong></td><td><code>Conversación y conocimiento general van a Llama</code></td></tr><tr><td><strong>Priority</strong></td><td><code>150</code></td></tr><tr><td><strong>Signal type</strong></td><td><code>domain</code></td></tr><tr><td><strong>Signal name</strong></td><td><code>general</code></td></tr><tr><td><strong>Model</strong></td><td><code>llama-32-3b</code></td></tr></tbody></table>
 <p>Al terminar: 3 signals y 4 decisions (<code>code-route</code>, <code>vision-route</code>, <code>general-route</code>, <code>default-route</code>).</p>

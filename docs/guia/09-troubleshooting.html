@@ -177,7 +177,7 @@ matched signals: 1
   - domains:code
 Error: HTTP 404 from http://localhost:8899/v1/chat/completions: 404 page not found</code></pre>
 <p>Hay dos fallos distintos:</p>
-<ol><li><strong>Description vacío o prioridad ≤ 100.</strong> El clasificador sí detecta <code>code</code>/<code>general</code>, pero sin <code>description</code> esas reglas no cargan. Si la prioridad es 10/20/50, <code>default-route</code> (P100) gana porque <strong>el número más alto gana</strong>. En <strong>Manage Decisions</strong>: Description relleno y prioridades <strong>250 / 200 / 150</strong>.</li><li><strong>URL sin <code>/v1</code> o Envoy sin clusters de MaaS.</strong> Envoy reescribe <code>/v1/chat/completions</code> encima de la Base URL. Esa URL tiene que terminar en <code>/v1</code>. Si Activate no regeneró Envoy, el chat cae en el router <code>:8080</code> (<code>404 page not found</code>). Con el YAML válido:</li></ol>
+<ol><li><strong>Description vacío o prioridad ≤ 100.</strong> El clasificador sí detecta <code>code</code>/<code>general</code>, pero sin <code>description</code> esas reglas no cargan. Si la prioridad es 10/20/50, <code>default-route</code> (P100) gana porque <strong>el número más alto gana</strong>. En <strong>Manage Decisions</strong>: Description relleno y prioridades <strong>300 / 250 / 150</strong> (<code>vision-route</code> > <code>code-route</code> > <code>general-route</code>).</li><li><strong>URL sin <code>/v1</code> o Envoy sin clusters de MaaS.</strong> Envoy reescribe <code>/v1/chat/completions</code> encima de la Base URL. Esa URL tiene que terminar en <code>/v1</code>. Si Activate no regeneró Envoy, el chat cae en el router <code>:8080</code> (<code>404 page not found</code>). Con el YAML válido:</li></ol>
 <pre><code class="language-bash">vllm-sr stop
 vllm-sr serve</code></pre>
 <p>Comprueba:</p>
@@ -187,7 +187,8 @@ curl -sS http://localhost:8899/v1/models | head</code></pre>
 <p>Eval debe decir <code>general-route</code>, no <code>default-route</code>.</p>
 <h2>Foto en playground cae en <code>default-route</code> / Llama</h2>
 <p><strong>Síntoma:</strong> <em>What is in this image?</em> + adjunto, pero <strong>DECISION</strong> <code>default-route</code> y <strong>MODEL</strong> <code>llama-32-3b</code>. Llama inventa a partir del nombre del archivo.</p>
-<p><code>Modality</code> <code>BOTH</code> no significa “hay una foto adjunta”. Significa “el prompt pide generar texto y imagen”, y <code>modality_detector</code> viene <strong>apagado</strong>. Cambia <code>vision-route</code> a signal <strong>Keywords</strong> <code>vision</code> (<code>image</code>, <code>photo</code>, <code>picture</code>, <code>what is in this</code>) y vuelve a enviar el mismo prompt.</p>
+<p><code>Modality</code> <code>BOTH</code> no significa “hay una foto adjunta”. El detector mira el texto del prompt. En este taller va <strong>encendido</strong> (<code>method: keyword</code>) con frases de análisis, no de generación. <code>vision-route</code> sigue siendo <strong>Keywords</strong> <code>vision</code> para enviar esas queries a Granite Vision.</p>
+<p>Si adjuntas la foto y cae en <strong><code>code-route</code></strong>: el JPEG/base64 parece código al clasificador de dominio. Sube <code>vision-route</code> a prioridad <strong>300</strong> (por encima de <code>code-route</code> 250).</p>
 <h2><code>vision-route</code> BOTH exige omni o AR+diffusion</h2>
 <p><strong>Síntoma:</strong></p>
 <pre><code>decision `vision-route` uses modality condition `BOTH` but modelRefs must include

@@ -243,7 +243,7 @@ Error: HTTP 404 from http://localhost:8899/v1/chat/completions: 404 page not fou
 
 Hay dos fallos distintos:
 
-1. **Description vacío o prioridad ≤ 100.** El clasificador sí detecta `code`/`general`, pero sin `description` esas reglas no cargan. Si la prioridad es 10/20/50, `default-route` (P100) gana porque **el número más alto gana**. En **Manage Decisions**: Description relleno y prioridades **250 / 200 / 150**.
+1. **Description vacío o prioridad ≤ 100.** El clasificador sí detecta `code`/`general`, pero sin `description` esas reglas no cargan. Si la prioridad es 10/20/50, `default-route` (P100) gana porque **el número más alto gana**. En **Manage Decisions**: Description relleno y prioridades **300 / 250 / 150** (`vision-route` > `code-route` > `general-route`).
 2. **URL sin `/v1` o Envoy sin clusters de MaaS.** Envoy reescribe `/v1/chat/completions` encima de la Base URL. Esa URL tiene que terminar en `/v1`. Si Activate no regeneró Envoy, el chat cae en el router `:8080` (`404 page not found`). Con el YAML válido:
 
 ```bash
@@ -265,7 +265,9 @@ Eval debe decir `general-route`, no `default-route`.
 
 **Síntoma:** *What is in this image?* + adjunto, pero **DECISION** `default-route` y **MODEL** `llama-32-3b`. Llama inventa a partir del nombre del archivo.
 
-`Modality` `BOTH` no significa “hay una foto adjunta”. Significa “el prompt pide generar texto y imagen”, y `modality_detector` viene **apagado**. Cambia `vision-route` a signal **Keywords** `vision` (`image`, `photo`, `picture`, `what is in this`) y vuelve a enviar el mismo prompt.
+`Modality` `BOTH` no significa “hay una foto adjunta”. El detector mira el texto del prompt. En este taller va **encendido** (`method: keyword`) con frases de análisis, no de generación. `vision-route` sigue siendo **Keywords** `vision` para enviar esas queries a Granite Vision.
+
+Si adjuntas la foto y cae en **`code-route`**: el JPEG/base64 parece código al clasificador de dominio. Sube `vision-route` a prioridad **300** (por encima de `code-route` 250).
 
 ## `vision-route` BOTH exige omni o AR+diffusion
 

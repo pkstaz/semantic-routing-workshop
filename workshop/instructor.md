@@ -42,7 +42,7 @@ Un solo modelo no es óptimo para todo. El router envía cada query al modelo m�
 
 ### Prioridades de decisions
 
-Mayor número = mayor prioridad. `code-route` (250) gana sobre `general-route` (150). `default-route` (P100) es el catch-all: no lo borres.
+Mayor número = mayor prioridad. `vision-route` (300) gana sobre `code-route` (250) porque un JPEG en base64 se clasifica a menudo como código. `default-route` (P100) es el catch-all: no lo borres.
 
 ### ¿Qué es MMLU? (en Signals tipo Domain)
 
@@ -76,7 +76,8 @@ Hay que elegir **MMLU categories**. MMLU es un examen de cultura académica; el 
 | Open WebUI sin respuesta | Verificar puerto 8899 con `curl localhost:8899/v1/models` |
 | Dashboard: *Bootstrap is complete* | `config.yaml` sin `setup.mode: true` / `version: "v0.3"` ([troubleshooting](./09-troubleshooting.md)) |
 | Dashboard Degraded tras Activate | `docker start vllm-sr-router-container vllm-sr-envoy-container` |
-| Chat 404 y siempre `default-route` | Description + prioridad 250/200/150; Base URL con `/v1`; `vllm-sr stop` + `serve` |
+| Chat 404 y siempre `default-route` | Description + prioridad 300/250/150; Base URL con `/v1`; `vllm-sr stop` + `serve` |
+| Foto adjunta va a `code-route` | `vision-route` prioridad **300** > `code-route` 250 (el base64 parece código) |
 | Foto va a `default-route` / Llama | Keywords `vision` en `vision-route`, no Modality `BOTH` |
 
 ## Preguntas frecuentes de participantes
