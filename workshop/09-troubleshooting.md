@@ -261,6 +261,12 @@ curl -sS http://localhost:8899/v1/models | head
 
 Eval debe decir `general-route`, no `default-route`.
 
+## Foto en playground cae en `default-route` / Llama
+
+**Síntoma:** *What is in this image?* + adjunto, pero **DECISION** `default-route` y **MODEL** `llama-32-3b`. Llama inventa a partir del nombre del archivo.
+
+`Modality` `BOTH` no significa “hay una foto adjunta”. Significa “el prompt pide generar texto y imagen”, y `modality_detector` viene **apagado**. Cambia `vision-route` a signal **Keywords** `vision` (`image`, `photo`, `picture`, `what is in this`) y vuelve a enviar el mismo prompt.
+
 ## `vision-route` BOTH exige omni o AR+diffusion
 
 **Síntoma:**

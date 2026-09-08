@@ -185,6 +185,9 @@ vllm-sr serve</code></pre>
 vllm-sr eval --prompt &quot;What is the capital of France?&quot;
 curl -sS http://localhost:8899/v1/models | head</code></pre>
 <p>Eval debe decir <code>general-route</code>, no <code>default-route</code>.</p>
+<h2>Foto en playground cae en <code>default-route</code> / Llama</h2>
+<p><strong>Síntoma:</strong> <em>What is in this image?</em> + adjunto, pero <strong>DECISION</strong> <code>default-route</code> y <strong>MODEL</strong> <code>llama-32-3b</code>. Llama inventa a partir del nombre del archivo.</p>
+<p><code>Modality</code> <code>BOTH</code> no significa “hay una foto adjunta”. Significa “el prompt pide generar texto y imagen”, y <code>modality_detector</code> viene <strong>apagado</strong>. Cambia <code>vision-route</code> a signal <strong>Keywords</strong> <code>vision</code> (<code>image</code>, <code>photo</code>, <code>picture</code>, <code>what is in this</code>) y vuelve a enviar el mismo prompt.</p>
 <h2><code>vision-route</code> BOTH exige omni o AR+diffusion</h2>
 <p><strong>Síntoma:</strong></p>
 <pre><code>decision `vision-route` uses modality condition `BOTH` but modelRefs must include

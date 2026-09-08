@@ -6,7 +6,7 @@ Con los servicios corriendo, sigue estos ejercicios en orden.
 
 1. Abre [http://localhost:8700](http://localhost:8700)
 2. Entra a **Manage Signals** y **Manage Decisions** (Manager)
-3. Identifica los signals `code`, `BOTH`, `general` y las decisions `code-route`, `vision-route`, `general-route`
+3. Identifica los signals `code`, `vision`, `general` y las decisions `code-route`, `vision-route`, `general-route`
 4. Revisa qué modelo está asignado a cada decision. Deja `default-route` (P100) como catch-all
 
 **Pregunta:** ¿Qué pasa si dos reglas coinciden? (Pista: mira el campo `priority`)

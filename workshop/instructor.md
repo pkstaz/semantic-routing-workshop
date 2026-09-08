@@ -46,7 +46,7 @@ Mayor número = mayor prioridad. `code-route` (250) gana sobre `general-route` (
 
 ### ¿Qué es MMLU? (en Signals tipo Domain)
 
-Hay que elegir **MMLU categories**. MMLU es un examen de cultura académica; el clasificador del router etiqueta el prompt con esas materias. `code` → `computer science`, `general` → `other`. Visión usa signal tipo **Modality** (`BOTH` = texto+imagen; `DIFFUSION` = generar imagen), no MMLU. `BOTH` exige que Granite Vision esté como **omni** en Manage Models (no `text`/`ar`).
+Hay que elegir **MMLU categories**. MMLU es un examen de cultura académica; el clasificador del router etiqueta el prompt con esas materias. `code` → `computer science`, `general` → `other`. Visión usa signal tipo **Keywords** (`image`, `photo`, `what is in this`), no Modality `BOTH` ni MMLU. Granite Vision en Manage Models: modality **omni**.
 
 ## Demo en vivo sugerida
 
@@ -77,7 +77,7 @@ Hay que elegir **MMLU categories**. MMLU es un examen de cultura académica; el 
 | Dashboard: *Bootstrap is complete* | `config.yaml` sin `setup.mode: true` / `version: "v0.3"` ([troubleshooting](./09-troubleshooting.md)) |
 | Dashboard Degraded tras Activate | `docker start vllm-sr-router-container vllm-sr-envoy-container` |
 | Chat 404 y siempre `default-route` | Description + prioridad 250/200/150; Base URL con `/v1`; `vllm-sr stop` + `serve` |
-| `vision-route` BOTH: modelRefs must include AR+diffusion or omni | Manage Models → granite-vision → modality **omni**; un solo Model reference |
+| Foto va a `default-route` / Llama | Keywords `vision` en `vision-route`, no Modality `BOTH` |
 
 ## Preguntas frecuentes de participantes
 

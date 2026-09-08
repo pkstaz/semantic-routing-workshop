@@ -142,7 +142,7 @@ vllm-sr model list
 
 En el dashboard, **Quick Actions → Manage Signals** (o pestaña **Signals** del Manager).
 
-La lista empieza vacía (**0 ITEMS**). Crea **2** Domain (`code`, `general`) y **1** Modality (`BOTH`).
+La lista empieza vacía (**0 ITEMS**). Crea **2** Domain (`code`, `general`) y **1** Keywords (`vision`).
 
 En un Domain hay que elegir categorías **MMLU**. Sin eso el clasificador no sabe qué textos pertenecen a tu signal.
 
@@ -157,17 +157,16 @@ En un Domain hay que elegir categorías **MMLU**. Sin eso el clasificador no sab
 | **Description** | `Programación, debugging, SQL, scripts y algoritmos` |
 | **MMLU categories** | `computer science` |
 
-### `BOTH` (visión)
+### `vision` (Keywords)
 
-**Name** tiene que ser exactamente `AR`, `DIFFUSION` o `BOTH`. `vision` no valida.
-
-Para este taller usa **BOTH** (texto + imagen: *qué hay en esta foto*). **DIFFUSION** es generar imagen; **AR** es solo texto.
+`Modality` / `BOTH` no sirve para *qué hay en esta foto*. `BOTH` es “el prompt pide generar texto **y** imagen”; el detector además viene **apagado**. Para análisis visual usa Keywords.
 
 | Campo | Valor |
 |---|---|
-| **Type** | Modality |
-| **Name** | `BOTH` |
-| **Description** | `Imágenes, fotos y análisis visual` |
+| **Type** | Keywords |
+| **Name** | `vision` |
+| **Operator** | `OR` |
+| **Keywords** | `image`, `photo`, `picture`, `imagen`, `foto`, `diagram`, `what is in this` |
 
 ### `general`
 
@@ -203,9 +202,7 @@ Crea **3** reglas. Prioridad: **número más alto gana** (tienen que ser **> 100
 
 ### `vision-route`
 
-`BOTH` no significa “esta ruta es de fotos”. Significa: el request pide texto **y** imagen, y los **modelRefs** tienen que ser un modelo **omni** o el par **AR + diffusion**.
-
-Granite Vision es un solo modelo de visión: márcalo **omni** en **Manage Models** (no `text`/`ar`). Luego un solo Model reference: `granite-vision-32-2b`.
+No uses Signal type **Modality** / `BOTH` para este taller. Granite Vision analiza fotos; `BOTH` es otra cosa (generar imagen + texto).
 
 | Campo | Valor |
 |---|---|
@@ -213,8 +210,8 @@ Granite Vision es un solo modelo de visión: márcalo **omni** en **Manage Model
 | **Description** | `Texto e imagen van a Granite Vision` |
 | **Priority** | `200` |
 | **Rules Operator** | `AND` |
-| **Signal type** | `modality` |
-| **Signal name** | `BOTH` |
+| **Signal type** | `keyword` |
+| **Signal name** | `vision` |
 | **Model** | `granite-vision-32-2b` (modality **omni**) |
 
 ### `general-route`
