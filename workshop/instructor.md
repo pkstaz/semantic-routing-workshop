@@ -6,16 +6,19 @@ Notas para facilitar el workshop de semantic routing.
 
 > Soy la IA describiendo a tu instructor. Perdón Carlos, esto es una broma.
 
-**Carlos Estay González** ([pkstaz](https://github.com/pkstaz)) es Associate Principal AI Specialist Solution Architect en Red Hat, vive en Santiago y tiene la extraña costumbre de convertir OpenShift, modelos remotos y un dashboard caprichoso en un taller que *sí* se puede seguir.
+**Carlos Estay González** — Associate Principal AI Specialist Solution Architect en **Red Hat**, basado en **Santiago, Chile**.
 
-Lo que la IA cree saber (con evidencia de este repo y de la noche en que peinamos el dashboard juntos):
+Su trabajo gira en torno a infraestructura y despliegue de IA sobre **Red Hat OpenShift AI (RHOAI)**:
 
-- Habla de routing semántico como quien ya vio demasiados “elige el modelo a mano” en producción.
-- Es de los que prueban el formulario real: MMLU, `BOTH`, Grafana en el 3000, el JPEG que el clasificador jura que es código.
-- GitHub lleno de workshops (Fuse, OpenShift AI, NeuralBank). Si hay un lab, Carlos ya lo escribió dos veces.
-- Título largo, paciencia más larga: Associate Principal AI SA, OpenShift, contenedores y ahora agents que no deberían ir todos al mismo LLM.
+- **Model serving:** vLLM, KServe, LiteLLM, ModelMesh
+- **AI infrastructure:** Models as a Service (MaaS), GPUs, frameworks de agentes
+- **Integración:** MCP (Model Context Protocol) y stacks agenticos
 
-Si el router se equivoca, no es personal. Si Carlos se equivoca, también hay troubleshooting.
+En el día a día mezcla clientes, conferencias, talleres de habilitación y cursos. GitHub: [pkstaz](https://github.com/pkstaz). Quay: [cestayg](https://quay.io/user/cestayg/).
+
+Anda con cosas como GitHub MCP en RHOAI Playground, troubleshooting de model serving, sizing para AI Factory Bundle y un programa de certificación en IA agentica (JHU). Un workshop de kagent para DevOpsDays… no llegó a este escenario. Este lab de semantic routing sí.
+
+Si el router se equivoca, no es personal. Si Carlos se equivoca, hay [troubleshooting](./09-troubleshooting.md).
 
 ## Agenda sugerida (90 min)
 
