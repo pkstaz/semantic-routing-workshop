@@ -142,6 +142,10 @@ En el dashboard, **Quick Actions → Manage Signals** (o pestaña **Signals** de
 
 La lista empieza vacía (**0 ITEMS**). Pulsa **Add Signal** y crea **3** de tipo **Domain**.
 
+En un Domain hay que elegir categorías **MMLU**. Sin eso el clasificador no sabe qué textos pertenecen a tu signal.
+
+**MMLU** (*Massive Multitask Language Understanding*) es un benchmark de preguntas de examen en materias académicas (matemáticas, derecho, *computer science*, etc.). El router trae un clasificador entrenado con esas etiquetas: mira el prompt y dice “esto parece computer science / math / other…”. Tu signal `code` no es una etiqueta MMLU; **MMLU categories** es el puente: “cuando el modelo diga *computer science*, actívame `code`”.
+
 ### `code`
 
 | Campo | Valor |
@@ -149,14 +153,20 @@ La lista empieza vacía (**0 ITEMS**). Pulsa **Add Signal** y crea **3** de tipo
 | **Type** | Domain |
 | **Name** | `code` |
 | **Description** | `Programación, debugging, SQL, scripts y algoritmos` |
+| **MMLU categories** | `computer science` |
 
 ### `vision`
+
+MMLU es **texto académico**: no hay categoría de fotos o imágenes. Crea el Domain para la decision, pero no esperes que un prompt con imagen se clasifique por MMLU.
+
+Si **Add Signal** ofrece tipo **Modality**, úsalo para visión (imagen) y apunta `vision-route` a ese signal. Si solo hay Domain, crea `vision` igual y **no** marques `computer science` (chocaría con `code`).
 
 | Campo | Valor |
 |---|---|
 | **Type** | Domain |
 | **Name** | `vision` |
 | **Description** | `Imágenes, fotos y análisis visual` |
+| **MMLU categories** | no uses `computer science` |
 
 ### `general`
 
@@ -165,6 +175,7 @@ La lista empieza vacía (**0 ITEMS**). Pulsa **Add Signal** y crea **3** de tipo
 | **Type** | Domain |
 | **Name** | `general` |
 | **Description** | `Conversación, conocimiento general, redacción y preguntas abiertas` |
+| **MMLU categories** | `other` |
 
 Guarda cada uno. Debes ver **3 ITEMS**.
 

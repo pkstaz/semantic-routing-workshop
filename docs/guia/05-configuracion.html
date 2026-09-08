@@ -114,12 +114,16 @@ EOF</code></pre>
 <h2>4. Signals</h2>
 <p>En el dashboard, <strong>Quick Actions → Manage Signals</strong> (o pestaña <strong>Signals</strong> del Manager).</p>
 <p>La lista empieza vacía (<strong>0 ITEMS</strong>). Pulsa <strong>Add Signal</strong> y crea <strong>3</strong> de tipo <strong>Domain</strong>.</p>
+<p>En un Domain hay que elegir categorías <strong>MMLU</strong>. Sin eso el clasificador no sabe qué textos pertenecen a tu signal.</p>
+<p><strong>MMLU</strong> (<em>Massive Multitask Language Understanding</em>) es un benchmark de preguntas de examen en materias académicas (matemáticas, derecho, <em>computer science</em>, etc.). El router trae un clasificador entrenado con esas etiquetas: mira el prompt y dice “esto parece computer science / math / other…”. Tu signal <code>code</code> no es una etiqueta MMLU; <strong>MMLU categories</strong> es el puente: “cuando el modelo diga <em>computer science</em>, actívame <code>code</code>”.</p>
 <h3><code>code</code></h3>
-<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>code</code></td></tr><tr><td><strong>Description</strong></td><td><code>Programación, debugging, SQL, scripts y algoritmos</code></td></tr></tbody></table>
+<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>code</code></td></tr><tr><td><strong>Description</strong></td><td><code>Programación, debugging, SQL, scripts y algoritmos</code></td></tr><tr><td><strong>MMLU categories</strong></td><td><code>computer science</code></td></tr></tbody></table>
 <h3><code>vision</code></h3>
-<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>vision</code></td></tr><tr><td><strong>Description</strong></td><td><code>Imágenes, fotos y análisis visual</code></td></tr></tbody></table>
+<p>MMLU es <strong>texto académico</strong>: no hay categoría de fotos o imágenes. Crea el Domain para la decision, pero no esperes que un prompt con imagen se clasifique por MMLU.</p>
+<p>Si <strong>Add Signal</strong> ofrece tipo <strong>Modality</strong>, úsalo para visión (imagen) y apunta <code>vision-route</code> a ese signal. Si solo hay Domain, crea <code>vision</code> igual y <strong>no</strong> marques <code>computer science</code> (chocaría con <code>code</code>).</p>
+<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>vision</code></td></tr><tr><td><strong>Description</strong></td><td><code>Imágenes, fotos y análisis visual</code></td></tr><tr><td><strong>MMLU categories</strong></td><td>no uses <code>computer science</code></td></tr></tbody></table>
 <h3><code>general</code></h3>
-<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>general</code></td></tr><tr><td><strong>Description</strong></td><td><code>Conversación, conocimiento general, redacción y preguntas abiertas</code></td></tr></tbody></table>
+<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>general</code></td></tr><tr><td><strong>Description</strong></td><td><code>Conversación, conocimiento general, redacción y preguntas abiertas</code></td></tr><tr><td><strong>MMLU categories</strong></td><td><code>other</code></td></tr></tbody></table>
 <p>Guarda cada uno. Debes ver <strong>3 ITEMS</strong>.</p>
 <h2>5. Decisions</h2>
 <p>Pestaña <strong>Decisions</strong> del Manager (o <strong>Manage Decisions</strong>).</p>

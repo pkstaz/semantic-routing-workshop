@@ -43,6 +43,10 @@ Un solo modelo no es óptimo para todo. El router envía cada query al modelo m�
 
 Menor número = mayor prioridad. `code-route` (10) gana sobre `general-route` (50). `default-route` (P100) es el catch-all: no lo borres.
 
+### ¿Qué es MMLU? (en Signals tipo Domain)
+
+Hay que elegir **MMLU categories**. MMLU es un examen de cultura académica; el clasificador del router etiqueta el prompt con esas materias. `code` → `computer science`, `general` → `other`. Visión no es una materia MMLU (es imagen): si hay signal **Modality**, usarlo para `vision-route`.
+
 ## Demo en vivo sugerida
 
 1. **Dashboard abierto** en pantalla compartida (sección de decisions)

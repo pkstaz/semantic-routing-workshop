@@ -64,6 +64,8 @@
 <table><thead><tr><th>Puerto</th><th>Qué es</th></tr></thead><tbody><tr><td>8899</td><td>API de chat (Open WebUI, <code>vllm-sr chat</code>)</td></tr><tr><td>8080</td><td>API interna (<code>vllm-sr eval</code>)</td></tr><tr><td>8700</td><td>Dashboard</td></tr></tbody></table>
 <h3>Prioridades de decisions</h3>
 <p>Menor número = mayor prioridad. <code>code-route</code> (10) gana sobre <code>general-route</code> (50). <code>default-route</code> (P100) es el catch-all: no lo borres.</p>
+<h3>¿Qué es MMLU? (en Signals tipo Domain)</h3>
+<p>Hay que elegir <strong>MMLU categories</strong>. MMLU es un examen de cultura académica; el clasificador del router etiqueta el prompt con esas materias. <code>code</code> → <code>computer science</code>, <code>general</code> → <code>other</code>. Visión no es una materia MMLU (es imagen): si hay signal <strong>Modality</strong>, usarlo para <code>vision-route</code>.</p>
 <h2>Demo en vivo sugerida</h2>
 <ol><li><strong>Dashboard abierto</strong> en pantalla compartida (sección de decisions)</li><li>Pide a un participante que envíe una query de código en Open WebUI</li><li>Muestra en el dashboard la decisión que se tomó en tiempo real</li><li>Repite con una query general y una de visión (si hay imagen disponible)</li></ol>
 <h2>Queries de demo</h2>
