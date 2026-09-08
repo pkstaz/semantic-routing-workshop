@@ -180,16 +180,24 @@ Guarda cada uno. Debes ver **3 ITEMS**.
 
 ## 5. Decisions
 
-Pestaña **Decisions** del Manager (o **Manage Decisions**).
+Pestaña **Decisions** del Manager (o **Manage Decisions**). Pulsa **Add Decision**.
 
 Ya existe `default-route` (**P100**, 0 conditions, 1 model): es el catch-all. **No lo borres.**
 
-Pulsa **Add Decision** y crea **3** reglas. Prioridad: **número más bajo gana** (deben ser < 100 para ganar al catch-all).
+Crea **3** reglas. Prioridad: **número más bajo gana** (deben ser < 100).
 
-En cada una:
+En el formulario:
 
-- **Conditions:** type `domain` + name `code`/`general`, o type `modality` + name `BOTH`
-- **Models:** el modelo de esa ruta
+| Campo | Qué poner |
+|---|---|
+| **Name** | el de la tabla de abajo |
+| **Description** | opcional (qué rutea esta decision) |
+| **Priority** | el número de la tabla |
+| **Rules Operator** | `AND` (con una sola condition da igual AND u OR). **AND no es el signal BOTH.** |
+| **Conditions → Signal type** | `domain` o `modality` (no dejes `keyword`) |
+| **Conditions → Signal name** | el signal que ya creaste (`code`, `general` o `BOTH`) |
+| **Model references → Model** | el modelo de esa ruta |
+| **Use reasoning / LoRA / Weight / Plugins** | déjalos vacíos |
 
 ### `code-route`
 
@@ -197,7 +205,8 @@ En cada una:
 |---|---|
 | **Name** | `code-route` |
 | **Priority** | `10` |
-| **Condition** | domain `code` |
+| **Signal type** | `domain` |
+| **Signal name** | `code` |
 | **Model** | `qwen35-9b` |
 
 ### `vision-route`
@@ -206,7 +215,8 @@ En cada una:
 |---|---|
 | **Name** | `vision-route` |
 | **Priority** | `20` |
-| **Condition** | modality `BOTH` |
+| **Signal type** | `modality` |
+| **Signal name** | `BOTH` |
 | **Model** | `granite-vision-32-2b` |
 
 ### `general-route`
@@ -215,7 +225,8 @@ En cada una:
 |---|---|
 | **Name** | `general-route` |
 | **Priority** | `50` |
-| **Condition** | domain `general` |
+| **Signal type** | `domain` |
+| **Signal name** | `general` |
 | **Model** | `llama-32-3b` |
 
 Al terminar: 3 signals y 4 decisions (`code-route`, `vision-route`, `general-route`, `default-route`).
