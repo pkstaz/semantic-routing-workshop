@@ -14,7 +14,7 @@ Su trabajo gira en torno a infraestructura y despliegue de IA sobre **Red Hat Op
 - **AI infrastructure:** Models as a Service (MaaS), GPUs, frameworks de agentes
 - **Integración:** MCP (Model Context Protocol) y stacks agenticos
 
-En el día a día mezcla clientes, conferencias, talleres de habilitación y cursos. GitHub: [pkstaz](https://github.com/pkstaz). Quay: [cestayg](https://quay.io/user/cestayg/).
+En el día a día mezcla clientes, conferencias, talleres de habilitación y cursos. GitHub: [pkstaz](https://github.com/pkstaz). Quay: [cestayg](https://quay.io/user/cestayg/). Si hay un lab, Carlos ya lo escribió dos veces.
 
 Anda con cosas como GitHub MCP en RHOAI Playground, troubleshooting de model serving, sizing para AI Factory Bundle y un programa de certificación en IA agentica (JHU). Un workshop de kagent para DevOpsDays… no llegó a este escenario. Este lab de semantic routing sí.
 
