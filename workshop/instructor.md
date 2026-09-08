@@ -2,6 +2,21 @@
 
 Notas para facilitar el workshop de semantic routing.
 
+## Quién imparte
+
+> Soy la IA describiendo a tu instructor. Perdón Carlos, esto es una broma.
+
+**Carlos Estay González** ([pkstaz](https://github.com/pkstaz)) es Associate Principal AI Specialist Solution Architect en Red Hat, vive en Santiago y tiene la extraña costumbre de convertir OpenShift, modelos remotos y un dashboard caprichoso en un taller que *sí* se puede seguir.
+
+Lo que la IA cree saber (con evidencia de este repo y de la noche en que peinamos el dashboard juntos):
+
+- Habla de routing semántico como quien ya vio demasiados “elige el modelo a mano” en producción.
+- Es de los que prueban el formulario real: MMLU, `BOTH`, Grafana en el 3000, el JPEG que el clasificador jura que es código.
+- GitHub lleno de workshops (Fuse, OpenShift AI, NeuralBank). Si hay un lab, Carlos ya lo escribió dos veces.
+- Título largo, paciencia más larga: Associate Principal AI SA, OpenShift, contenedores y ahora agents que no deberían ir todos al mismo LLM.
+
+Si el router se equivoca, no es personal. Si Carlos se equivoca, también hay troubleshooting.
+
 ## Agenda sugerida (90 min)
 
 | Tiempo | Actividad | Material |
