@@ -5,9 +5,9 @@ Con los servicios corriendo, sigue estos ejercicios en orden.
 ## Ejercicio 1 — Explorar el dashboard
 
 1. Abre [http://localhost:8700](http://localhost:8700)
-2. Navega a la sección de **routing rules** / **decisions**
-3. Identifica las tres rutas: `code`, `vision`, `general`
-4. Revisa qué modelo está asignado a cada una
+2. Entra a **Manage Signals** y **Manage Decisions** (Manager)
+3. Identifica los signals `code`, `vision`, `general` y las decisions `code-route`, `vision-route`, `general-route`
+4. Revisa qué modelo está asignado a cada decision. Deja `default-route` (P100) como catch-all
 
 **Pregunta:** ¿Qué pasa si dos reglas coinciden? (Pista: mira el campo `priority`)
 

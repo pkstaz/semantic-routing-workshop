@@ -118,113 +118,97 @@ Comprueba:
 - Models **3**
 - Routing mode **From scratch**
 
-**Decisions: 1** y **Signals: 0** es normal: From scratch deja un catch-all. Dominios y rutas de código/visión/general se agregan **después** de activar.
+**Decisions: 1** y **Signals: 0** es normal: From scratch deja un catch-all. Signals y decisions de código/visión/general se agregan **después** de activar (secciones 4 y 5).
 
 Si algo no cuadra, pulsa **Revalidate**. Si está READY, pulsa **Activate**.
+
+El dashboard puede quedar **Degraded** / **Starting router services** unos segundos: en setup, Router y Envoy arrancan al activar. Recarga hasta ver Router y Envoy **running**.
+
+Si se quedan en **unknown**, arráncalos a mano:
+
+```bash
+docker start vllm-sr-router-container vllm-sr-envoy-container
+```
 
 Comprueba que ves los 3 modelos:
 
 ```bash
-vllm-sr model
+vllm-sr model list
 ```
 
-## 4. Dominios
+## 4. Signals
 
-En el dashboard (ya fuera del wizard), crea estos 3 dominios. Copia el nombre y la descripción.
+En el dashboard, **Quick Actions → Manage Signals** (o pestaña **Signals** del Manager).
+
+La lista empieza vacía (**0 ITEMS**). Pulsa **Add Signal** y crea **3** de tipo **Domain**.
 
 ### `code`
 
-Nombre:
-
-```
-code
-```
-
-Descripción:
-
-```
-Programación, debugging, SQL, scripts y algoritmos
-```
+| Campo | Valor |
+|---|---|
+| **Type** | Domain |
+| **Name** | `code` |
+| **Description** | `Programación, debugging, SQL, scripts y algoritmos` |
 
 ### `vision`
 
-Nombre:
-
-```
-vision
-```
-
-Descripción:
-
-```
-Imágenes, fotos y análisis visual
-```
+| Campo | Valor |
+|---|---|
+| **Type** | Domain |
+| **Name** | `vision` |
+| **Description** | `Imágenes, fotos y análisis visual` |
 
 ### `general`
 
-Nombre:
+| Campo | Valor |
+|---|---|
+| **Type** | Domain |
+| **Name** | `general` |
+| **Description** | `Conversación, conocimiento general, redacción y preguntas abiertas` |
 
-```
-general
-```
+Guarda cada uno. Debes ver **3 ITEMS**.
 
-Descripción:
+## 5. Decisions
 
-```
-Conversación, conocimiento general, redacción y preguntas abiertas
-```
+Pestaña **Decisions** del Manager (o **Manage Decisions**).
 
-## 5. Rutas
+Ya existe `default-route` (**P100**, 0 conditions, 1 model): es el catch-all. **No lo borres.**
 
-Crea 3 reglas. Prioridad: **número más bajo gana**.
+Pulsa **Add Decision** y crea **3** reglas. Prioridad: **número más bajo gana** (deben ser < 100 para ganar al catch-all).
 
-### Ruta código
+En cada una:
 
-Nombre:
+- **Conditions:** type `domain`, name = el signal (`code`, `vision` o `general`)
+- **Models:** el modelo de esa ruta
 
-```
-code-route
-```
+### `code-route`
 
-Prioridad:
+| Campo | Valor |
+|---|---|
+| **Name** | `code-route` |
+| **Priority** | `10` |
+| **Condition** | domain `code` |
+| **Model** | `qwen35-9b` |
 
-```
-10
-```
+### `vision-route`
 
-Si el dominio es `code` → modelo `qwen35-9b`
+| Campo | Valor |
+|---|---|
+| **Name** | `vision-route` |
+| **Priority** | `20` |
+| **Condition** | domain `vision` |
+| **Model** | `granite-vision-32-2b` |
 
-### Ruta visión
+### `general-route`
 
-Nombre:
+| Campo | Valor |
+|---|---|
+| **Name** | `general-route` |
+| **Priority** | `50` |
+| **Condition** | domain `general` |
+| **Model** | `llama-32-3b` |
 
-```
-vision-route
-```
-
-Prioridad:
-
-```
-20
-```
-
-Si el dominio es `vision` → modelo `granite-vision-32-2b`
-
-### Ruta general
-
-Nombre:
-
-```
-general-route
-```
-
-Prioridad:
-
-```
-100
-```
-
-Si el dominio es `general` → modelo `llama-32-3b`
+Al terminar: 3 signals y 4 decisions (`code-route`, `vision-route`, `general-route`, `default-route`).
 
 ## Siguiente paso
 

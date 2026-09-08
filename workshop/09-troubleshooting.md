@@ -217,6 +217,19 @@ vllm-sr serve
 
 Si corriste `serve` desde home, `~/config.yaml` y `~/.vllm-sr/` son otro workspace.
 
+## Dashboard Degraded / Starting router services
+
+**Síntoma:** después de **Activate**, el dashboard muestra *Starting router services*, Router y Envoy en **unknown**, Services Healthy **1/3**.
+
+En modo setup esos contenedores se crean parados. Activate debería arrancarlos; en macOS a veces no los encuentra (`router container ... not found`).
+
+```bash
+docker start vllm-sr-router-container vllm-sr-envoy-container
+vllm-sr status
+```
+
+Recarga el dashboard. Router y Envoy deben pasar a **running**.
+
 ## Puerto ya en uso
 
 ```bash

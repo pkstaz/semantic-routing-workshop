@@ -35,7 +35,7 @@ vllm-sr chat --json "Explain recursion in Python"
 ## Modelos y configuración
 
 ```bash
-vllm-sr model                              # Listar modelos configurados
+vllm-sr model list                         # Listar modelos configurados
 vllm-sr validate --config config.yaml      # Validar YAML
 vllm-sr config router                      # Ver config efectiva del router
 ```

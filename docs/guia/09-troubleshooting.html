@@ -164,6 +164,12 @@ rm -f &quot;$HOME/config.yaml&quot;
 vllm-sr serve</code></pre>
 <ol><li>Abre <a href="http://localhost:8700">http://localhost:8700</a> con recarga forzada. Debe pedir <strong>crear cuenta</strong>, no <em>Bootstrap is complete</em>.</li></ol>
 <p>Si corriste <code>serve</code> desde home, <code>~/config.yaml</code> y <code>~/.vllm-sr/</code> son otro workspace.</p>
+<h2>Dashboard Degraded / Starting router services</h2>
+<p><strong>Síntoma:</strong> después de <strong>Activate</strong>, el dashboard muestra <em>Starting router services</em>, Router y Envoy en <strong>unknown</strong>, Services Healthy <strong>1/3</strong>.</p>
+<p>En modo setup esos contenedores se crean parados. Activate debería arrancarlos; en macOS a veces no los encuentra (<code>router container ... not found</code>).</p>
+<pre><code class="language-bash">docker start vllm-sr-router-container vllm-sr-envoy-container
+vllm-sr status</code></pre>
+<p>Recarga el dashboard. Router y Envoy deben pasar a <strong>running</strong>.</p>
 <h2>Puerto ya en uso</h2>
 <pre><code class="language-bash"># Ver qué proceso usa el puerto
 lsof -i :8899

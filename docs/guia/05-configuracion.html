@@ -104,47 +104,36 @@ EOF</code></pre>
 <p>Estás en <strong>Review & activate</strong>. Aquí se valida y se activa.</p>
 <p>Comprueba:</p>
 <ul><li>Badge <strong>READY</strong></li><li>Listener <strong>:8899</strong></li><li>Models <strong>3</strong></li><li>Routing mode <strong>From scratch</strong></li></ul>
-<p><strong>Decisions: 1</strong> y <strong>Signals: 0</strong> es normal: From scratch deja un catch-all. Dominios y rutas de código/visión/general se agregan <strong>después</strong> de activar.</p>
+<p><strong>Decisions: 1</strong> y <strong>Signals: 0</strong> es normal: From scratch deja un catch-all. Signals y decisions de código/visión/general se agregan <strong>después</strong> de activar (secciones 4 y 5).</p>
 <p>Si algo no cuadra, pulsa <strong>Revalidate</strong>. Si está READY, pulsa <strong>Activate</strong>.</p>
+<p>El dashboard puede quedar <strong>Degraded</strong> / <strong>Starting router services</strong> unos segundos: en setup, Router y Envoy arrancan al activar. Recarga hasta ver Router y Envoy <strong>running</strong>.</p>
+<p>Si se quedan en <strong>unknown</strong>, arráncalos a mano:</p>
+<pre><code class="language-bash">docker start vllm-sr-router-container vllm-sr-envoy-container</code></pre>
 <p>Comprueba que ves los 3 modelos:</p>
-<pre><code class="language-bash">vllm-sr model</code></pre>
-<h2>4. Dominios</h2>
-<p>En el dashboard (ya fuera del wizard), crea estos 3 dominios. Copia el nombre y la descripción.</p>
+<pre><code class="language-bash">vllm-sr model list</code></pre>
+<h2>4. Signals</h2>
+<p>En el dashboard, <strong>Quick Actions → Manage Signals</strong> (o pestaña <strong>Signals</strong> del Manager).</p>
+<p>La lista empieza vacía (<strong>0 ITEMS</strong>). Pulsa <strong>Add Signal</strong> y crea <strong>3</strong> de tipo <strong>Domain</strong>.</p>
 <h3><code>code</code></h3>
-<p>Nombre:</p>
-<pre><code>code</code></pre>
-<p>Descripción:</p>
-<pre><code>Programación, debugging, SQL, scripts y algoritmos</code></pre>
+<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>code</code></td></tr><tr><td><strong>Description</strong></td><td><code>Programación, debugging, SQL, scripts y algoritmos</code></td></tr></tbody></table>
 <h3><code>vision</code></h3>
-<p>Nombre:</p>
-<pre><code>vision</code></pre>
-<p>Descripción:</p>
-<pre><code>Imágenes, fotos y análisis visual</code></pre>
+<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>vision</code></td></tr><tr><td><strong>Description</strong></td><td><code>Imágenes, fotos y análisis visual</code></td></tr></tbody></table>
 <h3><code>general</code></h3>
-<p>Nombre:</p>
-<pre><code>general</code></pre>
-<p>Descripción:</p>
-<pre><code>Conversación, conocimiento general, redacción y preguntas abiertas</code></pre>
-<h2>5. Rutas</h2>
-<p>Crea 3 reglas. Prioridad: <strong>número más bajo gana</strong>.</p>
-<h3>Ruta código</h3>
-<p>Nombre:</p>
-<pre><code>code-route</code></pre>
-<p>Prioridad:</p>
-<pre><code>10</code></pre>
-<p>Si el dominio es <code>code</code> → modelo <code>qwen35-9b</code></p>
-<h3>Ruta visión</h3>
-<p>Nombre:</p>
-<pre><code>vision-route</code></pre>
-<p>Prioridad:</p>
-<pre><code>20</code></pre>
-<p>Si el dominio es <code>vision</code> → modelo <code>granite-vision-32-2b</code></p>
-<h3>Ruta general</h3>
-<p>Nombre:</p>
-<pre><code>general-route</code></pre>
-<p>Prioridad:</p>
-<pre><code>100</code></pre>
-<p>Si el dominio es <code>general</code> → modelo <code>llama-32-3b</code></p>
+<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>general</code></td></tr><tr><td><strong>Description</strong></td><td><code>Conversación, conocimiento general, redacción y preguntas abiertas</code></td></tr></tbody></table>
+<p>Guarda cada uno. Debes ver <strong>3 ITEMS</strong>.</p>
+<h2>5. Decisions</h2>
+<p>Pestaña <strong>Decisions</strong> del Manager (o <strong>Manage Decisions</strong>).</p>
+<p>Ya existe <code>default-route</code> (<strong>P100</strong>, 0 conditions, 1 model): es el catch-all. <strong>No lo borres.</strong></p>
+<p>Pulsa <strong>Add Decision</strong> y crea <strong>3</strong> reglas. Prioridad: <strong>número más bajo gana</strong> (deben ser < 100 para ganar al catch-all).</p>
+<p>En cada una:</p>
+<ul><li><strong>Conditions:</strong> type <code>domain</code>, name = el signal (<code>code</code>, <code>vision</code> o <code>general</code>)</li><li><strong>Models:</strong> el modelo de esa ruta</li></ul>
+<h3><code>code-route</code></h3>
+<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Name</strong></td><td><code>code-route</code></td></tr><tr><td><strong>Priority</strong></td><td><code>10</code></td></tr><tr><td><strong>Condition</strong></td><td>domain <code>code</code></td></tr><tr><td><strong>Model</strong></td><td><code>qwen35-9b</code></td></tr></tbody></table>
+<h3><code>vision-route</code></h3>
+<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Name</strong></td><td><code>vision-route</code></td></tr><tr><td><strong>Priority</strong></td><td><code>20</code></td></tr><tr><td><strong>Condition</strong></td><td>domain <code>vision</code></td></tr><tr><td><strong>Model</strong></td><td><code>granite-vision-32-2b</code></td></tr></tbody></table>
+<h3><code>general-route</code></h3>
+<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Name</strong></td><td><code>general-route</code></td></tr><tr><td><strong>Priority</strong></td><td><code>50</code></td></tr><tr><td><strong>Condition</strong></td><td>domain <code>general</code></td></tr><tr><td><strong>Model</strong></td><td><code>llama-32-3b</code></td></tr></tbody></table>
+<p>Al terminar: 3 signals y 4 decisions (<code>code-route</code>, <code>vision-route</code>, <code>general-route</code>, <code>default-route</code>).</p>
 <h2>Siguiente paso</h2>
 <p><a href="06-levantar-servicios.html">Levantar Open WebUI →</a></p>
         <nav class="pager"><a href="04-arquitectura-y-flujo.html"><span class="dir">Anterior</span>Arquitectura y flujo</a><a href="06-levantar-servicios.html"><span class="dir">Siguiente</span>Levantar los servicios</a></nav>
