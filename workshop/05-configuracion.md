@@ -188,19 +188,6 @@ Ya existe `default-route` (**P100**, 0 conditions, 1 model): es el catch-all. **
 
 Crea **3** reglas. Prioridad: **número más bajo gana** (deben ser < 100).
 
-En el formulario:
-
-| Campo | Qué poner |
-|---|---|
-| **Name** | el de la tabla de abajo |
-| **Description** | opcional (qué rutea esta decision) |
-| **Priority** | el número de la tabla |
-| **Rules Operator** | `AND` (con una sola condition da igual AND u OR). **AND no es el signal BOTH.** |
-| **Conditions → Signal type** | `domain` o `modality` (no dejes `keyword`) |
-| **Conditions → Signal name** | el signal que ya creaste (`code`, `general` o `BOTH`) |
-| **Model references → Model** | el modelo de esa ruta |
-| **Use reasoning / LoRA / Weight / Plugins** | déjalos vacíos |
-
 ### `code-route`
 
 | Campo | Valor |
