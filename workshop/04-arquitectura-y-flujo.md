@@ -7,7 +7,7 @@ Usaremos **dos interfaces** complementarias:
 | Interfaz | Puerto | Para qué |
 |---|---|---|
 | **Dashboard vllm-sr** | 8700 | Explicar y visualizar el routing |
-| **Open WebUI** | 3000 | Experiencia final de chat para el usuario |
+| **Open WebUI** | 3001 | Experiencia final de chat para el usuario |
 
 ### Puertos de vllm-sr
 
@@ -26,7 +26,7 @@ Usaremos **dos interfaces** complementarias:
 - **Métricas** — qué modelo se eligió para cada query
 - **Editor visual** del `config.yaml`
 
-### Open WebUI (puerto 3000)
+### Open WebUI (puerto 3001)
 
 Chat orientado al usuario final. Apunta al semantic router en el puerto **8899** (API OpenAI-compatible vía Envoy). El usuario no ve el router; solo conversa.
 
@@ -34,7 +34,7 @@ Chat orientado al usuario final. Apunta al semantic router en el puerto **8899**
 
 1. El participante abre el **dashboard** (`http://localhost:8700`) y revisa las reglas definidas.
 2. Escribe una query en el **playground** del dashboard y ve en tiempo real qué modelo fue elegido y por qué.
-3. Abre **Open WebUI** (`http://localhost:3000`) y chatea con normalidad, sin ver el router.
+3. Abre **Open WebUI** (`http://localhost:3001`) y chatea con normalidad, sin ver el router.
 4. El instructor muestra en el dashboard las decisiones de routing que se tomaron en segundo plano.
 
 ## Cómo se levanta cada pieza
@@ -50,7 +50,7 @@ Chat orientado al usuario final. Apunta al semantic router en el puerto **8899**
 Participante                    Instructor
      │                               │
      ▼                               ▼
-Open WebUI :3000              Dashboard :8700
+Open WebUI :3001              Dashboard :8700
      │                               │
      └──────────► Envoy :8899 ◄──────┘
                       │

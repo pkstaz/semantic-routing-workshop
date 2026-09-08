@@ -5,7 +5,7 @@ Workshop comunitario sobre **semantic routing** con [vLLM Semantic Router](https
 ## Qué vas a construir
 
 ```
-Open WebUI :3000  ──►  vllm-sr (Envoy :8899)  ──►  OpenShift AI
+Open WebUI :3001  ──►  vllm-sr (Envoy :8899)  ──►  OpenShift AI
                               │
 Dashboard :8700  ◄────────────┘
          (visualizar routing)

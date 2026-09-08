@@ -25,7 +25,7 @@ Notas para facilitar el workshop de semantic routing.
 ### ¿Por qué dos interfaces?
 
 - **Dashboard (8700):** transparencia — el participante *ve* el routing
-- **Open WebUI (3000):** experiencia real — el usuario *no ve* el routing
+- **Open WebUI (3001):** experiencia real — el usuario *no ve* el routing
 
 ### ¿Por qué tres modelos?
 
@@ -38,6 +38,7 @@ Un solo modelo no es óptimo para todo. El router envía cada query al modelo m�
 | 8899 | API de chat (Open WebUI, `vllm-sr chat`) |
 | 8080 | API interna (`vllm-sr eval`) |
 | 8700 | Dashboard |
+| 3001 | Open WebUI (el 3000 suele ser Grafana) |
 
 ### Prioridades de decisions
 

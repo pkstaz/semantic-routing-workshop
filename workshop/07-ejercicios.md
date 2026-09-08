@@ -62,7 +62,7 @@ vllm-sr eval --prompt "Hello, how are you?" --json
 
 ## Ejercicio 6 — Open WebUI: experiencia de usuario
 
-1. Abre [http://localhost:3000](http://localhost:3000)
+1. Abre [http://localhost:3001](http://localhost:3001)
 2. Inicia sesión (cuenta local)
 3. Envía estas tres consultas **sin elegir modelo**:
 

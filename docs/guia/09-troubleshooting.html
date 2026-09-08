@@ -176,10 +176,18 @@ vllm-sr status</code></pre>
 both an AR model (modality: ar) and a diffusion model (modality: diffusion),
 or an omni model (modality: omni)</code></pre>
 <p><code>BOTH</code> no es “ruta de fotos”: pide un modelo <strong>omni</strong> o el par texto (AR) + generación de imagen (diffusion). Granite Vision es un modelo: en <strong>Manage Models</strong> pon su modality en <strong>omni</strong> y deja un solo Model reference.</p>
+<h2>Puerto 3000 ocupado (Grafana)</h2>
+<p><strong>Síntoma:</strong></p>
+<pre><code>Bind for 0.0.0.0:3000 failed: port is already allocated</code></pre>
+<p>Grafana (y otros stacks) usan el <strong>3000</strong>. Open WebUI de este taller va en <strong>3001</strong>. Vuelve a descargar <code>docker-compose.yml</code> y arranca de nuevo:</p>
+<pre><code class="language-bash">curl -fsSL -o docker-compose.yml https://raw.githubusercontent.com/pkstaz/semantic-routing-workshop/devopsdays/docker-compose.yml
+docker compose up -d</code></pre>
+<p>Abre <a href="http://localhost:3001">http://localhost:3001</a>. No pares Grafana.</p>
 <h2>Puerto ya en uso</h2>
 <pre><code class="language-bash"># Ver qué proceso usa el puerto
 lsof -i :8899
 lsof -i :8700
+lsof -i :3001
 
 # Detener el stack anterior
 vllm-sr stop</code></pre>

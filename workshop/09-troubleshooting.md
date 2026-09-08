@@ -242,12 +242,30 @@ or an omni model (modality: omni)
 
 `BOTH` no es “ruta de fotos”: pide un modelo **omni** o el par texto (AR) + generación de imagen (diffusion). Granite Vision es un modelo: en **Manage Models** pon su modality en **omni** y deja un solo Model reference.
 
+## Puerto 3000 ocupado (Grafana)
+
+**Síntoma:**
+
+```
+Bind for 0.0.0.0:3000 failed: port is already allocated
+```
+
+Grafana (y otros stacks) usan el **3000**. Open WebUI de este taller va en **3001**. Vuelve a descargar `docker-compose.yml` y arranca de nuevo:
+
+```bash
+curl -fsSL -o docker-compose.yml https://raw.githubusercontent.com/pkstaz/semantic-routing-workshop/devopsdays/docker-compose.yml
+docker compose up -d
+```
+
+Abre [http://localhost:3001](http://localhost:3001). No pares Grafana.
+
 ## Puerto ya en uso
 
 ```bash
 # Ver qué proceso usa el puerto
 lsof -i :8899
 lsof -i :8700
+lsof -i :3001
 
 # Detener el stack anterior
 vllm-sr stop

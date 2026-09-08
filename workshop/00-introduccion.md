@@ -18,7 +18,7 @@ En este workshop vas a montar un **semantic router** que clasifica cada consulta
 | **vllm-sr** (Envoy) | 8899 | API de chat OpenAI-compatible |
 | **vllm-sr** (router) | 8080 | API interna (eval, debugging) |
 | **vllm-sr** (dashboard) | 8700 | Visualización y playground |
-| **Open WebUI** | 3000 | Chat para el usuario final |
+| **Open WebUI** | 3001 | Chat para el usuario final |
 
 ## Modelos remotos (OpenShift AI)
 

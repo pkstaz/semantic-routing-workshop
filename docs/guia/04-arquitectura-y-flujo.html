@@ -52,23 +52,23 @@
         <h1>4. Arquitectura y flujo del workshop</h1>
 <h2>Interfaces</h2>
 <p>Usaremos <strong>dos interfaces</strong> complementarias:</p>
-<table><thead><tr><th>Interfaz</th><th>Puerto</th><th>Para qué</th></tr></thead><tbody><tr><td><strong>Dashboard vllm-sr</strong></td><td>8700</td><td>Explicar y visualizar el routing</td></tr><tr><td><strong>Open WebUI</strong></td><td>3000</td><td>Experiencia final de chat para el usuario</td></tr></tbody></table>
+<table><thead><tr><th>Interfaz</th><th>Puerto</th><th>Para qué</th></tr></thead><tbody><tr><td><strong>Dashboard vllm-sr</strong></td><td>8700</td><td>Explicar y visualizar el routing</td></tr><tr><td><strong>Open WebUI</strong></td><td>3001</td><td>Experiencia final de chat para el usuario</td></tr></tbody></table>
 <h3>Puertos de vllm-sr</h3>
 <table><thead><tr><th>Puerto</th><th>Componente</th><th>Uso</th></tr></thead><tbody><tr><td><strong>8899</strong></td><td>Envoy</td><td>API de chat — Open WebUI apunta aquí</td></tr><tr><td><strong>8080</strong></td><td>Router</td><td>API interna — <code>vllm-sr eval</code>, debugging</td></tr><tr><td><strong>8700</strong></td><td>Dashboard</td><td>UI web con playground y métricas</td></tr></tbody></table>
 <h3>Dashboard vllm-sr (puerto 8700)</h3>
 <p><code>vllm-sr</code> incluye un dashboard web con:</p>
 <ul><li><strong>Playground de chat</strong> — probar el routing sin Open WebUI</li><li><strong>Reglas de routing</strong> — visualización en tiempo real</li><li><strong>Métricas</strong> — qué modelo se eligió para cada query</li><li><strong>Editor visual</strong> del <code>config.yaml</code></li></ul>
-<h3>Open WebUI (puerto 3000)</h3>
+<h3>Open WebUI (puerto 3001)</h3>
 <p>Chat orientado al usuario final. Apunta al semantic router en el puerto <strong>8899</strong> (API OpenAI-compatible vía Envoy). El usuario no ve el router; solo conversa.</p>
 <h2>Flujo del workshop</h2>
-<ol><li>El participante abre el <strong>dashboard</strong> (<code>http://localhost:8700</code>) y revisa las reglas definidas.</li><li>Escribe una query en el <strong>playground</strong> del dashboard y ve en tiempo real qué modelo fue elegido y por qué.</li><li>Abre <strong>Open WebUI</strong> (<code>http://localhost:3000</code>) y chatea con normalidad, sin ver el router.</li><li>El instructor muestra en el dashboard las decisiones de routing que se tomaron en segundo plano.</li></ol>
+<ol><li>El participante abre el <strong>dashboard</strong> (<code>http://localhost:8700</code>) y revisa las reglas definidas.</li><li>Escribe una query en el <strong>playground</strong> del dashboard y ve en tiempo real qué modelo fue elegido y por qué.</li><li>Abre <strong>Open WebUI</strong> (<code>http://localhost:3001</code>) y chatea con normalidad, sin ver el router.</li><li>El instructor muestra en el dashboard las decisiones de routing que se tomaron en segundo plano.</li></ol>
 <h2>Cómo se levanta cada pieza</h2>
 <table><thead><tr><th>Componente</th><th>Comando</th></tr></thead><tbody><tr><td>vllm-sr (router + envoy + dashboard)</td><td><code>vllm-sr serve</code></td></tr><tr><td>Open WebUI</td><td><code>docker compose up -d</code></td></tr></tbody></table>
 <h2>Diagrama</h2>
 <pre><code>Participante                    Instructor
      │                               │
      ▼                               ▼
-Open WebUI :3000              Dashboard :8700
+Open WebUI :3001              Dashboard :8700
      │                               │
      └──────────► Envoy :8899 ◄──────┘
                       │

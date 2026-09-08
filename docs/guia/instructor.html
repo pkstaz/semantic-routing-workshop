@@ -57,11 +57,11 @@
 <ul><li>[ ] Tener token y las 3 URLs (llama / code / vision) listas para dictar — los participantes las pegan en el setup</li><li>[ ] Probar el flujo completo: <code>vllm-sr serve</code> → setup dashboard → <code>docker compose up</code></li><li>[ ] Verificar que los 3 modelos remotos responden</li><li>[ ] Tener el dashboard abierto en una pantalla compartida para la demo en vivo</li></ul>
 <h2>Puntos clave para explicar</h2>
 <h3>¿Por qué dos interfaces?</h3>
-<ul><li><strong>Dashboard (8700):</strong> transparencia — el participante <em>ve</em> el routing</li><li><strong>Open WebUI (3000):</strong> experiencia real — el usuario <em>no ve</em> el routing</li></ul>
+<ul><li><strong>Dashboard (8700):</strong> transparencia — el participante <em>ve</em> el routing</li><li><strong>Open WebUI (3001):</strong> experiencia real — el usuario <em>no ve</em> el routing</li></ul>
 <h3>¿Por qué tres modelos?</h3>
 <p>Un solo modelo no es óptimo para todo. El router envía cada query al modelo más adecuado según su <strong>significado</strong>, no por palabras clave exactas.</p>
 <h3>Puertos (confusión frecuente)</h3>
-<table><thead><tr><th>Puerto</th><th>Qué es</th></tr></thead><tbody><tr><td>8899</td><td>API de chat (Open WebUI, <code>vllm-sr chat</code>)</td></tr><tr><td>8080</td><td>API interna (<code>vllm-sr eval</code>)</td></tr><tr><td>8700</td><td>Dashboard</td></tr></tbody></table>
+<table><thead><tr><th>Puerto</th><th>Qué es</th></tr></thead><tbody><tr><td>8899</td><td>API de chat (Open WebUI, <code>vllm-sr chat</code>)</td></tr><tr><td>8080</td><td>API interna (<code>vllm-sr eval</code>)</td></tr><tr><td>8700</td><td>Dashboard</td></tr><tr><td>3001</td><td>Open WebUI (el 3000 suele ser Grafana)</td></tr></tbody></table>
 <h3>Prioridades de decisions</h3>
 <p>Menor número = mayor prioridad. <code>code-route</code> (10) gana sobre <code>general-route</code> (50). <code>default-route</code> (P100) es el catch-all: no lo borres.</p>
 <h3>¿Qué es MMLU? (en Signals tipo Domain)</h3>

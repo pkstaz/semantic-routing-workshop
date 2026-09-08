@@ -62,7 +62,8 @@ vllm-sr serve</code></pre>
 <p>Descarga <a href="../docker-compose.yml"><code>docker-compose.yml</code></a> ahí y levántalo:</p>
 <pre><code class="language-bash">curl -fsSL -o docker-compose.yml https://raw.githubusercontent.com/pkstaz/semantic-routing-workshop/devopsdays/docker-compose.yml
 docker compose up -d</code></pre>
-<p>Abre: <a href="http://localhost:3000">http://localhost:3000</a></p>
+<p>Abre: <a href="http://localhost:3001">http://localhost:3001</a></p>
+<p>Grafana (y otros stacks) suelen ocupar el <strong>3000</strong>, por eso Open WebUI usa <strong>3001</strong>.</p>
 <p>La primera vez crea una cuenta local (solo para este entorno).</p>
 <p><code>docker-compose.yml</code> ya apunta al router:</p>
 <pre><code class="language-yaml">OPENAI_API_BASE_URL=http://host.docker.internal:8899/v1</code></pre>

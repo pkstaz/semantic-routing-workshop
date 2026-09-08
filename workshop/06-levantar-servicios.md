@@ -32,7 +32,9 @@ curl -fsSL -o docker-compose.yml https://raw.githubusercontent.com/pkstaz/semant
 docker compose up -d
 ```
 
-Abre: [http://localhost:3000](http://localhost:3000)
+Abre: [http://localhost:3001](http://localhost:3001)
+
+Grafana (y otros stacks) suelen ocupar el **3000**, por eso Open WebUI usa **3001**.
 
 La primera vez crea una cuenta local (solo para este entorno).
 
