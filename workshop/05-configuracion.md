@@ -49,7 +49,7 @@ Crea **3 modelos** con **Add model**. En cada uno:
 |---|---|
 | **Provider** | `OpenAI-compatible API` |
 | **Access key** | el token del instructor (igual en los 3) |
-| **Base URL or Host** | la URL que te dicten, **sin** `/v1` al final |
+| **Base URL or Host** | la URL que te dicten, **con** `/v1` al final (si no lo trae, añádelo) |
 
 ### Llama — conversación
 
@@ -62,7 +62,7 @@ llama-32-3b
 Base URL or Host:
 
 ```
-https://<URL-LLAMA>
+https://<URL-LLAMA>/v1
 ```
 
 Uso: preguntas generales, redacción, conocimiento.
@@ -80,7 +80,7 @@ qwen35-9b
 Base URL or Host:
 
 ```
-https://<URL-CODE>
+https://<URL-CODE>/v1
 ```
 
 Uso: Python, SQL, debugging, scripts.
@@ -96,7 +96,7 @@ granite-vision-32-2b
 Base URL or Host:
 
 ```
-https://<URL-VISION>
+https://<URL-VISION>/v1
 ```
 
 Uso: fotos y análisis visual.
@@ -186,14 +186,17 @@ Pestaña **Decisions** del Manager (o **Manage Decisions**). Pulsa **Add Decisio
 
 Ya existe `default-route` (**P100**, 0 conditions, 1 model): es el catch-all. **No lo borres.**
 
-Crea **3** reglas. Prioridad: **número más bajo gana** (deben ser < 100).
+Crea **3** reglas. Prioridad: **número más alto gana** (tienen que ser **> 100** para ganar al catch-all `default-route` P100).
+
+**Description es obligatorio.** Sin ese campo el validador descarta la decision y todo cae en `default-route`.
 
 ### `code-route`
 
 | Campo | Valor |
 |---|---|
 | **Name** | `code-route` |
-| **Priority** | `10` |
+| **Description** | `Código, SQL, debugging y scripts van a Qwen` |
+| **Priority** | `250` |
 | **Signal type** | `domain` |
 | **Signal name** | `code` |
 | **Model** | `qwen35-9b` |
@@ -207,7 +210,8 @@ Granite Vision es un solo modelo de visión: márcalo **omni** en **Manage Model
 | Campo | Valor |
 |---|---|
 | **Name** | `vision-route` |
-| **Priority** | `20` |
+| **Description** | `Texto e imagen van a Granite Vision` |
+| **Priority** | `200` |
 | **Rules Operator** | `AND` |
 | **Signal type** | `modality` |
 | **Signal name** | `BOTH` |
@@ -218,7 +222,8 @@ Granite Vision es un solo modelo de visión: márcalo **omni** en **Manage Model
 | Campo | Valor |
 |---|---|
 | **Name** | `general-route` |
-| **Priority** | `50` |
+| **Description** | `Conversación y conocimiento general van a Llama` |
+| **Priority** | `150` |
 | **Signal type** | `domain` |
 | **Signal name** | `general` |
 | **Model** | `llama-32-3b` |

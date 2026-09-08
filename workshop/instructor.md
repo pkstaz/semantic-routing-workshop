@@ -42,7 +42,7 @@ Un solo modelo no es óptimo para todo. El router envía cada query al modelo m�
 
 ### Prioridades de decisions
 
-Menor número = mayor prioridad. `code-route` (10) gana sobre `general-route` (50). `default-route` (P100) es el catch-all: no lo borres.
+Mayor número = mayor prioridad. `code-route` (250) gana sobre `general-route` (150). `default-route` (P100) es el catch-all: no lo borres.
 
 ### ¿Qué es MMLU? (en Signals tipo Domain)
 
@@ -76,6 +76,7 @@ Hay que elegir **MMLU categories**. MMLU es un examen de cultura académica; el 
 | Open WebUI sin respuesta | Verificar puerto 8899 con `curl localhost:8899/v1/models` |
 | Dashboard: *Bootstrap is complete* | `config.yaml` sin `setup.mode: true` / `version: "v0.3"` ([troubleshooting](./09-troubleshooting.md)) |
 | Dashboard Degraded tras Activate | `docker start vllm-sr-router-container vllm-sr-envoy-container` |
+| Chat 404 y siempre `default-route` | Description + prioridad 250/200/150; Base URL con `/v1`; `vllm-sr stop` + `serve` |
 | `vision-route` BOTH: modelRefs must include AR+diffusion or omni | Manage Models → granite-vision → modality **omni**; un solo Model reference |
 
 ## Preguntas frecuentes de participantes

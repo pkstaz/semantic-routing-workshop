@@ -160,7 +160,7 @@ docker inspect open-webui | grep OPENAI_API_BASE_URL
 **Síntoma:** el router conecta pero el modelo remoto rechaza la petición.
 
 - En el dashboard, revisa el **API key** (Bearer) de cada endpoint: el token puede haber expirado
-- Confirma que las URLs están **sin** `/v1` al final
+- Confirma que las URLs **terminan en** `/v1`
 - Pide al instructor un token de respaldo si el actual falla
 
 ## El routing elige el modelo incorrecto
@@ -229,6 +229,37 @@ vllm-sr status
 ```
 
 Recarga el dashboard. Router y Envoy deben pasar a **running**.
+
+## `vllm-sr chat` da 404 y todo cae en `default-route`
+
+**Síntoma:**
+
+```
+decision: default-route
+matched signals: 1
+  - domains:code
+Error: HTTP 404 from http://localhost:8899/v1/chat/completions: 404 page not found
+```
+
+Hay dos fallos distintos:
+
+1. **Description vacío o prioridad ≤ 100.** El clasificador sí detecta `code`/`general`, pero sin `description` esas reglas no cargan. Si la prioridad es 10/20/50, `default-route` (P100) gana porque **el número más alto gana**. En **Manage Decisions**: Description relleno y prioridades **250 / 200 / 150**.
+2. **URL sin `/v1` o Envoy sin clusters de MaaS.** Envoy reescribe `/v1/chat/completions` encima de la Base URL. Esa URL tiene que terminar en `/v1`. Si Activate no regeneró Envoy, el chat cae en el router `:8080` (`404 page not found`). Con el YAML válido:
+
+```bash
+vllm-sr stop
+vllm-sr serve
+```
+
+Comprueba:
+
+```bash
+vllm-sr validate --config config.yaml
+vllm-sr eval --prompt "What is the capital of France?"
+curl -sS http://localhost:8899/v1/models | head
+```
+
+Eval debe decir `general-route`, no `default-route`.
 
 ## `vision-route` BOTH exige omni o AR+diffusion
 

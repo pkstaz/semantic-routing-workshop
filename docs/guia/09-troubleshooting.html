@@ -129,7 +129,7 @@ vllm-sr chat &quot;hello&quot;</code></pre>
 <pre><code class="language-bash">docker inspect open-webui | grep OPENAI_API_BASE_URL</code></pre>
 <h2>Error 401 / 403 desde OpenShift AI</h2>
 <p><strong>Síntoma:</strong> el router conecta pero el modelo remoto rechaza la petición.</p>
-<ul><li>En el dashboard, revisa el <strong>API key</strong> (Bearer) de cada endpoint: el token puede haber expirado</li><li>Confirma que las URLs están <strong>sin</strong> <code>/v1</code> al final</li><li>Pide al instructor un token de respaldo si el actual falla</li></ul>
+<ul><li>En el dashboard, revisa el <strong>API key</strong> (Bearer) de cada endpoint: el token puede haber expirado</li><li>Confirma que las URLs <strong>terminan en</strong> <code>/v1</code></li><li>Pide al instructor un token de respaldo si el actual falla</li></ul>
 <h2>El routing elige el modelo incorrecto</h2>
 <pre><code class="language-bash"># Diagnosticar qué señales se activaron
 vllm-sr eval --prompt &quot;tu query aquí&quot; --json</code></pre>
@@ -170,6 +170,21 @@ vllm-sr serve</code></pre>
 <pre><code class="language-bash">docker start vllm-sr-router-container vllm-sr-envoy-container
 vllm-sr status</code></pre>
 <p>Recarga el dashboard. Router y Envoy deben pasar a <strong>running</strong>.</p>
+<h2><code>vllm-sr chat</code> da 404 y todo cae en <code>default-route</code></h2>
+<p><strong>Síntoma:</strong></p>
+<pre><code>decision: default-route
+matched signals: 1
+  - domains:code
+Error: HTTP 404 from http://localhost:8899/v1/chat/completions: 404 page not found</code></pre>
+<p>Hay dos fallos distintos:</p>
+<ol><li><strong>Description vacío o prioridad ≤ 100.</strong> El clasificador sí detecta <code>code</code>/<code>general</code>, pero sin <code>description</code> esas reglas no cargan. Si la prioridad es 10/20/50, <code>default-route</code> (P100) gana porque <strong>el número más alto gana</strong>. En <strong>Manage Decisions</strong>: Description relleno y prioridades <strong>250 / 200 / 150</strong>.</li><li><strong>URL sin <code>/v1</code> o Envoy sin clusters de MaaS.</strong> Envoy reescribe <code>/v1/chat/completions</code> encima de la Base URL. Esa URL tiene que terminar en <code>/v1</code>. Si Activate no regeneró Envoy, el chat cae en el router <code>:8080</code> (<code>404 page not found</code>). Con el YAML válido:</li></ol>
+<pre><code class="language-bash">vllm-sr stop
+vllm-sr serve</code></pre>
+<p>Comprueba:</p>
+<pre><code class="language-bash">vllm-sr validate --config config.yaml
+vllm-sr eval --prompt &quot;What is the capital of France?&quot;
+curl -sS http://localhost:8899/v1/models | head</code></pre>
+<p>Eval debe decir <code>general-route</code>, no <code>default-route</code>.</p>
 <h2><code>vision-route</code> BOTH exige omni o AR+diffusion</h2>
 <p><strong>Síntoma:</strong></p>
 <pre><code>decision `vision-route` uses modality condition `BOTH` but modelRefs must include
