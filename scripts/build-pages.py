@@ -348,6 +348,13 @@ def write_guide_pages() -> None:
         (GUIA / f"{page['slug']}.html").write_text(content, encoding="utf-8")
 
 
+def copy_downloadable_files() -> None:
+    src = ROOT / "docker-compose.yml"
+    dest = DOCS / "docker-compose.yml"
+    dest.write_bytes(src.read_bytes())
+
+
 if __name__ == "__main__":
     write_guide_pages()
+    copy_downloadable_files()
     print(f"Generated {len(PAGES)} guide pages in {GUIA}")

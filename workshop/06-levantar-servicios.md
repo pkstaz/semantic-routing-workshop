@@ -23,9 +23,12 @@ Dashboard: [http://localhost:8700](http://localhost:8700)
 
 ## 1. Open WebUI
 
-En **otra terminal**, desde la raíz del repositorio:
+En **otra terminal**, desde el mismo directorio donde estás haciendo el lab (donde corre `vllm-sr serve`).
+
+Descarga [`docker-compose.yml`](../docker-compose.yml) ahí y levántalo:
 
 ```bash
+curl -fsSL -o docker-compose.yml https://raw.githubusercontent.com/pkstaz/semantic-routing-workshop/devopsdays/docker-compose.yml
 docker compose up -d
 ```
 
@@ -49,6 +52,8 @@ vllm-sr chat "What is the capital of France?"
 ```
 
 ## 3. Detener (cuando termines el taller)
+
+En el mismo directorio del `docker-compose.yml`:
 
 ```bash
 docker compose down

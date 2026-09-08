@@ -58,8 +58,10 @@ vllm-sr serve</code></pre>
 <p>Dashboard: <a href="http://localhost:8700">http://localhost:8700</a></p>
 <table><thead><tr><th>Puerto</th><th>Servicio</th></tr></thead><tbody><tr><td><strong>8899</strong></td><td>API de chat (Open WebUI apunta aquí)</td></tr><tr><td><strong>8080</strong></td><td>API interna del router (<code>vllm-sr eval</code>)</td></tr><tr><td><strong>8700</strong></td><td>Dashboard web</td></tr></tbody></table>
 <h2>1. Open WebUI</h2>
-<p>En <strong>otra terminal</strong>, desde la raíz del repositorio:</p>
-<pre><code class="language-bash">docker compose up -d</code></pre>
+<p>En <strong>otra terminal</strong>, desde el mismo directorio donde estás haciendo el lab (donde corre <code>vllm-sr serve</code>).</p>
+<p>Descarga <a href="../docker-compose.yml"><code>docker-compose.yml</code></a> ahí y levántalo:</p>
+<pre><code class="language-bash">curl -fsSL -o docker-compose.yml https://raw.githubusercontent.com/pkstaz/semantic-routing-workshop/devopsdays/docker-compose.yml
+docker compose up -d</code></pre>
 <p>Abre: <a href="http://localhost:3000">http://localhost:3000</a></p>
 <p>La primera vez crea una cuenta local (solo para este entorno).</p>
 <p><code>docker-compose.yml</code> ya apunta al router:</p>
@@ -69,6 +71,7 @@ vllm-sr serve</code></pre>
 <pre><code class="language-bash">vllm-sr eval --prompt &quot;Write a Python function to sort a list&quot;
 vllm-sr chat &quot;What is the capital of France?&quot;</code></pre>
 <h2>3. Detener (cuando termines el taller)</h2>
+<p>En el mismo directorio del <code>docker-compose.yml</code>:</p>
 <pre><code class="language-bash">docker compose down
 vllm-sr stop</code></pre>
 <h2>Siguiente paso</h2>

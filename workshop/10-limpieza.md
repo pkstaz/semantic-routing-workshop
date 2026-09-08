@@ -4,6 +4,8 @@ Al terminar el workshop, detén y limpia los recursos locales.
 
 ## Detener servicios
 
+En el mismo directorio donde descargaste `docker-compose.yml`:
+
 ```bash
 docker compose down
 vllm-sr stop
