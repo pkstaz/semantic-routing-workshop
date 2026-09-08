@@ -101,6 +101,8 @@ https://<URL-VISION>
 
 Uso: fotos y análisis visual.
 
+Si el modelo tiene campo **Modality**, pon **omni** (entiende texto + imagen). Si queda en `text`/`ar`, `vision-route` con BOTH no valida.
+
 Deberías ver 3 modelos. Pulsa **Next**.
 
 En **Choose routing** deja **From scratch** (Default catch-all). No elijas Balance, Security ni From remote.
@@ -211,13 +213,18 @@ En el formulario:
 
 ### `vision-route`
 
+`BOTH` no significa “esta ruta es de fotos”. Significa: el request pide texto **y** imagen, y los **modelRefs** tienen que ser un modelo **omni** o el par **AR + diffusion**.
+
+Granite Vision es un solo modelo de visión: márcalo **omni** en **Manage Models** (no `text`/`ar`). Luego un solo Model reference: `granite-vision-32-2b`.
+
 | Campo | Valor |
 |---|---|
 | **Name** | `vision-route` |
 | **Priority** | `20` |
+| **Rules Operator** | `AND` |
 | **Signal type** | `modality` |
 | **Signal name** | `BOTH` |
-| **Model** | `granite-vision-32-2b` |
+| **Model** | `granite-vision-32-2b` (modality **omni**) |
 
 ### `general-route`
 

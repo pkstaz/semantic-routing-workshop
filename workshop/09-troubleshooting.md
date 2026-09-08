@@ -230,6 +230,18 @@ vllm-sr status
 
 Recarga el dashboard. Router y Envoy deben pasar a **running**.
 
+## `vision-route` BOTH exige omni o AR+diffusion
+
+**Síntoma:**
+
+```
+decision `vision-route` uses modality condition `BOTH` but modelRefs must include
+both an AR model (modality: ar) and a diffusion model (modality: diffusion),
+or an omni model (modality: omni)
+```
+
+`BOTH` no es “ruta de fotos”: pide un modelo **omni** o el par texto (AR) + generación de imagen (diffusion). Granite Vision es un modelo: en **Manage Models** pon su modality en **omni** y deja un solo Model reference.
+
 ## Puerto ya en uso
 
 ```bash

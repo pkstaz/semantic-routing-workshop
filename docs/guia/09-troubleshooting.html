@@ -170,6 +170,12 @@ vllm-sr serve</code></pre>
 <pre><code class="language-bash">docker start vllm-sr-router-container vllm-sr-envoy-container
 vllm-sr status</code></pre>
 <p>Recarga el dashboard. Router y Envoy deben pasar a <strong>running</strong>.</p>
+<h2><code>vision-route</code> BOTH exige omni o AR+diffusion</h2>
+<p><strong>Síntoma:</strong></p>
+<pre><code>decision `vision-route` uses modality condition `BOTH` but modelRefs must include
+both an AR model (modality: ar) and a diffusion model (modality: diffusion),
+or an omni model (modality: omni)</code></pre>
+<p><code>BOTH</code> no es “ruta de fotos”: pide un modelo <strong>omni</strong> o el par texto (AR) + generación de imagen (diffusion). Granite Vision es un modelo: en <strong>Manage Models</strong> pon su modality en <strong>omni</strong> y deja un solo Model reference.</p>
 <h2>Puerto ya en uso</h2>
 <pre><code class="language-bash"># Ver qué proceso usa el puerto
 lsof -i :8899

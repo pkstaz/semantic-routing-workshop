@@ -97,6 +97,7 @@ EOF</code></pre>
 <p>Base URL or Host:</p>
 <pre><code>https://&lt;URL-VISION&gt;</code></pre>
 <p>Uso: fotos y análisis visual.</p>
+<p>Si el modelo tiene campo <strong>Modality</strong>, pon <strong>omni</strong> (entiende texto + imagen). Si queda en <code>text</code>/<code>ar</code>, <code>vision-route</code> con BOTH no valida.</p>
 <p>Deberías ver 3 modelos. Pulsa <strong>Next</strong>.</p>
 <p>En <strong>Choose routing</strong> deja <strong>From scratch</strong> (Default catch-all). No elijas Balance, Security ni From remote.</p>
 <p>Pulsa <strong>Next</strong> otra vez.</p>
@@ -134,7 +135,9 @@ EOF</code></pre>
 <h3><code>code-route</code></h3>
 <table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Name</strong></td><td><code>code-route</code></td></tr><tr><td><strong>Priority</strong></td><td><code>10</code></td></tr><tr><td><strong>Signal type</strong></td><td><code>domain</code></td></tr><tr><td><strong>Signal name</strong></td><td><code>code</code></td></tr><tr><td><strong>Model</strong></td><td><code>qwen35-9b</code></td></tr></tbody></table>
 <h3><code>vision-route</code></h3>
-<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Name</strong></td><td><code>vision-route</code></td></tr><tr><td><strong>Priority</strong></td><td><code>20</code></td></tr><tr><td><strong>Signal type</strong></td><td><code>modality</code></td></tr><tr><td><strong>Signal name</strong></td><td><code>BOTH</code></td></tr><tr><td><strong>Model</strong></td><td><code>granite-vision-32-2b</code></td></tr></tbody></table>
+<p><code>BOTH</code> no significa “esta ruta es de fotos”. Significa: el request pide texto <strong>y</strong> imagen, y los <strong>modelRefs</strong> tienen que ser un modelo <strong>omni</strong> o el par <strong>AR + diffusion</strong>.</p>
+<p>Granite Vision es un solo modelo de visión: márcalo <strong>omni</strong> en <strong>Manage Models</strong> (no <code>text</code>/<code>ar</code>). Luego un solo Model reference: <code>granite-vision-32-2b</code>.</p>
+<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Name</strong></td><td><code>vision-route</code></td></tr><tr><td><strong>Priority</strong></td><td><code>20</code></td></tr><tr><td><strong>Rules Operator</strong></td><td><code>AND</code></td></tr><tr><td><strong>Signal type</strong></td><td><code>modality</code></td></tr><tr><td><strong>Signal name</strong></td><td><code>BOTH</code></td></tr><tr><td><strong>Model</strong></td><td><code>granite-vision-32-2b</code> (modality <strong>omni</strong>)</td></tr></tbody></table>
 <h3><code>general-route</code></h3>
 <table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Name</strong></td><td><code>general-route</code></td></tr><tr><td><strong>Priority</strong></td><td><code>50</code></td></tr><tr><td><strong>Signal type</strong></td><td><code>domain</code></td></tr><tr><td><strong>Signal name</strong></td><td><code>general</code></td></tr><tr><td><strong>Model</strong></td><td><code>llama-32-3b</code></td></tr></tbody></table>
 <p>Al terminar: 3 signals y 4 decisions (<code>code-route</code>, <code>vision-route</code>, <code>general-route</code>, <code>default-route</code>).</p>
