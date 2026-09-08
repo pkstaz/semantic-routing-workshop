@@ -28,17 +28,15 @@ global:
         enabled: true
         method: keyword
         keywords:
-          - what is in this
-          - what's in this
-          - que hay en esta
+          - what is in this image
+          - what's in this image
+          - que hay en esta imagen
           - describe this image
-          - describe this photo
         both_keywords:
-          - what is in this
-          - what's in this
-          - que hay en esta
+          - what is in this image
+          - what's in this image
+          - que hay en esta imagen
           - describe this image
-          - describe this photo
 EOF
 ```
 
@@ -178,14 +176,14 @@ En un Domain hay que elegir categorías **MMLU**. Sin eso el clasificador no sab
 
 ### `vision` (Keywords)
 
-`Modality` / `BOTH` no rutea “qué hay en esta foto” a Granite por sí solo: el detector mira el **texto** (¿generar imagen?) no el adjunto. En este taller el detector arranca **encendido** en modo `keyword` con frases de *análisis* (`what is in this`, `describe this photo`), no de *generación* (`draw`, `generate an image`). Aun así, `vision-route` usa **Keywords** `vision` para mandar esas queries a Granite Vision.
+`Modality` / `BOTH` no rutea “qué hay en esta foto” a Granite por sí solo: el detector mira el **texto** (¿generar imagen?) no el adjunto. En este taller el detector arranca **encendido** en modo `keyword` con frases de *análisis* (`what is in this image`, `que hay en esta imagen`), no de *generación* (`draw`, `generate an image`). Aun así, `vision-route` usa **Keywords** `vision` para mandar esas queries a Granite Vision.
 
 | Campo | Valor |
 |---|---|
 | **Type** | Keywords |
 | **Name** | `vision` |
 | **Operator** | `OR` |
-| **Keywords** | `image`, `photo`, `picture`, `imagen`, `foto`, `diagram`, `what is in this` |
+| **Keywords** | `image`, `photo`, `picture`, `imagen`, `foto`, `what is in this image` |
 
 ### `general`
 

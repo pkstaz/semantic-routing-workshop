@@ -74,17 +74,15 @@ global:
         enabled: true
         method: keyword
         keywords:
-          - what is in this
-          - what&#x27;s in this
-          - que hay en esta
+          - what is in this image
+          - what&#x27;s in this image
+          - que hay en esta imagen
           - describe this image
-          - describe this photo
         both_keywords:
-          - what is in this
-          - what&#x27;s in this
-          - que hay en esta
+          - what is in this image
+          - what&#x27;s in this image
+          - que hay en esta imagen
           - describe this image
-          - describe this photo
 EOF</code></pre>
 <p>Arranca el stack:</p>
 <pre><code class="language-bash">vllm-sr serve</code></pre>
@@ -139,8 +137,8 @@ EOF</code></pre>
 <h3><code>code</code></h3>
 <table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>code</code></td></tr><tr><td><strong>Description</strong></td><td><code>Programación, debugging, SQL, scripts y algoritmos</code></td></tr><tr><td><strong>MMLU categories</strong></td><td><code>computer science</code></td></tr></tbody></table>
 <h3><code>vision</code> (Keywords)</h3>
-<p><code>Modality</code> / <code>BOTH</code> no rutea “qué hay en esta foto” a Granite por sí solo: el detector mira el <strong>texto</strong> (¿generar imagen?) no el adjunto. En este taller el detector arranca <strong>encendido</strong> en modo <code>keyword</code> con frases de <em>análisis</em> (<code>what is in this</code>, <code>describe this photo</code>), no de <em>generación</em> (<code>draw</code>, <code>generate an image</code>). Aun así, <code>vision-route</code> usa <strong>Keywords</strong> <code>vision</code> para mandar esas queries a Granite Vision.</p>
-<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Keywords</td></tr><tr><td><strong>Name</strong></td><td><code>vision</code></td></tr><tr><td><strong>Operator</strong></td><td><code>OR</code></td></tr><tr><td><strong>Keywords</strong></td><td><code>image</code>, <code>photo</code>, <code>picture</code>, <code>imagen</code>, <code>foto</code>, <code>diagram</code>, <code>what is in this</code></td></tr></tbody></table>
+<p><code>Modality</code> / <code>BOTH</code> no rutea “qué hay en esta foto” a Granite por sí solo: el detector mira el <strong>texto</strong> (¿generar imagen?) no el adjunto. En este taller el detector arranca <strong>encendido</strong> en modo <code>keyword</code> con frases de <em>análisis</em> (<code>what is in this image</code>, <code>que hay en esta imagen</code>), no de <em>generación</em> (<code>draw</code>, <code>generate an image</code>). Aun así, <code>vision-route</code> usa <strong>Keywords</strong> <code>vision</code> para mandar esas queries a Granite Vision.</p>
+<table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Keywords</td></tr><tr><td><strong>Name</strong></td><td><code>vision</code></td></tr><tr><td><strong>Operator</strong></td><td><code>OR</code></td></tr><tr><td><strong>Keywords</strong></td><td><code>image</code>, <code>photo</code>, <code>picture</code>, <code>imagen</code>, <code>foto</code>, <code>what is in this image</code></td></tr></tbody></table>
 <h3><code>general</code></h3>
 <table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td><strong>Type</strong></td><td>Domain</td></tr><tr><td><strong>Name</strong></td><td><code>general</code></td></tr><tr><td><strong>Description</strong></td><td><code>Conversación, conocimiento general, redacción y preguntas abiertas</code></td></tr><tr><td><strong>MMLU categories</strong></td><td><code>other</code></td></tr></tbody></table>
 <p>Guarda cada uno. Debes ver <strong>3 ITEMS</strong>.</p>

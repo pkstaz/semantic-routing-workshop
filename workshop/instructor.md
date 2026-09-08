@@ -46,7 +46,7 @@ Mayor número = mayor prioridad. `vision-route` (300) gana sobre `code-route` (2
 
 ### ¿Qué es MMLU? (en Signals tipo Domain)
 
-Hay que elegir **MMLU categories**. MMLU es un examen de cultura académica; el clasificador del router etiqueta el prompt con esas materias. `code` → `computer science`, `general` → `other`. Visión usa signal tipo **Keywords** (`image`, `photo`, `what is in this`), no Modality `BOTH` ni MMLU. Granite Vision en Manage Models: modality **omni**.
+Hay que elegir **MMLU categories**. MMLU es un examen de cultura académica; el clasificador del router etiqueta el prompt con esas materias. `code` → `computer science`, `general` → `other`. Visión usa signal tipo **Keywords** (`image`, `imagen`, `what is in this image`), no Modality `BOTH` ni MMLU. Granite Vision en Manage Models: modality **omni**.
 
 ## Demo en vivo sugerida
 

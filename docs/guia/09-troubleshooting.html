@@ -189,6 +189,11 @@ curl -sS http://localhost:8899/v1/models | head</code></pre>
 <p><strong>Síntoma:</strong> <em>What is in this image?</em> + adjunto, pero <strong>DECISION</strong> <code>default-route</code> y <strong>MODEL</strong> <code>llama-32-3b</code>. Llama inventa a partir del nombre del archivo.</p>
 <p><code>Modality</code> <code>BOTH</code> no significa “hay una foto adjunta”. El detector mira el texto del prompt. En este taller va <strong>encendido</strong> (<code>method: keyword</code>) con frases de análisis, no de generación. <code>vision-route</code> sigue siendo <strong>Keywords</strong> <code>vision</code> para enviar esas queries a Granite Vision.</p>
 <p>Si adjuntas la foto y cae en <strong><code>code-route</code></strong>: el JPEG/base64 parece código al clasificador de dominio. Sube <code>vision-route</code> a prioridad <strong>300</strong> (por encima de <code>code-route</code> 250).</p>
+<h2>API 400: input tokens vs context length (70000)</h2>
+<p><strong>Síntoma:</strong></p>
+<pre><code>You passed 70001 input tokens ... the model&#x27;s context length is only 70000 tokens</code></pre>
+<p>El playground está metiendo el JPEG como texto (base64) y, si el hilo ya era largo, se pasa del contexto de Granite (~70k).</p>
+<ol><li>Abre un <strong>chat nuevo</strong> (no reenvíes en el mismo hilo).</li><li>Usa una imagen <strong>pequeña</strong> (unos KB, no un PNG enorme).</li><li>Prefiere <strong>Open WebUI</strong> (<code>http://localhost:3001</code>): adjunta la foto como imagen, no como archivo pegado en el texto.</li></ol>
 <h2><code>vision-route</code> BOTH exige omni o AR+diffusion</h2>
 <p><strong>Síntoma:</strong></p>
 <pre><code>decision `vision-route` uses modality condition `BOTH` but modelRefs must include

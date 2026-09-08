@@ -269,6 +269,20 @@ Eval debe decir `general-route`, no `default-route`.
 
 Si adjuntas la foto y cae en **`code-route`**: el JPEG/base64 parece código al clasificador de dominio. Sube `vision-route` a prioridad **300** (por encima de `code-route` 250).
 
+## API 400: input tokens vs context length (70000)
+
+**Síntoma:**
+
+```
+You passed 70001 input tokens ... the model's context length is only 70000 tokens
+```
+
+El playground está metiendo el JPEG como texto (base64) y, si el hilo ya era largo, se pasa del contexto de Granite (~70k).
+
+1. Abre un **chat nuevo** (no reenvíes en el mismo hilo).
+2. Usa una imagen **pequeña** (unos KB, no un PNG enorme).
+3. Prefiere **Open WebUI** (`http://localhost:3001`): adjunta la foto como imagen, no como archivo pegado en el texto.
+
 ## `vision-route` BOTH exige omni o AR+diffusion
 
 **Síntoma:**

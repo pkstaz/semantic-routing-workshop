@@ -65,7 +65,7 @@
 <h3>Prioridades de decisions</h3>
 <p>Mayor número = mayor prioridad. <code>vision-route</code> (300) gana sobre <code>code-route</code> (250) porque un JPEG en base64 se clasifica a menudo como código. <code>default-route</code> (P100) es el catch-all: no lo borres.</p>
 <h3>¿Qué es MMLU? (en Signals tipo Domain)</h3>
-<p>Hay que elegir <strong>MMLU categories</strong>. MMLU es un examen de cultura académica; el clasificador del router etiqueta el prompt con esas materias. <code>code</code> → <code>computer science</code>, <code>general</code> → <code>other</code>. Visión usa signal tipo <strong>Keywords</strong> (<code>image</code>, <code>photo</code>, <code>what is in this</code>), no Modality <code>BOTH</code> ni MMLU. Granite Vision en Manage Models: modality <strong>omni</strong>.</p>
+<p>Hay que elegir <strong>MMLU categories</strong>. MMLU es un examen de cultura académica; el clasificador del router etiqueta el prompt con esas materias. <code>code</code> → <code>computer science</code>, <code>general</code> → <code>other</code>. Visión usa signal tipo <strong>Keywords</strong> (<code>image</code>, <code>imagen</code>, <code>what is in this image</code>), no Modality <code>BOTH</code> ni MMLU. Granite Vision en Manage Models: modality <strong>omni</strong>.</p>
 <h2>Demo en vivo sugerida</h2>
 <ol><li><strong>Dashboard abierto</strong> en pantalla compartida (sección de decisions)</li><li>Pide a un participante que envíe una query de código en Open WebUI</li><li>Muestra en el dashboard la decisión que se tomó en tiempo real</li><li>Repite con una query general y una de visión (si hay imagen disponible)</li></ol>
 <h2>Queries de demo</h2>
