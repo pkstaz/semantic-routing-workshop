@@ -1,6 +1,6 @@
 # 0. Introducción
 
-## Objetivo
+## Objetivo principal
 
 En este workshop vas a montar un **semantic router** que clasifica cada consulta del usuario y la envía al modelo más adecuado en OpenShift AI — sin que el usuario tenga que elegir modelo manualmente.
 
